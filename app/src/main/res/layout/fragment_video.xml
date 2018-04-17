@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<FrameLayout-->
+        <!--android:id="@+id/video_controller"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:layout_alignParentBottom="true">-->
+
+        <!--android:layout_above="@id/video_controller"/>-->
+        <VideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
+        <ImageButton
+            android:id="@+id/video_start_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@mipmap/video_start"
+            android:background="@drawable/circle"
+            android:scaleType="fitCenter"
+            android:layout_centerInParent="true"/>
+
+        <ImageButton
+            android:id="@+id/video_stop_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@mipmap/video_stop"
+            android:background="@drawable/circle"
+            android:scaleType="fitCenter"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+    <!--</FrameLayout>-->
+</RelativeLayout>

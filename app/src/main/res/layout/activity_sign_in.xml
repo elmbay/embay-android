@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_marginTop="80dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="24dp"
+    android:layout_marginRight="24dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/user_name"/>
+        <EditText
+            android:layout_alignParentRight="true"
+            android:id="@+id/user_name"
+            android:layout_width="220dp"
+            android:layout_centerVertical="true"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+        <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/password"/>
+        <EditText
+                android:layout_alignParentRight="true"
+                android:id="@+id/password"
+                android:layout_width="220dp"
+                android:layout_centerVertical="true"
+                android:layout_height="match_parent"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+        <TextView
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:text="@string/forget_user_name"/>
+        <TextView
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:text="@string/forget_password"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp">
+        <CheckBox
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/keep_me_signed_in"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
+        <Button
+            android:layout_alignParentLeft="true"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/oval_button"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:text="@string/sign_in"/>
+        <Button
+            android:layout_alignParentRight="true"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/oval_button"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:text="@string/sign_up"/>
+    </RelativeLayout>
+
+</LinearLayout>
