@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 
 import com.example.elmbay.R;
 import com.example.elmbay.activity.CourseDetailActivity;
+import com.example.elmbay.manager.AppManager;
+import com.example.elmbay.model.Lesson;
 
 /**
  * Created by kgu on 4/15/18.
@@ -24,13 +26,17 @@ public class TranscriptFragment extends Fragment {
 
         final ImageButton button = top.findViewById(R.id.transcript_icon);
         if (button != null) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    button.setVisibility(View.GONE);
-                    ((CourseDetailActivity) getActivity()).viewTranscript();
-                }
-            });
+            Lesson lesson = AppManager.getInstance().getSessionData().getCurrentLesson();
+            if (lesson != null && lesson.getTranscript() != null) {
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((CourseDetailActivity) getActivity()).toggleTranscript();
+                    }
+                });
+            } else {
+                button.setAlpha((float) 0.20);
+            }
         }
         return top;
     }

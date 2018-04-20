@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.elmbay">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.elmbay">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -18,7 +17,6 @@
 
         <activity
             android:name="com.example.elmbay.activity.CourseListActivity"
-            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,14 +26,32 @@
 
         <activity
             android:name="com.example.elmbay.activity.SignInActivity"
-            android:label="@string/course_list"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
             android:name="com.example.elmbay.activity.CourseDetailActivity"
-            android:label="@string/course_detail"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name="com.example.elmbay.activity.CourseDetailWithFullScreenActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:screenOrientation="landscape"
+            android:name="com.example.elmbay.activity.FullScreenVideoActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:screenOrientation="landscape"
+            android:name="com.example.elmbay.activity.FullScreenImageActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

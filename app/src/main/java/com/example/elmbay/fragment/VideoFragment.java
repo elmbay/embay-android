@@ -2,7 +2,6 @@ package com.example.elmbay.fragment;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,10 +16,10 @@ import android.widget.VideoView;
 import com.example.elmbay.R;
 import com.example.elmbay.activity.CourseDetailActivity;
 import com.example.elmbay.activity.CourseListActivity;
+import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.manager.NetworkManager;
-
-import static com.example.elmbay.activity.CourseDetailActivity.ARG_ITEM_ID;
-import static com.example.elmbay.manager.AppManager.PACKAGE_NAME;
+import com.example.elmbay.model.ContentDescriptor;
+import com.example.elmbay.model.Lesson;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -29,7 +28,7 @@ import static com.example.elmbay.manager.AppManager.PACKAGE_NAME;
  * on handsets.
  */
 public class VideoFragment extends Fragment {
-    private String mItemId;
+    private ContentDescriptor mVideo;
     private VideoView mSimpleVideoView;
     private MediaPlayer mMediaPlayer;
     private MediaController mMediaController;
@@ -40,8 +39,9 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_video, container, false);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItemId = getArguments().getString(ARG_ITEM_ID);
+        Lesson lesson = AppManager.getInstance().getSessionData().getCurrentLesson();
+        if (lesson != null) {
+            mVideo = lesson.getVideo();
         }
 
         final Context context = getContext();
@@ -50,15 +50,10 @@ public class VideoFragment extends Fragment {
         setStopButton(context, top);
 
         // initiate a video view
-        Uri uri;
-        if ("1".equals(mItemId)) {
-            uri = Uri.parse("http://abhiandroid-8fb4.kxcdn.com/ui/wp-content/uploads/2016/04/videoviewtestingvideo.mp4");
-        } else if ("2".equals(mItemId)) {
-            uri = Uri.parse("android.resource://" + PACKAGE_NAME + "/" + R.raw.change_channel_01_vd);
-        } else {
-            uri = Uri.parse("android.resource://" + PACKAGE_NAME + "/" + R.raw.ppcash);
+        if (mVideo != null) {
+            mSimpleVideoView.setVideoURI(mVideo.getUri());
+            playVideo(true);
         }
-        mSimpleVideoView.setVideoURI(uri);
 
         return top;
     }
@@ -83,35 +78,25 @@ public class VideoFragment extends Fragment {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     playVideo(false);
-//                    Toast.makeText(context, "Thank You!", Toast.LENGTH_LONG).show(); // display a toast when an video is completed
                 }
             });
 
             mSimpleVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mp, int what, int extra) {
-                    if (!NetworkManager.getInstance().hasNetworkConnection()) {
-                        Toast.makeText(context, "No internet connection", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(context, "Oops An Error Occur While Playing Video...!!!", Toast.LENGTH_LONG).show();
-                    }
-                    return false;
+                if (!NetworkManager.getInstance().hasNetworkConnection()) {
+                    Toast.makeText(context, "No internet connection", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Oops An Error Occur While Playing Video...!!!", Toast.LENGTH_LONG).show();
+                }
+                return false;
                 }
             });
 
             mSimpleVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
-                    mMediaPlayer = mediaPlayer;
-                    // When video Screen change size.
-//                    mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
-//                        @Override
-//                        public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-//
-//                            // Re-Set the videoView that acts as the anchor for the MediaController
-//                            mMediaController.setAnchorView(mSimpleVideoView);
-//                        }
-//                    });
+                mMediaPlayer = mediaPlayer;
                 }
             });
         }
@@ -132,12 +117,16 @@ public class VideoFragment extends Fragment {
     private void setStartButton(Context context, View top) {
         mStartButton = top.findViewById(R.id.video_start_button);
         if (mStartButton != null) {
-            mStartButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    playVideo(true);
-                }
-            });
+            if (mVideo != null) {
+                mStartButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        playVideo(true);
+                    }
+                });
+            } else {
+                mStartButton.setAlpha((float) 0.25);
+            }
         }
     }
 

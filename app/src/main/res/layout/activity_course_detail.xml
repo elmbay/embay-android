@@ -1,70 +1,68 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-        <include
-            layout="@layout/app_bar_short_dark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"/>
+    <include
+        layout="@layout/app_bar_short_dark"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <FrameLayout
+        android:layout_below="@id/app_bar"
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_below="@id/video_container"
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
 
         <FrameLayout
-            android:id="@+id/video_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"/>
-
-
-        <LinearLayout
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/video_container"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:id="@+id/audio_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"/>
-
-            <FrameLayout
-                android:id="@+id/transcript_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="50"/>
-        </LinearLayout>
-
-        <include
-            android:id="@+id/transcript_divider"
-            layout="@layout/divider_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/description"/>
-
-        <FrameLayout
-            android:id="@+id/recorder_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
-
-        <include
-            android:id="@+id/recorder_divider"
-            layout="@layout/divider_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@id/recorder_container"/>
-
-        <com.example.elmbay.manager.TouchImageView
-            android:layout_below="@id/transcript_divider"
-            android:layout_above="@id/recorder_divider"
-            android:id="@+id/transcript"
+            android:id="@+id/audio_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:src="@drawable/change_channel_01_tx"
-            android:visibility="gone"/>
+            android:layout_weight="50"/>
+
+        <FrameLayout
+            android:id="@+id/transcript_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="50"/>
+    </LinearLayout>
+
+    <include
+        android:layout_below="@id/description"
+        android:id="@+id/transcript_divider"
+        layout="@layout/divider_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <FrameLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/recorder_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <include
+        android:layout_above="@id/recorder_container"
+        android:id="@+id/recorder_divider"
+        layout="@layout/divider_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <com.example.elmbay.manager.TouchImageView
+        android:layout_below="@id/transcript_divider"
+        android:layout_above="@id/recorder_divider"
+        android:id="@+id/transcript"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

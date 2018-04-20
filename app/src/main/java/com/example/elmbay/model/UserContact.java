@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by kgu on 4/12/18.
  */
 
-public class Contact {
+public class UserContact {
     private static final int CONTACT_TYPE_EMAIL = 1;
     private static final int CONTACT_TYPE_PHONE = 2;
     private static final int CONTACT_TYPE_WECHAT = 3;

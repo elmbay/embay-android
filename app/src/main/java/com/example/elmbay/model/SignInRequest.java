@@ -14,12 +14,12 @@ public class SignInRequest {
     String mPassword;
 
     @SerializedName("contacts")
-    Contact mContacts[];
+    UserContact mUserContacts[];
 
-    public SignInRequest(String userName, String password, Contact contacts[]) {
+    public SignInRequest(String userName, String password, UserContact userContacts[]) {
         mUserName = userName;
         mPassword = password;
-        mContacts = contacts;
+        mUserContacts = userContacts;
     }
 
     public void setUserName(String userName) { mUserName = userName; }
@@ -28,19 +28,19 @@ public class SignInRequest {
     public void setPassword(String password) { mPassword = password;}
     public String getPassword() { return mPassword; }
 
-    public void setContacts(Contact contacts[]) { mContacts = contacts; }
-    public Contact[] getContacts() { return mContacts; }
+    public void setUserContacts(UserContact userContacts[]) { mUserContacts = userContacts; }
+    public UserContact[] getUserContacts() { return mUserContacts; }
 
-    public void addContact(Contact contact) {
-        if (contact != null) {
-            if (mContacts == null) {
-                mContacts = new Contact[1];
+    public void addContact(UserContact userContact) {
+        if (userContact != null) {
+            if (mUserContacts == null) {
+                mUserContacts = new UserContact[1];
             } else {
-                Contact oldContacts[] = mContacts;
-                mContacts = new Contact[oldContacts.length + 1];
-                System.arraycopy(oldContacts, 0, mContacts, 0, oldContacts.length);
+                UserContact oldUserContacts[] = mUserContacts;
+                mUserContacts = new UserContact[oldUserContacts.length + 1];
+                System.arraycopy(oldUserContacts, 0, mUserContacts, 0, oldUserContacts.length);
             }
-            mContacts[mContacts.length - 1] = contact;
+            mUserContacts[mUserContacts.length - 1] = userContact;
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.elmbay.fragment;
 
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,10 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.elmbay.R;
+import com.example.elmbay.manager.AppManager;
+import com.example.elmbay.model.ContentDescriptor;
+import com.example.elmbay.model.Lesson;
 
 import java.io.IOException;
-
-import static com.example.elmbay.manager.AppManager.PACKAGE_NAME;
 
 /**
  * Created by kgu on 3/21/18.
@@ -25,7 +25,7 @@ public class AudioFragment extends Fragment {
     private static final String LOG_TAG = AudioFragment.class.getName();
     private static final int STATE_READY = 0;
     private static final int STATE_PLAYING = 1;
-    private Uri mUri;
+    private ContentDescriptor mAudio;
     private int mState = STATE_READY;
     private MediaPlayer mPlayer;
     private ImageButton mPlayButton;
@@ -34,15 +34,23 @@ public class AudioFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_audio, container, false);
-        mUri = Uri.parse("android.resource://" + PACKAGE_NAME + "/" + R.raw.change_channel_01_ad);
+
+        Lesson lesson = AppManager.getInstance().getSessionData().getCurrentLesson();
+        if (lesson != null) {
+            mAudio = lesson.getAudio();
+        }
 
         mPlayButton = top.findViewById(R.id.replay);
         if (mPlayButton != null) {
-            mPlayButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    startPlaying();
-                }
-            });
+            if (mAudio != null) {
+                mPlayButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        startPlaying();
+                    }
+                });
+            } else {
+                mPlayButton.setAlpha((float)0.20);
+            }
         }
 
         mStopButton = top.findViewById(R.id.record_stop);
@@ -54,7 +62,6 @@ public class AudioFragment extends Fragment {
                 }
             });
         }
-
         return top;
     }
 
@@ -70,7 +77,7 @@ public class AudioFragment extends Fragment {
             mState = STATE_PLAYING;
             mPlayer = new MediaPlayer();
             try {
-                mPlayer.setDataSource(getContext(), mUri);
+                mPlayer.setDataSource(getContext(), mAudio.getUri());
                 mPlayer.prepare();
                 mPlayer.start();
                 mPlayButton.setVisibility(View.GONE);

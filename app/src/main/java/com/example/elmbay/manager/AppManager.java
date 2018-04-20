@@ -11,6 +11,8 @@ import android.util.Log;
 
 public class AppManager {
     public static final String PACKAGE_NAME = "com.example.elmbay";
+    public static final boolean DEBUG = true;
+    public static final boolean MOCK = true;
 
     private static final String LOG_TAG = AppManager.class.getName();
     private static AppManager sInstance;
@@ -20,7 +22,7 @@ public class AppManager {
 
     public static synchronized void setup(Context context) {
         if (sInstance == null) {
-            sInstance = new AppManager();
+            sInstance = new AppManager(context);
         }
     }
 
@@ -44,6 +46,9 @@ public class AppManager {
     private AppManager(@NonNull Context context) {
         mAppContext = context.getApplicationContext();
         mSessionData = new SessionData();
+        if (MOCK) {
+            mSessionData.setSignInResult(DataProvider.getSignInResult(mAppContext));
+        }
     }
 
     private AppManager() {}

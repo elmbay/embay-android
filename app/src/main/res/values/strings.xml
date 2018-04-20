@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Elm Bay</string>
+    <!-- manifest -->
+    <string name="app_name">Elm Bay * 榆树湾</string>
 
+    <!-- sign in -->
     <string name="user_name">User Name</string>
     <string name="password">Password</string>
     <string name="forget_user_name">Forget user name</string>
@@ -9,10 +11,13 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Create Account</string>
 
-    <string name="course_list">Course List</string>
-    <string name="course_detail">Course Detail</string>
+    <!-- image buttons -->
+    <string name="repeat_slowly">Repeat slowly</string>
+    <string name="show_transcript">Show transcript</string>
+    <string name="transcript">transcript</string>
     <string name="start_recording">Start recording</string>
     <string name="stop_recording">Stop recording</string>
     <string name="start_playing">Start playing</string>
     <string name="stop_playing">Stop playing</string>
+    <string name="share_recording">Share recording</string>
 </resources>

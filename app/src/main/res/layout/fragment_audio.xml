@@ -10,8 +10,8 @@
 
     <ImageButton
         android:id="@+id/replay"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerInParent="true"
         android:background="@drawable/circle"
         android:scaleType="fitCenter"
@@ -19,8 +19,8 @@
 
     <ImageButton
         android:id="@+id/record_stop"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerInParent="true"
         android:background="@drawable/circle"
         android:scaleType="fitCenter"

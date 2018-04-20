@@ -9,10 +9,10 @@
 
     <ImageView
         android:id="@+id/mouth"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:src="@mipmap/mouth"
         android:cropToPadding="false"
         android:adjustViewBounds="false"/>
@@ -22,22 +22,24 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"/>
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp">
 
         <RelativeLayout
-            android:layout_alignParentLeft="true"
             android:id="@+id/record_buttons"
-            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <ImageButton
                 android:id="@+id/record_start"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:background="@drawable/circle"
                 android:scaleType="fitCenter"
                 android:layout_centerVertical="true"
@@ -46,8 +48,8 @@
 
             <ImageButton
                 android:id="@+id/record_stop"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:background="@drawable/circle"
                 android:scaleType="fitCenter"
                 android:layout_centerVertical="true"
@@ -56,24 +58,31 @@
         </RelativeLayout>
 
         <ImageButton
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="36dp"
             android:id="@+id/replay"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
             android:background="@drawable/circle"
             android:scaleType="fitCenter"
             android:src="@mipmap/play_blue"/>
 
         <ImageButton
-            android:layout_alignParentRight="true"
             android:id="@+id/share"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
             android:background="@drawable/circle"
             android:scaleType="fitCenter"
-            android:layout_centerVertical="true"
             android:src="@mipmap/share_blue"/>
-    </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="@drawable/circle"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/delete_blue"/>
+    </LinearLayout>
 
 </LinearLayout>

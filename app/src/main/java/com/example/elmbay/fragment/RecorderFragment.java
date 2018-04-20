@@ -20,7 +20,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.elmbay.R;
+import com.example.elmbay.manager.AppManager;
+import com.example.elmbay.model.Lesson;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -33,12 +36,17 @@ public class RecorderFragment extends Fragment {
     private static final int STATE_READY = 0;
     private static final int STATE_PLAYING = 1;
     private static final int STATE_RECORDING = 2;
-    private static String mFileName;
     private int mState = STATE_READY;
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
     private RecordButton mRecordButton;
     private StopButton mStopButton;
+    private PlayButton mPlayButton;
+    private ImageButton mShareButton;
+    private ImageButton mDeleteButton;
+    private Lesson mLesson;
+    private static String mFileName;
+    private File mFile;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -49,29 +57,39 @@ public class RecorderFragment extends Fragment {
         View top = inflater.inflate(R.layout.fragment_recorder, container, false);
 
         Activity activity = getActivity();
-
-        // Record to the external cache directory for visibility
-        mFileName = activity.getExternalCacheDir().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
-
         ActivityCompat.requestPermissions(activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-        ImageButton button = top.findViewById(R.id.replay);
-        new PlayButton(button);
+        // Record to the external cache directory for visibility
+        mLesson = AppManager.getInstance().getSessionData().getCurrentLesson();
+        mFileName = activity.getExternalCacheDir().getAbsolutePath() + "/" + mLesson.getId() + ".3gp";
+        mFile = new File(mFileName);
 
-        button = top.findViewById(R.id.record_start);
+        ImageButton button = top.findViewById(R.id.record_start);
         mRecordButton = new RecordButton(button);
 
         button = top.findViewById(R.id.record_stop);
         mStopButton = new StopButton(button);
 
-        button = top.findViewById(R.id.share);
-        button.setOnClickListener(new View.OnClickListener() {
+        button = top.findViewById(R.id.replay);
+        mPlayButton = new PlayButton(button);
+
+        mShareButton = top.findViewById(R.id.share);
+        mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 shareAudio();
             }
         });
+
+        mDeleteButton = top.findViewById(R.id.delete);
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteFile();
+            }
+        });
+
+        checkFileExists();
 
         return top;
     }
@@ -119,9 +137,9 @@ public class RecorderFragment extends Fragment {
         public PlayButton(ImageButton button) {
             mButton = button;
             button.setOnClickListener(clicker);
-//            File file = new File(mFileName);
-//            button.setVisibility( file.exists() ? View.VISIBLE : View.INVISIBLE);
         }
+
+        public ImageButton getImage() { return mButton; }
     }
 
     class RecordButton {
@@ -147,9 +165,7 @@ public class RecorderFragment extends Fragment {
             button.setOnClickListener(clicker);
         }
 
-        public void setVisibility(int visibility) {
-            mButton.setVisibility(visibility);
-        }
+        public ImageButton getImage() { return mButton; }
     }
 
     class StopButton {
@@ -174,9 +190,7 @@ public class RecorderFragment extends Fragment {
             button.setOnClickListener(clicker);
         }
 
-        public void setVisibility(int visibility) {
-            mButton.setVisibility(visibility);
-        }
+        public ImageButton getImage() { return mButton; }
     }
 
     private void onRecord(boolean start) {
@@ -188,8 +202,8 @@ public class RecorderFragment extends Fragment {
     }
 
     private void startRecording() {
-        mRecordButton.setVisibility(View.GONE);
-        mStopButton.setVisibility(View.VISIBLE);
+        mRecordButton.getImage().setVisibility(View.GONE);
+        mStopButton.getImage().setVisibility(View.VISIBLE);
 
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -214,14 +228,16 @@ public class RecorderFragment extends Fragment {
     }
 
     private void stopRecording() {
-        mStopButton.setVisibility(View.GONE);
-        mRecordButton.setVisibility(View.VISIBLE);
+        mStopButton.getImage().setVisibility(View.GONE);
+        mRecordButton.getImage().setVisibility(View.VISIBLE);
 
         if (mRecorder != null) {
             mRecorder.stop();
             mRecorder.release();
             mRecorder = null;
         }
+
+        checkFileExists();
     }
 
     private void onPlay(boolean start) {
@@ -262,12 +278,26 @@ public class RecorderFragment extends Fragment {
             share.putExtra(Intent.EXTRA_STREAM, Uri.parse(mFileName));
 
             // Add data to the intent, the receiving app will decide what to do with it.
-            share.putExtra(Intent.EXTRA_SUBJECT, "Title Of The Post");
-            share.putExtra(Intent.EXTRA_TEXT, "http://www.codeofaninja.com");
+            share.putExtra(Intent.EXTRA_SUBJECT, mLesson.getSubject());
+//            share.putExtra(Intent.EXTRA_TEXT, "http://www.codeofaninja.com");
 
-            startActivity(Intent.createChooser(share, "Share my recording!"));
+            startActivity(Intent.createChooser(share, mLesson.getSubject()));
         } catch (IllegalArgumentException e) {
             Log.e("File Selector", "The selected file can't be shared: " + mFileName);
         }
+    }
+
+    private void deleteFile() {
+        if (mFile.exists()) {
+            mFile.delete();
+            checkFileExists();
+        }
+    }
+
+    private void checkFileExists() {
+        float alpha = (float) (mFile.exists() ? 1.0 : 0.2);
+        mPlayButton.getImage().setAlpha(alpha);
+        mShareButton.setAlpha(alpha);
+        mDeleteButton.setAlpha(alpha);
     }
 }
