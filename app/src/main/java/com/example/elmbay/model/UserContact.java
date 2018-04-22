@@ -12,13 +12,13 @@ public class UserContact {
     private static final int CONTACT_TYPE_WECHAT = 3;
 
     @SerializedName("id")
-    String mId;
+    private String mId;
 
     @SerializedName("type")
-    int mType;
+    private int mType;
 
     @SerializedName("confirmed")
-    boolean mConfirmed;
+    private boolean mConfirmed;
 
     public void setId(String id) { mId = id; }
     public String getId() { return mId; }

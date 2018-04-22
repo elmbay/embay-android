@@ -9,15 +9,14 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Lesson {
-
     @SerializedName("id")
     private String mId;
 
-    @SerializedName("course")
-    private String mCourse;
+    @SerializedName("chapterId")
+    private String mChapterId;
 
-    @SerializedName("subject")
-    private String mSubject;
+    @SerializedName("keyword")
+    private String mKeyword;
 
     @SerializedName("video")
     private ContentDescriptor mVideo;
@@ -31,11 +30,11 @@ public class Lesson {
     public String getId() { return mId; }
     public void setId(String id) { mId = id; }
 
-    public String getCourse() { return mCourse; }
-    public void setCourse(String course) { mCourse = course; }
+    public String getChapterId() { return mChapterId; }
+    public void setChapterId(String id) { mChapterId = id; }
 
-    public String getSubject() { return mSubject; }
-    public void setSubject(String subject) { mSubject = subject; }
+    public String getKeyword() { return mKeyword; }
+    public void setKeyword(String keyword) { mKeyword = keyword; }
 
     public ContentDescriptor getVideo() { return mVideo; }
     public void setVideo(ContentDescriptor video) { mVideo = video; }

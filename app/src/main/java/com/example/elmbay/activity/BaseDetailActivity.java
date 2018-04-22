@@ -39,8 +39,8 @@ public class BaseDetailActivity extends AppCompatActivity {
     }
 
     protected void setupActionBar() {
-        if (mLesson != null && mLesson.getSubject() != null) {
-            setTitle(mLesson.getSubject());
+        if (mLesson != null && mLesson.getKeyword() != null) {
+            setTitle(mLesson.getKeyword());
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

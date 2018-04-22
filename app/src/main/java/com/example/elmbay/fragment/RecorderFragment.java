@@ -278,10 +278,10 @@ public class RecorderFragment extends Fragment {
             share.putExtra(Intent.EXTRA_STREAM, Uri.parse(mFileName));
 
             // Add data to the intent, the receiving app will decide what to do with it.
-            share.putExtra(Intent.EXTRA_SUBJECT, mLesson.getSubject());
+            share.putExtra(Intent.EXTRA_SUBJECT, mLesson.getKeyword());
 //            share.putExtra(Intent.EXTRA_TEXT, "http://www.codeofaninja.com");
 
-            startActivity(Intent.createChooser(share, mLesson.getSubject()));
+            startActivity(Intent.createChooser(share, mLesson.getKeyword()));
         } catch (IllegalArgumentException e) {
             Log.e("File Selector", "The selected file can't be shared: " + mFileName);
         }

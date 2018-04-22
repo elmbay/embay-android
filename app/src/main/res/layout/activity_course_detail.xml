@@ -1,6 +1,5 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -21,48 +20,37 @@
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="#e6f2ff"
         android:orientation="horizontal">
 
         <FrameLayout
             android:id="@+id/audio_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="50"/>
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+        <include
+            layout="@layout/divider_vertical"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
 
         <FrameLayout
-            android:id="@+id/transcript_container"
+            android:id="@+id/recorder_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="50"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
     <include
         android:layout_below="@id/description"
-        android:id="@+id/transcript_divider"
-        layout="@layout/divider_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
-
-    <FrameLayout
-        android:layout_alignParentBottom="true"
-        android:id="@+id/recorder_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <include
-        android:layout_above="@id/recorder_container"
         android:id="@+id/recorder_divider"
         layout="@layout/divider_horizontal"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
 
     <com.example.elmbay.manager.TouchImageView
-        android:layout_below="@id/transcript_divider"
-        android:layout_above="@id/recorder_divider"
+        android:layout_below="@id/recorder_divider"
         android:id="@+id/transcript"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:visibility="gone"/>
+        android:adjustViewBounds="true"/>
 
 </RelativeLayout>

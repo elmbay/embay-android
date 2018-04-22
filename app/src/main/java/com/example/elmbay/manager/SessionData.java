@@ -9,20 +9,11 @@ import com.example.elmbay.model.SignInResult;
 
 public class SessionData {
     private SignInResult mSignInResult;
-    private int mCurrentLessonIndex;
+    private Lesson mCurrentLesson;
 
     public void setSignInResult(SignInResult signInResult) { mSignInResult = signInResult; }
     public SignInResult getSignInResult() { return mSignInResult; }
 
-    public void setCurrentLessonIndex(int position) { mCurrentLessonIndex = position; }
-
-    public Lesson getCurrentLesson() {
-        if (mSignInResult != null) {
-            Lesson lessons[] = mSignInResult.getLessons();
-            if (lessons != null && mCurrentLessonIndex >= 0 && mCurrentLessonIndex < lessons.length) {
-                return lessons[mCurrentLessonIndex];
-            }
-        }
-        return null;
-    }
+    public void setCurrentLesson(Lesson lesson) { mCurrentLesson = lesson; }
+    public Lesson getCurrentLesson() { return mCurrentLesson; }
 }

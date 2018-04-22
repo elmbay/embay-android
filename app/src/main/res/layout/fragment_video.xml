@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="200dp">
 
     <!--<FrameLayout-->
         <!--android:id="@+id/video_controller"-->
@@ -13,29 +13,34 @@
         <!--android:layout_alignParentBottom="true">-->
 
         <!--android:layout_above="@id/video_controller"/>-->
-        <VideoView
-            android:id="@+id/video_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"/>
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"/>
+
+    <RelativeLayout
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="16dp"
+        android:layout_centerInParent="true">
 
         <ImageButton
             android:id="@+id/video_start_button"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:src="@mipmap/video_start"
             android:background="@drawable/circle"
-            android:scaleType="fitCenter"
-            android:layout_centerInParent="true"/>
+            android:scaleType="fitCenter"/>
 
         <ImageButton
             android:id="@+id/video_stop_button"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:src="@mipmap/video_stop"
             android:background="@drawable/circle"
             android:scaleType="fitCenter"
-            android:layout_centerInParent="true"
             android:visibility="gone"/>
+    </RelativeLayout>
     <!--</FrameLayout>-->
 </RelativeLayout>
