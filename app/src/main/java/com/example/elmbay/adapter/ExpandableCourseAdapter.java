@@ -18,6 +18,7 @@ import java.util.List;
  * Created by kgu on 4/20/18.
  *
  * See http://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
+ * For expandable RecyclerView see https://github.com/bignerdranch/expandable-recycler-view/tree/master/expandablerecyclerview/src/main/java/com/bignerdranch/expandablerecyclerview
  */
 
 public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
@@ -25,15 +26,19 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
     private List<Chapter> mChapters;
     private IViewHolderClickListener mItemClickListener;
 
-    public ExpandableCourseAdapter(Context context, List<Chapter> chapters, IViewHolderClickListener itemClickListener) {
+    public ExpandableCourseAdapter(Context context, IViewHolderClickListener itemClickListener) {
         mContext = context;
-        mChapters = chapters;
         mItemClickListener = itemClickListener;
+    }
+
+    public void setChapters(List<Chapter> chapters) {
+        mChapters = chapters;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getGroupCount() {
-        return mChapters.size();
+        return mChapters == null ? 0 : mChapters.size();
     }
 
     @Override

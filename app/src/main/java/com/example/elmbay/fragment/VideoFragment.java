@@ -28,6 +28,7 @@ import com.example.elmbay.model.Lesson;
  * on handsets.
  */
 public class VideoFragment extends Fragment {
+    private static final String LOG_TAG = VideoFragment.class.getName();
     private ContentDescriptor mVideo;
     private VideoView mSimpleVideoView;
     private MediaPlayer mMediaPlayer;
@@ -52,7 +53,6 @@ public class VideoFragment extends Fragment {
         // initiate a video view
         if (mVideo != null) {
             mSimpleVideoView.setVideoURI(mVideo.getUri());
-            playVideo(true);
         }
 
         return top;
@@ -143,18 +143,24 @@ public class VideoFragment extends Fragment {
     }
 
     private void playVideo(boolean isResume) {
-        if (mMediaPlayer != null) {
-            if (isResume) {
-                // use MediaPlyer.start() instead of VideoView.start() to handle pause/resume properly
-                mMediaPlayer.start();
-                mStartButton.setVisibility(View.GONE);
-                mStopButton.setVisibility(View.VISIBLE);
-            } else {
-                // use mMediaPlayer.pause() instead of VideoView.stopPlayback() to handle pause/resume properly
-                mMediaPlayer.pause();
-                mStopButton.setVisibility(View.GONE);
-                mStartButton.setVisibility(View.VISIBLE);
+//        try {
+            if (mMediaPlayer != null) {
+                if (isResume) {
+                    // use MediaPlyer.start() instead of VideoView.start() to handle pause/resume properly
+                    mMediaPlayer.start();
+                    mStartButton.setVisibility(View.GONE);
+                    mStopButton.setVisibility(View.VISIBLE);
+                } else {
+                    // use mMediaPlayer.pause() instead of VideoView.stopPlayback() to handle pause/resume properly
+                    mMediaPlayer.pause();
+                    mStopButton.setVisibility(View.GONE);
+                    mStartButton.setVisibility(View.VISIBLE);
+                }
             }
-        }
+//        } catch (IllegalStateException e) {
+//            if (AppManager.DEBUG) {
+//                Log.e(LOG_TAG, e.getMessage());
+//            }
+//        }
     }
 }

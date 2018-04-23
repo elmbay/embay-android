@@ -1,4 +1,4 @@
-package com.example.elmbay.manager;
+package com.example.elmbay.widget;
 
 /*
  * TouchImageView.java

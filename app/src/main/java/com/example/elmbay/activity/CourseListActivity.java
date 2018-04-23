@@ -2,6 +2,8 @@ package com.example.elmbay.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,9 +12,17 @@ import android.widget.ExpandableListView;
 import com.example.elmbay.R;
 import com.example.elmbay.adapter.ExpandableCourseAdapter;
 import com.example.elmbay.adapter.IViewHolderClickListener;
+import com.example.elmbay.event.SignInResponseEvent;
+import com.example.elmbay.fragment.LoaderFragment;
 import com.example.elmbay.manager.AppManager;
+import com.example.elmbay.manager.SignInOperation;
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
+import com.example.elmbay.model.SignInRequest;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -31,39 +41,42 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
     private ExpandableCourseAdapter mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         AppManager.setup(getApplicationContext());
 
         setContentView(R.layout.activity_course_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setTitle(getTitle());
         }
 
         setupExpandableListView();
+
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment f = new LoaderFragment();
+            ft.add(R.id.course_loader, f).commit();
+        }
     }
 
-    private void setupExpandableListView() {
-        ExpandableListView view = findViewById(R.id.expendable_list);
-        assert view != null;
-        try {
-            List<Chapter> chapters = AppManager.getInstance().getSessionData().getSignInResult().getChapters();
-            mAdapter = new ExpandableCourseAdapter(this, chapters, this);
-            view.setAdapter(mAdapter);
+    @Override
+    public void onResume() {
+        super.onResume();
 
-            // Add horizontal divider between items
-//            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                    LinearLayoutManager.VERTICAL);
-//            view.addItemDecoration(dividerItemDecoration);
-        } catch (Exception e) {
-            if (AppManager.DEBUG) {
-                Log.e(LOG_TAG, "Exception at accessing chapters: " + e.getMessage());
-            }
+        EventBus.getDefault().register(this);
+        if (AppManager.getInstance().getSessionData().getSignInResult() == null) {
+            loadCourses();
         }
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
     }
 
     @Override
@@ -71,5 +84,32 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
         AppManager.getInstance().getSessionData().setCurrentLesson(lesson);
         Intent intent = new Intent(this, CourseDetailActivity.class);
         startActivity(intent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(SignInResponseEvent event) {
+        if (!event.hasError()) {
+            try {
+                List<Chapter> chapters =AppManager.getInstance().getSessionData().getSignInResult().getChapters();
+                mAdapter.setChapters(chapters);
+            } catch (Exception e) {
+                if (AppManager.DEBUG) {
+                    Log.w(LOG_TAG, "get chapters: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    private void setupExpandableListView() {
+        ExpandableListView view = findViewById(R.id.expendable_list);
+        assert view != null;
+        mAdapter = new ExpandableCourseAdapter(this, this);
+        view.setAdapter(mAdapter);
+    }
+
+    private void loadCourses() {
+        SignInRequest request = new SignInRequest("xueshengjia", "1234", null);
+        SignInOperation op = new SignInOperation(request, true);
+        op.submit();
     }
 }

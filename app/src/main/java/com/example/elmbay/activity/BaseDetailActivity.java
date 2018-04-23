@@ -16,7 +16,7 @@ import com.example.elmbay.model.Lesson;
  * Created by kgu on 4/18/18.
  */
 
-public class BaseDetailActivity extends AppCompatActivity {
+public abstract class BaseDetailActivity extends AppCompatActivity {
     public static final String LOG_TAG = BaseDetailActivity.class.getName();
     Lesson mLesson;
 
@@ -28,7 +28,7 @@ public class BaseDetailActivity extends AppCompatActivity {
     }
 
 
-        @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
@@ -43,7 +43,7 @@ public class BaseDetailActivity extends AppCompatActivity {
             setTitle(mLesson.getKeyword());
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }

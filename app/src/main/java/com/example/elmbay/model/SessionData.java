@@ -1,7 +1,4 @@
-package com.example.elmbay.manager;
-
-import com.example.elmbay.model.Lesson;
-import com.example.elmbay.model.SignInResult;
+package com.example.elmbay.model;
 
 /**
  * Created by kgu on 4/12/18.

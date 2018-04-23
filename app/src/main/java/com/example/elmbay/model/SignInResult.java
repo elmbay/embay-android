@@ -1,5 +1,6 @@
 package com.example.elmbay.model;
 
+import com.example.elmbay.manager.Helper;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -20,4 +21,20 @@ public class SignInResult {
 
     public void setChapters(List<Chapter> lessons) { mChapters = lessons; }
     public List<Chapter> getChapters() { return mChapters; }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{");
+        String comma = "";
+        if (mUserProgress != null) {
+            builder.append("userProgress=").append(mUserProgress.toString());
+            comma = ",";
+        }
+        if (mChapters != null) {
+            builder.append(comma).append("chapters=").append(Helper.listToString(mChapters));
+        }
+        builder.append("}");
+        return builder.toString();
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.elmbay.model;
 
+import com.example.elmbay.manager.Helper;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -19,10 +20,18 @@ public class Chapter {
     @SerializedName("topic")
     private String mTopic;
 
-    private boolean mIsExpanded;
-
     @SerializedName("lessons")
     private List<Lesson> mLessons;
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{id=").append(mId).append(",course=").append(mCourse).append(",topic=").append(mTopic);
+        if (mLessons != null) {
+            builder.append(",lessons=[").append(Helper.listToString(mLessons)).append("]");
+        }
+        return builder.toString();
+    }
 
     public String getId() { return mId; }
     public void setId(String id) { mId = id; }
@@ -32,9 +41,6 @@ public class Chapter {
 
     public String getTopic() { return mTopic; }
     public void setTopic(String topic) { mTopic = topic; }
-
-    public boolean isExpanded() { return mIsExpanded; }
-    public void setExpanded(boolean value) {mIsExpanded = value; }
 
     public List<Lesson> getLessons() { return mLessons; }
     public void setLessons(List<Lesson> lessons) { mLessons = lessons; }

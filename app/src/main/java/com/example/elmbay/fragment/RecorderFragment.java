@@ -295,9 +295,15 @@ public class RecorderFragment extends Fragment {
     }
 
     private void checkFileExists() {
-        float alpha = (float) (mFile.exists() ? 1.0 : 0.2);
+        boolean fileExists = mFile.exists();
+
+        float alpha = (float) (fileExists ? 1.0 : 0.2);
         mPlayButton.getImage().setAlpha(alpha);
         mShareButton.setAlpha(alpha);
         mDeleteButton.setAlpha(alpha);
+
+        mPlayButton.mButton.setEnabled(fileExists);
+        mShareButton.setEnabled(fileExists);
+        mDeleteButton.setEnabled(fileExists);
     }
 }

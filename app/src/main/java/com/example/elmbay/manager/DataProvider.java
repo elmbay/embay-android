@@ -2,11 +2,13 @@ package com.example.elmbay.manager;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.model.SignInResult;
 import com.example.elmbay.model.UserProgress;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +27,25 @@ public class DataProvider {
         List<Chapter> chapters = new ArrayList<Chapter>();
 
         List<Lesson> lessons = new ArrayList<Lesson>();
-        lessons.add(getLesson(context, "01"));
-        lessons.add(getLesson(context, "02"));
-        lessons.add(getLesson(context, "03"));
+        lessons.add(getLesson("01"));
+        lessons.add(getLesson("02"));
+        lessons.add(getLesson("03"));
         chapters.add(createChapter("01", "English 101", "Kids", lessons));
 
         lessons = new ArrayList<Lesson>();
-        lessons.add(getLesson(context, "04"));
+        lessons.add(getLesson("04"));
         chapters.add(createChapter("02", "English 101", "Nature", lessons));
 
         lessons = new ArrayList<Lesson>();
-        lessons.add(getLesson(context, "05"));
+        lessons.add(getLesson("05"));
         chapters.add(createChapter("03", "English 101", "Business", lessons));
 
         result.setChapters(chapters);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(chapters);
+
+        Log.w("DataProvider", json);
 
         return result;
     }
@@ -48,23 +55,23 @@ public class DataProvider {
         return progress;
     }
 
-    public static Lesson getLesson(Context context, String id) {
+    public static Lesson getLesson(String id) {
         Lesson lesson = null;
         switch (id) {
             case "01":
-                lesson = createLesson(context, id, "01", "Change Channel","change_channel_01_vd", "change_channel_01_ad", "change_channel_01_tx");
+                lesson = createLesson(id, "01", "Change Channel","change_channel_01_vd", "change_channel_01_ad", "change_channel_01_tx");
                 break;
             case "02":
-                lesson = createLesson(context, id, "01", "Juicy","juicy_02_vd", "juicy_02_ad", "juicy_02_tx");
+                lesson = createLesson(id, "01", "Juicy","juicy_02_vd", "juicy_02_ad", "juicy_02_tx");
                 break;
             case "03":
-                lesson = createLesson(context, id, "01", "literally","literally_03_vd", "literally_03_ad", "literally_03_tx");
+                lesson = createLesson(id, "01", "literally","literally_03_vd", "literally_03_ad", "literally_03_tx");
                 break;
             case "04":
-                lesson = createLesson(context, id, "02", "Blue Sea","http://abhiandroid-8fb4.kxcdn.com/ui/wp-content/uploads/2016/04/videoviewtestingvideo.mp4", null, null);
+                lesson = createLesson(id, "02", "Blue Sea","http://abhiandroid-8fb4.kxcdn.com/ui/wp-content/uploads/2016/04/videoviewtestingvideo.mp4", null, null);
                 break;
             case "05":
-                lesson = createLesson(context, id, "03", "Venice","ppcash", null, null);
+                lesson = createLesson(id, "03", "Venice","ppcash", null, null);
                 break;
         }
         return lesson;
@@ -79,15 +86,15 @@ public class DataProvider {
         return chapter;
     }
 
-    private static Lesson createLesson(Context context, @NonNull String id, @NonNull String chapterId, @NonNull String keyword, String videoString, String audioString, String transcriptString) {
+    private static Lesson createLesson(@NonNull String id, @NonNull String chapterId, @NonNull String keyword, String videoString, String audioString, String transcriptString) {
         Lesson lesson = new Lesson();
 
         lesson.setId(id);
         lesson.setChapterId(chapterId);
         lesson.setKeyword(keyword);
-        lesson.setVideo(context, videoString);
-        lesson.setAudio(context, audioString);
-        lesson.setTranscript(context, transcriptString);
+        lesson.setVideo(videoString);
+        lesson.setAudio(audioString);
+        lesson.setTranscript(transcriptString);
 
         return lesson;
     }

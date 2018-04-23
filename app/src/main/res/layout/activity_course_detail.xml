@@ -20,7 +20,7 @@
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#e6f2ff"
+        android:background="@color/colorPrimaryLight"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
 
-    <com.example.elmbay.manager.TouchImageView
+    <com.example.elmbay.widget.TouchImageView
         android:layout_below="@id/recorder_divider"
         android:id="@+id/transcript"
         android:layout_width="match_parent"

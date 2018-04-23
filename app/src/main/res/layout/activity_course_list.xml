@@ -13,8 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"/>
 
-    <ExpandableListView
-        android:id="@+id/expendable_list"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ExpandableListView
+            android:id="@+id/expendable_list"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+        <FrameLayout
+            android:id="@+id/course_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+    </RelativeLayout>
 </LinearLayout>

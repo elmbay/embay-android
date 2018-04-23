@@ -1,7 +1,5 @@
 package com.example.elmbay.model;
 
-import android.content.Context;
-
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -27,6 +25,23 @@ public class Lesson {
     @SerializedName("transcript")
     private ContentDescriptor mTranscript;
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{id=").append(mId).append(",chapterId=").append(mChapterId).append(",keyword=").append(mKeyword);
+        if (mVideo!= null) {
+            builder.append(",video=").append(mVideo.toString());
+        }
+        if (mAudio!= null) {
+            builder.append(",ausio=").append(mAudio.toString());
+        }
+        if (mTranscript!= null) {
+            builder.append(",transcript=").append(mTranscript.toString());
+        }
+        builder.append("}");
+        return builder.toString();
+    }
+
     public String getId() { return mId; }
     public void setId(String id) { mId = id; }
 
@@ -38,37 +53,37 @@ public class Lesson {
 
     public ContentDescriptor getVideo() { return mVideo; }
     public void setVideo(ContentDescriptor video) { mVideo = video; }
-    public void setVideo(Context context, String videoString) {
+    public void setVideo(String videoString) {
         if (videoString == null) {
             mVideo = null;
         } else {
             mVideo = new ContentDescriptor();
             mVideo.setType(ContentDescriptor.CONTENT_TYPE_VIDEO);
-            mVideo.setUri(context, videoString);
+            mVideo.setUriString(videoString);
         }
     }
 
     public ContentDescriptor getAudio() { return mAudio; }
     public void setAudio(ContentDescriptor audio) { mAudio = audio; }
-    public void setAudio(Context context, String audioString) {
+    public void setAudio(String audioString) {
         if (audioString == null) {
             mAudio = null;
         } else {
             mAudio = new ContentDescriptor();
             mAudio.setType(ContentDescriptor.CONTENT_TYPE_AUDIO);
-            mAudio.setUri(context, audioString);
+            mAudio.setUriString(audioString);
         }
     }
 
     public ContentDescriptor getTranscript() { return mTranscript; }
     public void setTranscript(ContentDescriptor transcript) { mTranscript = transcript; }
-    public void setTranscript(Context context, String transcriptString) {
+    public void setTranscript(String transcriptString) {
         if (transcriptString == null) {
             mTranscript = null;
         } else {
             mTranscript = new ContentDescriptor();
             mTranscript.setType(ContentDescriptor.CONTENT_TYPE_IMAGE);
-            mTranscript.setUri(context, transcriptString);
+            mTranscript.setUriString(transcriptString);
         }
     }
 }

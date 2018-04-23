@@ -1,25 +1,30 @@
 package com.example.elmbay.manager;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.elmbay.event.NetworkResponseEvent;
+import com.example.elmbay.event.SignInResponseEvent;
 import com.example.elmbay.model.SignInRequest;
 import com.example.elmbay.model.SignInResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
+import static com.example.elmbay.manager.NetworkManager.ENDPOINT_USERS;
+
 /**
+ *
  * Created by kgu on 4/10/18.
  */
 
 public class SignInOperation {
-    SignInRequest mRequest;
-    boolean mIsSignUp;
+    private static final String LOG_TAG = SignInOperation.class.getName();
+    private SignInRequest mRequest;
+    private boolean mIsSignUp;
 
     public SignInOperation(SignInRequest request, boolean isSignUp) {
         mRequest = request;
@@ -29,8 +34,7 @@ public class SignInOperation {
     public void submit() {
         int method = mIsSignUp ? Request.Method.POST : Request.Method.GET;
 
-        Uri.Builder builder = Uri.parse(NetworkManager.BASE_URL_MOCK).buildUpon();
-        builder.appendPath(NetworkManager.ENDPOINT_USERS);
+        Uri.Builder builder = Uri.parse(NetworkManager.BASE_URL_MOCK + ENDPOINT_USERS).buildUpon();
         if (!mIsSignUp) {
             builder.appendPath(mRequest.getUserName());
         }
@@ -43,24 +47,25 @@ public class SignInOperation {
     }
 
     private Response.Listener<JSONObject> onResult() {
-        Response.Listener<JSONObject> resultListener = new Response.Listener<JSONObject>() {
+        return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 SignInResult result = NetworkManager.fromJSONObject(response, SignInResult.class);
+                if (AppManager.DEBUG) {
+                    Log.i(LOG_TAG, "SignInResult=" + (result == null ? "null" : result.toString()));
+                }
                 AppManager.getInstance().getSessionData().setSignInResult(result);
-                EventBus.getDefault().post(new NetworkResponseEvent(result.getClass(), null));
+                EventBus.getDefault().post(new SignInResponseEvent(null));
             }
         };
-        return resultListener;
     }
 
     private Response.ErrorListener onError() {
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                EventBus.getDefault().post(new NetworkResponseEvent(SignInResult.class, error));
+                EventBus.getDefault().post(new SignInResponseEvent(error));
             }
         };
-        return errorListener;
     }
 }

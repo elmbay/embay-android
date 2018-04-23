@@ -8,16 +8,13 @@ import java.lang.reflect.Type;
  * Created by kgu on 4/11/18.
  */
 
-public class NetworkResponseEvent {
-    Type mResultType;
+public class SignInResponseEvent {
     VolleyError mError;
 
-    public NetworkResponseEvent(Type resultType, VolleyError error) {
-        mResultType = resultType;
+    public SignInResponseEvent(VolleyError error) {
         mError = error;
     }
 
     public boolean hasError() { return mError != null; }
-    public Type getResultType() { return mResultType; }
     public VolleyError getError() { return mError; }
 }

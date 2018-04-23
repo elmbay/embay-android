@@ -1,9 +1,8 @@
 package com.example.elmbay.model;
 
-import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 
+import com.example.elmbay.manager.AppManager;
 import com.google.gson.annotations.SerializedName;
 
 import static com.example.elmbay.manager.AppManager.PACKAGE_NAME;
@@ -18,22 +17,41 @@ public class ContentDescriptor {
     public static final int CONTENT_TYPE_IMAGE = 3;
 
     @SerializedName("type")
-    int mType;
+    private int mType;
 
-    @SerializedName("uri")
-    Uri mUri;
+    @SerializedName("uriString")
+    private String mUriString;
+
+    private transient Uri mUri;
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{type=").append(mType).append(",uriString=").append(mUriString).append("}");
+        return builder.toString();
+    }
 
     public void setType(int type) { mType = type; }
     public int getType() { return mType; }
 
-    public Uri getUri() { return mUri; }
+    public String getUriString() { return mUriString; }
+    public void setUriString(String uriString) { mUriString = uriString; }
 
-    public void setUri(@NonNull Context context, @NonNull String uriString) {
-        if (uriString.startsWith("http")) {
-            mUri = Uri.parse(uriString);
-        } else {
-            int resourceId = context.getResources().getIdentifier(uriString, "raw", PACKAGE_NAME);
-            mUri = Uri.parse("android.resource://" + PACKAGE_NAME + "/" + resourceId);
+    public Uri getUri() {
+        if (mUri == null && mUriString != null) {
+            deriveUri();
+        }
+        return mUri;
+    }
+
+    private void deriveUri() {
+        if (mUriString != null) {
+            if (mUriString.startsWith("http")) {
+                mUri = Uri.parse(mUriString);
+            } else {
+                int resourceId = AppManager.getInstance().getAppContext().getResources().getIdentifier(mUriString, "raw", PACKAGE_NAME);
+                mUri = Uri.parse("android.resource://" + PACKAGE_NAME + "/" + resourceId);
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import com.example.elmbay.R;
 import com.example.elmbay.fragment.AudioFragment;
 import com.example.elmbay.fragment.RecorderFragment;
 import com.example.elmbay.fragment.VideoFragment;
-import com.example.elmbay.manager.TouchImageView;
+import com.example.elmbay.widget.TouchImageView;
 
 /**
  * An activity representing a single Item detail screen. This

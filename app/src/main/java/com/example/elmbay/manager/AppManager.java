@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.elmbay.model.SessionData;
+
 /**
  * Created by kgu on 4/10/18.
  */
@@ -12,7 +14,7 @@ import android.util.Log;
 public class AppManager {
     public static final String PACKAGE_NAME = "com.example.elmbay";
     public static final boolean DEBUG = true;
-    public static final boolean MOCK = true;
+    public static final boolean MOCK = false;
 
     private static final String LOG_TAG = AppManager.class.getName();
     private static AppManager sInstance;
@@ -38,7 +40,9 @@ public class AppManager {
         try {
             return mAppContext.getPackageManager().getPackageInfo(getAppName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.w(LOG_TAG, "Missing android:versionName entry in AndroidManifest.xml");
+            if (AppManager.DEBUG) {
+                Log.w(LOG_TAG, "Missing android:versionName entry in AndroidManifest.xml");
+            }
             return null;
         }
     }

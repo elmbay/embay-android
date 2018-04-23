@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
@@ -20,15 +19,18 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 
 /**
+ * The class manages all network operations
+ *
  * Created by kgu on 4/11/18.
  */
 
 public class NetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getName();
+    private static final String sRequestMethods[] = {"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH"};
 
     // urls
-    public static final String BASE_URL_MOCK = "http://private-a3c9c-foundationwallet.apiary-mock.com";
-    public static final String ENDPOINT_USERS = "/v1/elmbay/users/";
+    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
+    public static final String ENDPOINT_USERS = "/v1/elmbay/users";
 
     private static NetworkManager sInstance;
     private Context mAppContext;
@@ -41,27 +43,48 @@ public class NetworkManager {
         return sInstance;
     }
 
-    public void submit(StringRequest request) {
+    /**
+     * Enqueue an http JsonObjectRequest
+     *
+     * @param request
+     */
+    public void submit(JsonObjectRequest request) {
+        if (AppManager.DEBUG) {
+            Log.i(LOG_TAG, "method:\t" + sRequestMethods[request.getMethod()]
+                    + "\n\turl:\t" + request.getUrl()
+                    + "\n\tbody:\t" + request.getBody());
+        }
         mRequestQueue.add(request);
     }
-    public void submit(JsonObjectRequest request) { mRequestQueue.add(request); }
+
+    /**
+     * Convert a JsonObjectRequest (from network response) to a target object
+     *
+     * @param jsonObject
+     * @param targetType
+     * @param <T>
+     * @return
+     */
+    public static <T> T fromJSONObject(JSONObject jsonObject, Type targetType) {
+        Gson gson = new Gson();
+        String str = jsonObject.toString();
+        if (AppManager.DEBUG) {
+            Log.i(LOG_TAG, str);
+        }
+        return gson.fromJson(str, targetType);
+    }
 
     public static JSONObject toJSONObject(Object object) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(object);
         try {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            return jsonObject;
+            return new JSONObject(jsonString);
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Failed to convert " + object.getClass().getSimpleName() + " to JSONObject: " + e.getMessage() + ": " + jsonString);
+            if (AppManager.DEBUG) {
+                Log.e(LOG_TAG, "Failed to convert " + object.getClass().getSimpleName() + " to JSONObject: " + e.getMessage() + ": " + jsonString);
+            }
             return null;
         }
-    }
-
-    public static <T> T fromJSONObject(JSONObject jsonObject, Type targetType) {
-        Gson gson = new Gson();
-        String str = jsonObject.toString();
-        return gson.fromJson(str, targetType);
     }
 
     public boolean hasNetworkConnection() {
