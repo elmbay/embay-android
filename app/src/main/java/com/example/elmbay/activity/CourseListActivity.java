@@ -16,15 +16,12 @@ import com.example.elmbay.event.SignInResponseEvent;
 import com.example.elmbay.fragment.LoaderFragment;
 import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.manager.SignInOperation;
-import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.model.SignInRequest;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.List;
 
 /**
  * An activity representing a list of Items. This activity
@@ -70,6 +67,8 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
         EventBus.getDefault().register(this);
         if (AppManager.getInstance().getSessionData().getSignInResult() == null) {
             loadCourses();
+        } else if (mAdapter.getGroupCount() == 0) {
+            mAdapter.setChapters(AppManager.getInstance().getSessionData().getSignInResult().getChapters());
         }
     }
 
@@ -88,10 +87,9 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(SignInResponseEvent event) {
-        if (!event.hasError()) {
+        if (event == null || !event.hasError()) {
             try {
-                List<Chapter> chapters =AppManager.getInstance().getSessionData().getSignInResult().getChapters();
-                mAdapter.setChapters(chapters);
+                mAdapter.setChapters(AppManager.getInstance().getSessionData().getSignInResult().getChapters());
             } catch (Exception e) {
                 if (AppManager.DEBUG) {
                     Log.w(LOG_TAG, "get chapters: " + e.getMessage());

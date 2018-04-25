@@ -143,24 +143,18 @@ public class VideoFragment extends Fragment {
     }
 
     private void playVideo(boolean isResume) {
-//        try {
-            if (mMediaPlayer != null) {
-                if (isResume) {
-                    // use MediaPlyer.start() instead of VideoView.start() to handle pause/resume properly
-                    mMediaPlayer.start();
-                    mStartButton.setVisibility(View.GONE);
-                    mStopButton.setVisibility(View.VISIBLE);
-                } else {
-                    // use mMediaPlayer.pause() instead of VideoView.stopPlayback() to handle pause/resume properly
-                    mMediaPlayer.pause();
-                    mStopButton.setVisibility(View.GONE);
-                    mStartButton.setVisibility(View.VISIBLE);
-                }
+        if (mMediaPlayer != null) {
+            if (isResume) {
+                // use MediaPlyer.start() instead of VideoView.start() to handle pause/resume properly
+                mMediaPlayer.start();
+                mStartButton.setVisibility(View.GONE);
+                mStopButton.setVisibility(View.VISIBLE);
+            } else {
+                // use mMediaPlayer.pause() instead of VideoView.stopPlayback() to handle pause/resume properly
+                mMediaPlayer.pause();
+                mStopButton.setVisibility(View.GONE);
+                mStartButton.setVisibility(View.VISIBLE);
             }
-//        } catch (IllegalStateException e) {
-//            if (AppManager.DEBUG) {
-//                Log.e(LOG_TAG, e.getMessage());
-//            }
-//        }
+        }
     }
 }
