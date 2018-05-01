@@ -36,14 +36,27 @@
                 android:visibility="gone"/>
         </RelativeLayout>
 
-        <ImageButton
-            android:id="@+id/replay"
+        <RelativeLayout
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:background="@drawable/circle"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/play_blue"/>
+            android:layout_height="32dp">
+
+            <ImageButton
+                android:id="@+id/replay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circle"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/play_blue"/>
+            <ImageButton
+                android:id="@+id/replay_stop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circle"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/stop_blue"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/share"

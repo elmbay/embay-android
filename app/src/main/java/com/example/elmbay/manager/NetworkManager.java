@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -25,16 +26,20 @@ import java.lang.reflect.Type;
  */
 
 public class NetworkManager {
+    private static final String S_REQUEST_METHODS[] = {"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH"};
+    private static final int MY_SOCKET_TIMEOUT_MS = 60000;
     private static final String LOG_TAG = NetworkManager.class.getName();
-    private static final String sRequestMethods[] = {"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH"};
 
     // urls
-    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
-    public static final String ENDPOINT_USERS = "/v1/elmbay/users";
+//    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
+//    public static final String ENDPOINT_USERS = "/v1/elmbay/users";
+    public static final String BASE_URL_MOCK = "http://107.3.138.187";
+    public static final String ENDPOINT_USERS = "/signup.php";
 
     private static NetworkManager sInstance;
     private Context mAppContext;
     private RequestQueue mRequestQueue;
+    private DefaultRetryPolicy mRetryPolicy;
 
     public static NetworkManager getInstance() {
         if (sInstance == null) {
@@ -50,10 +55,11 @@ public class NetworkManager {
      */
     public void submit(JsonObjectRequest request) {
         if (AppManager.DEBUG) {
-            Log.i(LOG_TAG, "method:\t" + sRequestMethods[request.getMethod()]
+            Log.i(LOG_TAG, "method:\t" + S_REQUEST_METHODS[request.getMethod()]
                     + "\n\turl:\t" + request.getUrl()
                     + "\n\tbody:\t" + request.getBody());
         }
+        request.setRetryPolicy(mRetryPolicy);
         mRequestQueue.add(request);
     }
 
@@ -117,6 +123,8 @@ public class NetworkManager {
 
         // Creates a default worker pool and calls {@link RequestQueue#start()} on it.
         mRequestQueue = Volley.newRequestQueue(appContext);
+
+        mRetryPolicy = new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
     }
 
     private NetworkManager() {}

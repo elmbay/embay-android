@@ -34,6 +34,7 @@ public class ContentDescriptor {
 
     private transient Uri mUri;
     private transient File mFile;
+    private String mMimeType;
 
     public ContentDescriptor() {
         if (sResources == null) {
@@ -61,6 +62,9 @@ public class ContentDescriptor {
     public void setType(int type) { mType = type; }
     public int getType() { return mType; }
 
+    public String getMimeType() { return mMimeType; }
+    public void setMimeType(String mimeType) { mMimeType = mimeType; }
+
     public String getUriString() { return mUriString; }
     public void setUriString(String uriString) { mUriString = uriString; }
 
@@ -85,6 +89,10 @@ public class ContentDescriptor {
                 mUri = Uri.parse("android.resource://" + PACKAGE_NAME + "/" + resourceId);
             }
         }
+    }
+
+    public boolean isRemote() {
+        return mUriString != null && mUriString.startsWith("http");
     }
 
     public File getFile() { return mFile; }

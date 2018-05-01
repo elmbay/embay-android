@@ -8,6 +8,8 @@ import com.example.elmbay.R;
 import com.example.elmbay.fragment.AudioFragment;
 import com.example.elmbay.fragment.RecorderFragment;
 import com.example.elmbay.fragment.VideoFragment;
+import com.example.elmbay.model.ContentDescriptor;
+import com.example.elmbay.widget.ImageViewer;
 import com.example.elmbay.widget.TouchImageView;
 
 /**
@@ -27,10 +29,7 @@ public class CourseDetailActivity extends BaseDetailActivity {
         setupActionBar();
 
         mTranscriptView = findViewById(R.id.transcript);
-        if (mLesson != null && mLesson.getTranscript() != null) {
-            mTranscriptView.setImageURI(mLesson.getTranscript().getUri());
-            mTranscriptView.setZoom((float) 1.8);
-        }
+        displayTranscript();
 
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -46,6 +45,17 @@ public class CourseDetailActivity extends BaseDetailActivity {
             ft.add(R.id.recorder_container, f);
 
             ft.commit();
+        }
+    }
+
+    private void displayTranscript() {
+        if (mLesson != null) {
+            ContentDescriptor transCript = mLesson.getTranscript();
+            if (transCript != null) {
+                ImageViewer imageViewer = new ImageViewer(mTranscriptView, transCript);
+                imageViewer.display();
+                mTranscriptView.setZoom((float) 1.8);
+            }
         }
     }
 }

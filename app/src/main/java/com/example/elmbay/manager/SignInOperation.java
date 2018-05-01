@@ -64,7 +64,11 @@ public class SignInOperation {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                EventBus.getDefault().post(new SignInResponseEvent(error));
+                if (AppManager.DEBUG) {
+                    Log.w(LOG_TAG, "SignInResult error" + error.getMessage());
+                }
+                EventBus.getDefault().post(new SignInResponseEvent(error)
+                );
             }
         };
     }

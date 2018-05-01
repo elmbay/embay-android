@@ -2,18 +2,16 @@ package com.example.elmbay.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.example.elmbay.R;
 import com.example.elmbay.adapter.ExpandableCourseAdapter;
 import com.example.elmbay.adapter.IViewHolderClickListener;
 import com.example.elmbay.event.SignInResponseEvent;
-import com.example.elmbay.fragment.LoaderFragment;
 import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.manager.SignInOperation;
 import com.example.elmbay.model.Lesson;
@@ -36,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class CourseListActivity extends AppCompatActivity implements IViewHolderClickListener {
     private static final String LOG_TAG = CourseListActivity.class.getName();
     private ExpandableCourseAdapter mAdapter;
+    private View mSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,11 +52,7 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
 
         setupExpandableListView();
 
-        if (savedInstanceState == null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            Fragment f = new LoaderFragment();
-            ft.add(R.id.course_loader, f).commit();
-        }
+        mSpinner = findViewById(R.id.spinner);
     }
 
     @Override
@@ -66,8 +61,10 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
 
         EventBus.getDefault().register(this);
         if (AppManager.getInstance().getSessionData().getSignInResult() == null) {
+            mSpinner.setVisibility(View.VISIBLE);
             loadCourses();
         } else if (mAdapter.getGroupCount() == 0) {
+            mSpinner.setVisibility(View.GONE);
             mAdapter.setChapters(AppManager.getInstance().getSessionData().getSignInResult().getChapters());
         }
     }
@@ -87,6 +84,7 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(SignInResponseEvent event) {
+        mSpinner.setVisibility(View.GONE);
         if (event == null || !event.hasError()) {
             try {
                 mAdapter.setChapters(AppManager.getInstance().getSessionData().getSignInResult().getChapters());
