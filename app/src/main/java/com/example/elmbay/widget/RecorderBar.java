@@ -15,7 +15,6 @@ import static com.example.elmbay.widget.StateButton.STATE_READY;
 public class RecorderBar {
     private static final String RECORDING_FILE_MIME_TYPE = "audio/3gpp";
     private static final String RECORDING_FILE_SUFFIX = ".3gp";
-    private static final String LOG_TAG = RecorderBar.class.getName();
 
     private int mState = STATE_READY;
     private Context mContext;
@@ -60,6 +59,9 @@ public class RecorderBar {
         }
     }
 
+    /**
+     * Call this after all buttons are created to coordinate the buttons responsivness
+     */
     public void setObservers() {
         if (mDeleteButton != null) {
             // recording may enable/disable other action buttons

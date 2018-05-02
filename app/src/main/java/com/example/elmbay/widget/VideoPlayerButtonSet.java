@@ -107,9 +107,13 @@ public class VideoPlayerButtonSet {
 
         public void onAction() {
             if (mState != STATE_PLAYING && mMediaPlayer != null) {
-                mMediaPlayer.start();
-                mState = STATE_PLAYING;
-                notifyStateChange();
+                try {
+                    mMediaPlayer.start();
+                    mState = STATE_PLAYING;
+                    notifyStateChange();
+                } catch (IllegalStateException e) {
+                    // ignore
+                }
             }
         }
 
@@ -125,9 +129,13 @@ public class VideoPlayerButtonSet {
 
         public void onAction() {
             if (mState == STATE_PLAYING && mMediaPlayer != null) {
-                mMediaPlayer.pause();
-                mState = STATE_READY;
-                notifyStateChange();
+                try {
+                    mMediaPlayer.pause();
+                    mState = STATE_READY;
+                    notifyStateChange();
+                } catch (IllegalStateException e) {
+                    // ignore
+                }
             }
         }
 

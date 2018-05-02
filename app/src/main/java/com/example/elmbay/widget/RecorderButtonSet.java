@@ -77,10 +77,7 @@ public class RecorderButtonSet {
                 mRecorder.start();
                 Toast.makeText(mContext, "Start recording...", Toast.LENGTH_LONG).show();
             } catch (IllegalStateException e) {
-                if (AppManager.DEBUG) {
-                    Log.e(LOG_TAG, "start() failed");
-                    e.printStackTrace();
-                }
+                // ignore
             }
 
             mState = STATE_RECORDING;
@@ -100,10 +97,14 @@ public class RecorderButtonSet {
 
         public void onAction() {
             if (mRecorder != null) {
-                mRecorder.stop();       // stop recording
-                mRecorder.reset();      // set state to idle
-                mRecorder.release();    // release resource back to system
-                mRecorder = null;
+                try {
+                    mRecorder.stop();       // stop recording
+                    mRecorder.reset();      // set state to idle
+                    mRecorder.release();    // release resource back to system
+                    mRecorder = null;
+                } catch (IllegalStateException e) {
+                    // ignore
+                }
             }
 
             mState = STATE_READY;

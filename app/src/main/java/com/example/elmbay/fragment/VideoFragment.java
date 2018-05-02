@@ -49,10 +49,4 @@ public class VideoFragment extends Fragment {
         super.onPause();
         mVideoPlayer.onStop();
     }
-
-    @Override
-    public void onStop() {
-        mVideoPlayer.onStop();
-        super.onStop();
-    }
 }
