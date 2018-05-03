@@ -15,7 +15,8 @@
         android:layout_centerInParent="true"
         android:background="@drawable/circle"
         android:scaleType="fitCenter"
-        android:src="@mipmap/slow_play"/>
+        android:src="@mipmap/slow_play"
+        android:tooltipText="Slow"/>
 
     <ImageButton
         android:id="@+id/record_stop"

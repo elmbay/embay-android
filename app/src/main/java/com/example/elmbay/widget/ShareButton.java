@@ -30,12 +30,15 @@ public class ShareButton extends StateButton {
 
             // Grant temporary read permission to the content URI
             share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            share.setType(mContent.getMimeType());
-            share.setData(mContent.getUri());
 
-            // Add data to the intent, the receiving app will decide what to do with it.
+            share.setType(mContent.getMimeType());
             share.putExtra(Intent.EXTRA_SUBJECT, mSubject);
-//            share.putExtra(Intent.EXTRA_TEXT, "http://www.codeofaninja.com");
+//            share.putExtra(Intent.EXTRA_TEXT, mSubject);
+
+            // Two places to set uri: This is to fix "Unsupported audio format"
+            share.setData(mContent.getUri());
+            // This is to really attach the file
+            share.putExtra(Intent.EXTRA_STREAM, mContent.getUri());
 
             mContext.startActivity(Intent.createChooser(share, mSubject));
         } catch (IllegalArgumentException e) {
@@ -46,5 +49,4 @@ public class ShareButton extends StateButton {
     public void onStateChange() {
         enableButton(mContent.exists());
     }
-
 }

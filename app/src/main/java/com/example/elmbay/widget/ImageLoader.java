@@ -19,14 +19,14 @@ import java.net.URL;
  * Created by kgu on 4/30/18.
  */
 
-public class ImageViewer {
+public class ImageLoader {
     private static AsyncTask mAsyncTask;
-    private static final String LOG_TAG = ImageViewer.class.getName();
+    private static final String LOG_TAG = ImageLoader.class.getName();
 
     private ImageView mImageView;
     private ContentDescriptor mImageContent;
 
-    public ImageViewer(ImageView imageView, ContentDescriptor imageContent) {
+    public ImageLoader(ImageView imageView, ContentDescriptor imageContent) {
         mImageView = imageView;
         mImageContent = imageContent;
     }
