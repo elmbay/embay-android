@@ -26,18 +26,16 @@
         </provider>
 
         <activity
-            android:name="com.example.elmbay.activity.CourseListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+                android:name="com.example.elmbay.activity.SignInActivity">
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN"/>
+                    <category android:name="android.intent.category.LAUNCHER"/>
+                </intent-filter>
         </activity>
 
         <activity
-            android:name="com.example.elmbay.activity.SignInActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
+                android:name="com.example.elmbay.activity.CourseListActivity"
+                android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity

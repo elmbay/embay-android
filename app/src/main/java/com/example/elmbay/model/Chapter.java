@@ -20,6 +20,7 @@ public class Chapter {
     @SerializedName("topic")
     private String mTopic;
 
+    // For comparison, lessons is a list of lessons in ascend order
     @SerializedName("lessons")
     private List<Lesson> mLessons;
 

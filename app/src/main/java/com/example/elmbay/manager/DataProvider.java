@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
-import com.example.elmbay.model.SignInResult;
-import com.example.elmbay.model.UserProgress;
+import com.example.elmbay.operation.ListChaptersResult;
+import com.example.elmbay.model.ProgressMark;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ import java.util.List;
 
 public class DataProvider {
 
-    public static SignInResult getSignInResult(Context context) {
-        SignInResult result = new SignInResult();
+    public static ListChaptersResult getSignInResult(Context context) {
+        ListChaptersResult result = new ListChaptersResult();
 
-        result.setUserProgress(getUserProgress());
+        result.setNextLoadInHours(2);
 
         List<Chapter> chapters = new ArrayList<Chapter>();
 
@@ -50,8 +50,8 @@ public class DataProvider {
         return result;
     }
 
-    public static UserProgress getUserProgress() {
-        UserProgress progress = new UserProgress();
+    public static ProgressMark getUserProgress() {
+        ProgressMark progress = new ProgressMark();
         return progress;
     }
 

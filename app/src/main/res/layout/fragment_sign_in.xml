@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/spinner"/>
+
+    <LinearLayout
+        android:id="@+id/signin_container"
+        android:orientation="vertical"
+        android:layout_marginTop="64dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp">
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:inputType="textEmailAddress"
+            android:hint="@string/email"
+            style="@style/Widget.AppCompat.EditText"/>
+
+        <TextView
+            android:id="@+id/or"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/or"
+            android:textColor="@color/colorPrimaryBold"/>
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="phone"
+            android:hint="@string/phone"
+            style="@style/Widget.AppCompat.EditText"/>
+
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPassword"
+            android:hint="@string/password"
+            style="@style/Widget.AppCompat.EditText"/>
+
+        <Button
+            android:id="@+id/sign_in"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/oval_button"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:text="@string/sign_in"/>
+
+        <TextView
+            android:id="@+id/forget_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="32dp"
+            android:clickable="true"
+            android:text="@string/forgot_password"
+            android:textColor="@color/colorPrimaryBold"/>
+
+    </LinearLayout>
+</RelativeLayout>

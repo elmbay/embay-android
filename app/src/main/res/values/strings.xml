@@ -3,13 +3,15 @@
     <string name="app_name">Elm Bay * 榆树湾</string>
 
     <!-- sign in -->
-    <string name="user_name">User Name</string>
+    <string name="email">Email</string>
+    <string name="or">-OR-</string>
+    <string name="phone">Phone</string>
     <string name="password">Password</string>
-    <string name="forget_user_name">Forget user name</string>
-    <string name="forget_password">Forget password</string>
-    <string name="keep_me_signed_in">Keep me signed in</string>
+    <string name="forgot_password">Forgot password?</string>
     <string name="sign_in">Sign In</string>
-    <string name="sign_up">Create Account</string>
+    <string name="invalid_user_id">Email or phone number is not valid</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="ok">OK</string>
 
     <!-- image buttons -->
     <string name="repeat_slowly">Repeat slowly</string>

@@ -31,10 +31,11 @@ public class NetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getName();
 
     // urls
-//    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
-//    public static final String ENDPOINT_USERS = "/v1/elmbay/users";
-    public static final String BASE_URL_MOCK = "http://107.3.138.187";
-    public static final String ENDPOINT_USERS = "/signup.php";
+    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
+    public static final String ENDPOINT_USERS = "/v1/elmbay/users";
+    public static final String ENDPOINT_CHAPTERS = "/v1/elmbay/chapters";
+//    public static final String BASE_URL_MOCK = "http://107.3.138.187";
+//    public static final String ENDPOINT_USERS = "/signup.php";
 
     private static NetworkManager sInstance;
     private Context mAppContext;
