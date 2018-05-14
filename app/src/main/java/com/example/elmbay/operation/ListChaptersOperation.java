@@ -48,8 +48,10 @@ public class ListChaptersOperation {
                 if (AppManager.DEBUG) {
                     Log.i(LOG_TAG, "ListChaptersResult=" + (result == null ? "null" : result.toString()));
                 }
-                AppManager.getInstance().getSessionData().setListChaptersResult(result);
-                EventBus.getDefault().post(new ListChaptersResponseEvent(null));
+                if (result != null && result.getChapters() != null) {
+                    AppManager.getInstance().getSessionData().setListChaptersResult(result);
+                    EventBus.getDefault().post(new ListChaptersResponseEvent(null));
+                }
             }
         };
     }

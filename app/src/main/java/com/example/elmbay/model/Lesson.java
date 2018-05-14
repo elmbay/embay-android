@@ -7,11 +7,12 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Lesson {
+
     @SerializedName("id")
-    private String mId;
+    private int mId;
 
     @SerializedName("chapterId")
-    private String mChapterId;
+    private int mChapterId;
 
     @SerializedName("keyword")
     private String mKeyword;
@@ -24,6 +25,8 @@ public class Lesson {
 
     @SerializedName("transcript")
     private ContentDescriptor mTranscript;
+
+    private int mStatus;
 
     @Override
     public String toString() {
@@ -42,11 +45,11 @@ public class Lesson {
         return builder.toString();
     }
 
-    public String getId() { return mId; }
-    public void setId(String id) { mId = id; }
+    public int getId() { return mId; }
+    public void setId(int id) { mId = id; }
 
-    public String getChapterId() { return mChapterId; }
-    public void setChapterId(String id) { mChapterId = id; }
+    public int getChapterId() { return mChapterId; }
+    public void setChapterId(int id) { mChapterId = id; }
 
     public String getKeyword() { return mKeyword; }
     public void setKeyword(String keyword) { mKeyword = keyword; }
@@ -86,4 +89,7 @@ public class Lesson {
             mTranscript.setUriString(transcriptString);
         }
     }
+
+    public int getStatus() { return mStatus; }
+    public void setStatus(int status) { mStatus = status; }
 }

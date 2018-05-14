@@ -22,5 +22,6 @@
     <string name="start_playing">Start playing</string>
     <string name="stop_playing">Stop playing</string>
     <string name="share_recording">Share recording</string>
+    <string name="checked">Done</string>
 
 </resources>

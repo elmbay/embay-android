@@ -14,6 +14,10 @@ import com.example.elmbay.model.Lesson;
 
 import java.util.List;
 
+import static com.example.elmbay.manager.SessionData.STATUS_INPROGRESS;
+import static com.example.elmbay.manager.SessionData.STATUS_LOCKED;
+import static com.example.elmbay.manager.SessionData.STATUS_READY;
+
 /**
  * Created by kgu on 4/20/18.
  *
@@ -49,14 +53,30 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.chapter_row, null);
         }
-
         TextView textView = (TextView) convertView.findViewById(R.id.chapter_id);
         textView.setTypeface(null, Typeface.BOLD);
-        textView.setText(chapter.getId());
+        textView.setText("" + chapter.getId());
 
         textView = (TextView) convertView.findViewById(R.id.topic);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setText(chapter.getTopic());
+
+        View checkMark = convertView.findViewById(R.id.status);
+        View rowView = convertView.findViewById(R.id.chapter_row);
+        switch(chapter.getStatus()) {
+            case STATUS_LOCKED:
+                rowView.setAlpha((float) 0.2);
+                checkMark.setVisibility(View.GONE);
+                break;
+            case STATUS_READY:
+            case STATUS_INPROGRESS:
+                rowView.setAlpha((float) 1.0);
+                checkMark.setVisibility(View.GONE);
+                break;
+            default:
+                rowView.setAlpha((float) 1.0);
+                checkMark.setVisibility(View.VISIBLE);
+        }
 
         return convertView;
     }
@@ -77,7 +97,7 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
         }
 
         TextView textView = convertView.findViewById(R.id.lesson_id);
-        textView.setText(lesson.getId());
+        textView.setText("" + lesson.getId());
 
         textView = convertView.findViewById(R.id.keyword);
         textView.setText(lesson.getKeyword());
@@ -88,6 +108,23 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
                 mItemClickListener.onLessonClick(lesson);
             }
         });
+
+        View checkMark = convertView.findViewById(R.id.status);
+        View rowView = convertView.findViewById(R.id.lesson_row);
+        switch(lesson.getStatus()) {
+            case STATUS_LOCKED:
+                rowView.setAlpha((float) 0.2);
+                checkMark.setVisibility(View.GONE);
+                break;
+            case STATUS_READY:
+            case STATUS_INPROGRESS:
+                rowView.setAlpha((float) 1.0);
+                checkMark.setVisibility(View.GONE);
+                break;
+            default:
+                rowView.setAlpha((float) 1.0);
+                checkMark.setVisibility(View.VISIBLE);
+        }
 
         return convertView;
     }

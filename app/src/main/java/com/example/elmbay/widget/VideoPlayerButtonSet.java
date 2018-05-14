@@ -8,6 +8,7 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.manager.NetworkManager;
 import com.example.elmbay.model.ContentDescriptor;
 
@@ -33,6 +34,7 @@ public class VideoPlayerButtonSet {
     private StateButton mPlayButton;
     private StateButton mStopButton;
     private List<StateButton> mObservers = new ArrayList<>();
+    private boolean mHasPlayedVideo;
 
     public VideoPlayerButtonSet(Context context, ContentDescriptor contentDescriptor, VideoView videoView, ImageButton playButton, ImageButton stopButton) {
         mContext = context;
@@ -108,6 +110,10 @@ public class VideoPlayerButtonSet {
         public void onAction() {
             if (mState != STATE_PLAYING && mMediaPlayer != null) {
                 try {
+                    if (!mHasPlayedVideo) {
+                        mHasPlayedVideo = true;
+                        AppManager.getInstance().getSessionData().doneWithCurrentLesson();
+                    }
                     mMediaPlayer.start();
                     mState = STATE_PLAYING;
                     notifyStateChange();

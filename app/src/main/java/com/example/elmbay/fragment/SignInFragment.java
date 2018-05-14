@@ -2,7 +2,6 @@ package com.example.elmbay.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,8 +15,7 @@ import android.widget.EditText;
 import com.example.elmbay.R;
 import com.example.elmbay.activity.SignInActivity;
 import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.manager.PersistenceManager;
-import com.example.elmbay.model.ProgressMark;
+import com.example.elmbay.manager.SessionData;
 import com.example.elmbay.operation.SignInOperation;
 import com.example.elmbay.operation.SignInRequest;
 import com.example.elmbay.operation.SignInResponseEvent;
@@ -27,15 +25,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import static com.example.elmbay.manager.PersistenceManager.HOUR_TO_MILLIS;
-
 /**
  * Created by kgu on 4/12/18.
  */
 
 public class SignInFragment extends Fragment implements View.OnClickListener {
     private static final String LOG_TAG = SignInFragment.class.getName();
-    private static final String EMAIL_PATTEN = ".+@.+";
+    private static final String EMAIL_PATTEN = ".+@.+[.com|.net|.org]";
     private static final String PHONE_PATTEN = "[0-9]";
 
     EditText mEmailView;
@@ -52,10 +48,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        SharedPreferences persistenceStore = PersistenceManager.getShagetPersistenceStore(getActivity());
-        mEmail = persistenceStore.getString(PersistenceManager.KEY_EMAIL, "");
-        mPhone = persistenceStore.getString(PersistenceManager.KEY_PHONE, "");
-        mPassword = persistenceStore.getString(PersistenceManager.KEY_PASSWORD, "");
+        SessionData sessionData = AppManager.getInstance().getSessionData();
+        mEmail = sessionData.getEmail();
+        mPhone = sessionData.getPhone();
+        mPassword = sessionData.getPassword();
 
         mEmailView = top.findViewById(R.id.email);
         mEmailView.setText(mEmail);
@@ -81,10 +77,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         EventBus.getDefault().register(this);
 
-        SharedPreferences persistenceStore = PersistenceManager.getShagetPersistenceStore(getActivity());
-        long loginTokenExpirationTime = persistenceStore.getLong(PersistenceManager.KEY_USER_TOKEN_EXPIRATION_TIME, 0);
-        if (loginTokenExpirationTime <= System.currentTimeMillis()) {
+        SessionData sessionData = AppManager.getInstance().getSessionData();
+        if (sessionData.getUserTokenExpirationTime() <= System.currentTimeMillis()) {
             loadData();
+        } else {
+            ((SignInActivity) getActivity()).postSignedIn();
         }
     }
 
@@ -101,12 +98,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in:
-                if (!isValidEmail() && !isValidPhone()) {
-                    showDialog(R.string.invalid_user_id);
-                }
-                if (!isValidPassword()) {
-                    showDialog(R.string.invalid_password);
-                }
                 loadData();
                 break;
 
@@ -127,14 +118,22 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loadData() {
+        if (!isValidEmail() && !isValidPhone()) {
+            showDialog(R.string.invalid_user_id);
+        }
+
+        if (!isValidPassword()) {
+            showDialog(R.string.invalid_password);
+        }
+
         mSignInContainer.setVisibility(View.GONE);
         mSpinner.setVisibility(View.VISIBLE);
 
         // Save the current sign in data
-        SharedPreferences persistenceStore = PersistenceManager.getShagetPersistenceStore(getActivity());
-        PersistenceManager.setString(persistenceStore, PersistenceManager.KEY_EMAIL, mEmail);
-        PersistenceManager.setString(persistenceStore, PersistenceManager.KEY_PHONE, mPhone);
-        PersistenceManager.setString(persistenceStore, PersistenceManager.KEY_PASSWORD, mPassword);
+        SessionData sessionData = AppManager.getInstance().getSessionData();
+        sessionData.setEmail(mEmail);
+        sessionData.setPhone(mPhone);
+        sessionData.setPassword(mPassword);
 
         SignInRequest request = new SignInRequest(mEmail, mPhone, mPassword);
         SignInOperation op = new SignInOperation(request);
@@ -145,23 +144,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mSpinner.setVisibility(View.GONE);
         try {
             SignInResult result = AppManager.getInstance().getSessionData().getSignInResult();
-            long expirationTime = System.currentTimeMillis() + result.getUserTokenLifeInHours() * HOUR_TO_MILLIS;
+            SessionData sessionData = AppManager.getInstance().getSessionData();
+            sessionData.setUserToken(result.getUserToken());
+            sessionData.setUserTokenExpirationTime(System.currentTimeMillis() + result.getUserTokenLifeInHours() * SessionData.HOUR_TO_MILLIS);
+            sessionData.setHighMark(result.getHighMark());
 
-            SharedPreferences persistenceStore = PersistenceManager.getShagetPersistenceStore(getActivity());
-            PersistenceManager.setString(persistenceStore, PersistenceManager.KEY_USER_TOKEN, result.getUserToken());
-            PersistenceManager.setLong(persistenceStore, PersistenceManager.KEY_USER_TOKEN_EXPIRATION_TIME, expirationTime);
-
-            ProgressMark mark = result.getLowMark();
-            if (mark != null)  {
-                mark.toPersistenceStore(persistenceStore, false);
-            }
-
-            mark = result.getHighMark();
-            if (mark != null) {
-                mark.toPersistenceStore(persistenceStore, true);
-            }
-
-            ((SignInActivity) getActivity()).navigateToNextActivity();
+            ((SignInActivity) getActivity()).postSignedIn();
 
         } catch (Exception e) {
             if (AppManager.DEBUG) {

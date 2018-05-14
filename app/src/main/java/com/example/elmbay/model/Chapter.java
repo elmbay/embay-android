@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Chapter {
     @SerializedName("id")
-    private String mId;
+    private int mId;
 
     @SerializedName("course")
     private String mCourse;
@@ -24,6 +24,8 @@ public class Chapter {
     @SerializedName("lessons")
     private List<Lesson> mLessons;
 
+    private int mStatus;
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -34,8 +36,8 @@ public class Chapter {
         return builder.toString();
     }
 
-    public String getId() { return mId; }
-    public void setId(String id) { mId = id; }
+    public int getId() { return mId; }
+    public void setId(int id) { mId = id; }
 
     public String getCourse() { return mCourse; }
     public void setCourse(String course) { mCourse = course; }
@@ -53,4 +55,7 @@ public class Chapter {
             mLessons.add(lesson);
         }
     }
+
+    public int getStatus() { return mStatus; }
+    public void setStatus(int status) { mStatus = status; }
 }

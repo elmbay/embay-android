@@ -15,9 +15,6 @@ public class SignInResult {
     @SerializedName("userTokenLifeInHours")
     private int mUserTokenLifeInHours;
 
-    @SerializedName("lowMark")
-    private ProgressMark mLowMark;
-
     @SerializedName("highMark")
     private ProgressMark mHighMark;
 
@@ -26,9 +23,6 @@ public class SignInResult {
 
     public int getUserTokenLifeInHours() { return mUserTokenLifeInHours; }
     public void setUserTokenLifeInHours(int hours) { mUserTokenLifeInHours = hours; }
-
-    public ProgressMark getLowMark() { return mLowMark; }
-    public void setLowMark(ProgressMark mark) { mLowMark = mark; }
 
     public ProgressMark getHighMark() { return mHighMark; }
     public void setHighMark(ProgressMark mark) { mHighMark = mark; }

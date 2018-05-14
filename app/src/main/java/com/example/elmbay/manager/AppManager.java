@@ -5,8 +5,6 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.example.elmbay.model.SessionData;
-
 /**
  * Created by kgu on 4/10/18.
  */
@@ -49,7 +47,7 @@ public class AppManager {
 
     private AppManager(@NonNull Context context) {
         mAppContext = context.getApplicationContext();
-        mSessionData = new SessionData();
+        mSessionData = new SessionData(mAppContext);
         if (MOCK) {
             mSessionData.setListChaptersResult(DataProvider.getSignInResult(mAppContext));
         }
