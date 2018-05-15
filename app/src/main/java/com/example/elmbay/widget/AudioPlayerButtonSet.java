@@ -13,22 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.elmbay.model.ContentDescriptor.CONTENT_TYPE_OUTPUT_FILE;
-import static com.example.elmbay.widget.StateButton.STATE_READY;
+import static com.example.elmbay.widget.StateButton.MEDIA_STATE_READY;
 
 /**
+ * The class defines a set of audio play buttons
  *
  * Created by kgu on 4/26/18.
  */
 public class AudioPlayerButtonSet {
     private static final String LOG_TAG = AudioPlayerButtonSet.class.getName();
 
-    private int mState = STATE_READY;
+    private int mState = MEDIA_STATE_READY;
     private Context mContext;
     private ContentDescriptor mContentDescriptor;
     private MediaPlayer mMediaPlayer;
     private StateButton mPlayButton;
     private StateButton mStopButton;
-    private List<StateButton> mObservers = new ArrayList<>();
 
     public AudioPlayerButtonSet(Context context, ContentDescriptor contentDescriptor, ImageButton playButton, ImageButton stopButton, boolean enabled) {
         mContext = context;
@@ -37,18 +37,18 @@ public class AudioPlayerButtonSet {
         mPlayButton = new AudioPlayerPlayButton(playButton, View.VISIBLE, enabled);
         mStopButton = new AudioPlayerStopButton(stopButton, View.GONE, enabled);
 
-        mObservers.add(mPlayButton);
-        mObservers.add(mStopButton);
-        mPlayButton.setObservers(mObservers);
-        mStopButton.setObservers(mObservers);
+        List<StateButton> observers = new ArrayList<>();
+        observers.add(mPlayButton);
+        observers.add(mStopButton);
+        mPlayButton.setObservers(observers);
+        mStopButton.setObservers(observers);
     }
-
-    public StateButton getPlayButton() { return mPlayButton; }
-    public StateButton getStopButton() { return mStopButton; }
 
     public void onStop() {
         mStopButton.onAction();
     }
+
+    StateButton getPlayButton() { return mPlayButton; }
 
     class AudioPlayerPlayButton extends StateButton {
         AudioPlayerPlayButton(ImageButton button, int visibility, boolean enabled) {
@@ -56,12 +56,12 @@ public class AudioPlayerButtonSet {
         }
 
         public void onAction() {
-            if (mState != STATE_PLAYING) {
+            if (mState != MEDIA_STATE_PLAYING) {
                 mMediaPlayer = new MediaPlayer();
                 mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        mState = STATE_READY;
+                        mState = MEDIA_STATE_READY;
                         notifyStateChange();
                     }
                 });
@@ -73,7 +73,7 @@ public class AudioPlayerButtonSet {
                     }
                     mMediaPlayer.prepare();
                     mMediaPlayer.start();
-                    mState = STATE_PLAYING;
+                    mState = MEDIA_STATE_PLAYING;
                     notifyStateChange();
                 } catch (IOException e) {
                     // mMediaPlayer.start() won't throw IOException
@@ -83,7 +83,7 @@ public class AudioPlayerButtonSet {
         }
 
         public void onStateChange() {
-            mButton.setVisibility(mState == STATE_READY ? View.VISIBLE : View.GONE);
+            mButton.setVisibility(mState == MEDIA_STATE_READY ? View.VISIBLE : View.GONE);
             if (mContentDescriptor.getType() == CONTENT_TYPE_OUTPUT_FILE) {
                 enableButton(mContentDescriptor.exists());
             }
@@ -96,16 +96,16 @@ public class AudioPlayerButtonSet {
         }
 
         public void onAction() {
-            if (mState == STATE_PLAYING && mMediaPlayer != null) {
+            if (mState == MEDIA_STATE_PLAYING && mMediaPlayer != null) {
                 mMediaPlayer.release();
                 mMediaPlayer = null;
-                mState = STATE_READY;
+                mState = MEDIA_STATE_READY;
                 notifyStateChange();
             }
         }
 
         public void onStateChange() {
-            mButton.setVisibility(mState == STATE_READY ? View.GONE : View.VISIBLE);
+            mButton.setVisibility(mState == MEDIA_STATE_READY ? View.GONE : View.VISIBLE);
             if (mContentDescriptor.getType() == CONTENT_TYPE_OUTPUT_FILE) {
                 enableButton(mContentDescriptor.exists());
             }

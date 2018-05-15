@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ *
  * Created by kgu on 4/12/18.
  */
 

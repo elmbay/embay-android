@@ -15,6 +15,8 @@ import com.example.elmbay.model.Lesson;
 import com.example.elmbay.widget.AudioPlayerButtonSet;
 
 /**
+ * The class manages replay/pause of slowed-down version of the audio
+ *
  * Created by kgu on 3/21/18.
  */
 

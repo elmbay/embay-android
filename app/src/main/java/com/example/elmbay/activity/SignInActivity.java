@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.elmbay.R;
 import com.example.elmbay.fragment.SignInFragment;
@@ -18,6 +19,7 @@ import com.example.elmbay.manager.SessionData;
  */
 
 public class SignInActivity extends AppCompatActivity {
+    private static final String LOG_TAG = SignInActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +31,18 @@ public class SignInActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             SessionData sessionData = AppManager.getInstance().getSessionData();
-            if (TextUtils.isEmpty(sessionData.getUserToken()) || sessionData.getUserTokenExpirationTime() <= System.currentTimeMillis()) {
+            if (AppManager.DEBUG) {
+                Log.i(LOG_TAG, "token=" + sessionData.getUserToken()
+                        + " expire_at=" + sessionData.getUserTokenExpirationTime() + " now=" + System.currentTimeMillis());
+            }
+            if (!TextUtils.isEmpty(sessionData.getUserToken()) && sessionData.getUserTokenExpirationTime() > System.currentTimeMillis()) {
+                postSignedIn();
+            } else {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 Fragment f = new SignInFragment();
                 ft.add(R.id.activity_frame, f);
                 ft.commit();
             }
-            postSignedIn();
         }
     }
 

@@ -15,7 +15,7 @@ import com.example.elmbay.model.ContentDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.elmbay.widget.StateButton.STATE_READY;
+import static com.example.elmbay.widget.StateButton.MEDIA_STATE_READY;
 
 /**
  *
@@ -23,31 +23,27 @@ import static com.example.elmbay.widget.StateButton.STATE_READY;
  */
 
 public class VideoPlayerButtonSet {
-    private static final String LOG_TAG = VideoPlayerButtonSet.class.getName();
-
-    private int mState = STATE_READY;
+    private int mState = MEDIA_STATE_READY;
     private Context mContext;
     private ContentDescriptor mContentDescriptor;
     private VideoView mVideoView;
     private MediaPlayer mMediaPlayer;
-    private MediaController mMediaController;
-    private StateButton mPlayButton;
     private StateButton mStopButton;
-    private List<StateButton> mObservers = new ArrayList<>();
     private boolean mHasPlayedVideo;
 
-    public VideoPlayerButtonSet(Context context, ContentDescriptor contentDescriptor, VideoView videoView, ImageButton playButton, ImageButton stopButton) {
+    public VideoPlayerButtonSet(Context context, ContentDescriptor contentDescriptor, VideoView videoView, ImageButton playButtonView, ImageButton stopButtonView) {
         mContext = context;
         mContentDescriptor = contentDescriptor;
         mVideoView = videoView;
 
-        mPlayButton = new VideoPlayerButtonSet.VideoPlayerPlayButton(playButton, View.VISIBLE, mContentDescriptor != null);
-        mStopButton = new VideoPlayerButtonSet.VideoPlayerStopButton(stopButton, View.GONE, mContentDescriptor != null);
+        StateButton playButton = new VideoPlayerButtonSet.VideoPlayerPlayButton(playButtonView, View.VISIBLE, mContentDescriptor != null);
+        mStopButton = new VideoPlayerButtonSet.VideoPlayerStopButton(stopButtonView, View.GONE, mContentDescriptor != null);
 
-        mObservers.add(mPlayButton);
-        mObservers.add(mStopButton);
-        mPlayButton.setObservers(mObservers);
-        mStopButton.setObservers(mObservers);
+        List<StateButton> observers = new ArrayList<>();
+        observers.add(playButton);
+        observers.add(mStopButton);
+        playButton.setObservers(observers);
+        mStopButton.setObservers(observers);
 
         setVideoView();
     }
@@ -94,11 +90,11 @@ public class VideoPlayerButtonSet {
     private void setMediaController(Context context, View top) {
         // create an object of media controller: http://abhiandroid.com/ui/videoview
         if (mVideoView != null) {
-            mMediaController = new MediaController(context) {
+            MediaController controller = new MediaController(context) {
             };
-            mMediaController.setAnchorView(mVideoView);
-            mVideoView.setMediaController(mMediaController);
-            mMediaController.show();
+            controller.setAnchorView(mVideoView);
+            mVideoView.setMediaController(controller);
+            controller.show();
         }
     }
 
@@ -108,14 +104,14 @@ public class VideoPlayerButtonSet {
         }
 
         public void onAction() {
-            if (mState != STATE_PLAYING && mMediaPlayer != null) {
+            if (mState != MEDIA_STATE_PLAYING && mMediaPlayer != null) {
                 try {
                     if (!mHasPlayedVideo) {
                         mHasPlayedVideo = true;
-                        AppManager.getInstance().getSessionData().doneWithCurrentLesson();
+                        AppManager.getInstance().getSessionData().finishedCurrentLesson();
                     }
                     mMediaPlayer.start();
-                    mState = STATE_PLAYING;
+                    mState = MEDIA_STATE_PLAYING;
                     notifyStateChange();
                 } catch (IllegalStateException e) {
                     // ignore
@@ -124,7 +120,7 @@ public class VideoPlayerButtonSet {
         }
 
         public void onStateChange() {
-            mButton.setVisibility(mState == STATE_READY ? View.VISIBLE : View.GONE);
+            mButton.setVisibility(mState == MEDIA_STATE_READY ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -134,10 +130,10 @@ public class VideoPlayerButtonSet {
         }
 
         public void onAction() {
-            if (mState == STATE_PLAYING && mMediaPlayer != null) {
+            if (mState == MEDIA_STATE_PLAYING && mMediaPlayer != null) {
                 try {
                     mMediaPlayer.pause();
-                    mState = STATE_READY;
+                    mState = MEDIA_STATE_READY;
                     notifyStateChange();
                 } catch (IllegalStateException e) {
                     // ignore
@@ -146,7 +142,7 @@ public class VideoPlayerButtonSet {
         }
 
         public void onStateChange() {
-            mButton.setVisibility(mState == STATE_READY ? View.GONE : View.VISIBLE);
+            mButton.setVisibility(mState == MEDIA_STATE_READY ? View.GONE : View.VISIBLE);
         }
     }
 

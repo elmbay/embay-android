@@ -6,9 +6,10 @@ import android.widget.ImageButton;
 import com.example.elmbay.model.ContentDescriptor;
 
 import static android.view.View.VISIBLE;
-import static com.example.elmbay.widget.StateButton.STATE_READY;
 
 /**
+ * The class defines a bar of buttons (including share and delete) to manage voice recording
+ *
  * Created by kgu on 4/26/18.
  */
 
@@ -16,7 +17,6 @@ public class RecorderBar {
     private static final String RECORDING_FILE_MIME_TYPE = "audio/3gpp";
     private static final String RECORDING_FILE_SUFFIX = ".3gp";
 
-    private int mState = STATE_READY;
     private Context mContext;
     private ContentDescriptor mOutputFile;
     private boolean mOutputFileExists;

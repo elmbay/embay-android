@@ -52,13 +52,6 @@ public class ContentDescriptor {
         }
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{type=").append(mType).append(",uriString=").append(mUriString).append("}");
-        return builder.toString();
-    }
-
     public void setType(int type) { mType = type; }
     public int getType() { return mType; }
 
@@ -104,4 +97,11 @@ public class ContentDescriptor {
     public boolean deleteFile() { return mFile == null ? true : mFile.delete(); }
 
     public boolean exists() { return mFile != null && mFile.exists(); }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{type=").append(mType).append(",uriString=").append(mUriString).append("}");
+        return builder.toString();
+    }
 }

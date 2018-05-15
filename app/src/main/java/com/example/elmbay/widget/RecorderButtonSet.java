@@ -15,40 +15,41 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.example.elmbay.widget.StateButton.STATE_READY;
+import static com.example.elmbay.widget.StateButton.MEDIA_STATE_READY;
 
 /**
+ * The class defines a pair of buttons to start or stop voice recording
+ *
  * Created by kgu on 4/27/18.
  */
 
-public class RecorderButtonSet {
+class RecorderButtonSet {
     private static final String LOG_TAG = RecorderButtonSet.class.getName();
 
-    private int mState = STATE_READY;
+    private int mState = MEDIA_STATE_READY;
     private Context mContext;
     private String mOutputFilePath;
     private MediaRecorder mRecorder;
     private RecordStartButton mStartButton;
     private RecordStopButton mStopButton;
-    List<StateButton> mObservers = new ArrayList<>();
 
-    public RecorderButtonSet(Context context, String outputFilePath, ImageButton startButton, ImageButton stopButton) {
+    RecorderButtonSet(Context context, String outputFilePath, ImageButton startButton, ImageButton stopButton) {
         mContext = context;
         mOutputFilePath = outputFilePath;
 
         mStartButton = new RecordStartButton(startButton, VISIBLE, true);
         mStopButton = new RecordStopButton(stopButton, GONE, true);
 
-        mObservers.add(mStartButton);
-        mObservers.add(mStopButton);
-        mStartButton.setObservers(mObservers);
-        mStopButton.setObservers(mObservers);
+        List<StateButton> observers = new ArrayList<>();
+        observers.add(mStartButton);
+        observers.add(mStopButton);
+        mStartButton.setObservers(observers);
+        mStopButton.setObservers(observers);
     }
 
-    public StateButton getStartButton() { return mStartButton; }
-    public StateButton getStopButton() { return mStopButton; }
+    StateButton getStartButton() { return mStartButton; }
 
-    public void onStop() {
+    void onStop() {
         mStopButton.onAction();
     }
 
@@ -80,13 +81,13 @@ public class RecorderButtonSet {
                 // ignore
             }
 
-            mState = STATE_RECORDING;
+            mState = MEDIA_STATE_RECORDING;
             mButton.setVisibility(GONE);
             notifyStateChange();
-        };
+        }
 
         public void onStateChange() {
-            mButton.setVisibility(mState == STATE_READY ? View.VISIBLE : GONE);
+            mButton.setVisibility(mState == MEDIA_STATE_READY ? View.VISIBLE : GONE);
         }
     }
 
@@ -107,13 +108,13 @@ public class RecorderButtonSet {
                 }
             }
 
-            mState = STATE_READY;
+            mState = MEDIA_STATE_READY;
             mButton.setVisibility(GONE);
             notifyStateChange();
         }
 
         public void onStateChange() {
-            mButton.setVisibility(mState == STATE_RECORDING ? View.VISIBLE : GONE);
+            mButton.setVisibility(mState == MEDIA_STATE_RECORDING ? View.VISIBLE : GONE);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.elmbay.operation;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -24,7 +25,7 @@ public class ListChaptersOperation {
     private static final String LOG_TAG = ListChaptersOperation.class.getName();
     private ListChaptersRequest mRequest;
 
-    public ListChaptersOperation(ListChaptersRequest request) {
+    public ListChaptersOperation(@NonNull ListChaptersRequest request) {
         mRequest = request;
     }
 
@@ -48,10 +49,8 @@ public class ListChaptersOperation {
                 if (AppManager.DEBUG) {
                     Log.i(LOG_TAG, "ListChaptersResult=" + (result == null ? "null" : result.toString()));
                 }
-                if (result != null && result.getChapters() != null) {
-                    AppManager.getInstance().getSessionData().setListChaptersResult(result);
-                    EventBus.getDefault().post(new ListChaptersResponseEvent(null));
-                }
+                AppManager.getInstance().getSessionData().setListChaptersResult(result);
+                EventBus.getDefault().post(new ListChaptersResponseEvent(null));
             }
         };
     }

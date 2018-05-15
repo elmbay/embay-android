@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 
@@ -62,11 +61,12 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
         super.onResume();
 
         EventBus.getDefault().register(this);
-        ListChaptersResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
         if (isReadyToLoad()) {
             loadData();
         } else if (mAdapter.getGroupCount() == 0) {
-            processData();
+            onDataLoaded();
+        } else {
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -74,6 +74,11 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
     public void onPause() {
         EventBus.getDefault().unregister(this);
         super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Don't go back to a blank page
     }
 
     @Override
@@ -86,7 +91,7 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ListChaptersResponseEvent event) {
         if (event == null || !event.hasError()) {
-            processData();
+            onDataLoaded();
         } else {
             //TODO: show error
         }
@@ -117,18 +122,10 @@ public class CourseListActivity extends AppCompatActivity implements IViewHolder
         op.submit();
     }
 
-    private void processData() {
+    private void onDataLoaded() {
         mSpinner.setVisibility(View.GONE);
 
-        try {
-            ListChaptersResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
-            mAdapter.setChapters(result.getChapters());
-            SessionData sessionData = AppManager.getInstance().getSessionData();
-            sessionData.setNextLoadTime(System.currentTimeMillis() + result.getNextLoadInHours() * SessionData.HOUR_TO_MILLIS);
-        } catch (Exception e) {
-            if (AppManager.DEBUG) {
-                Log.w(LOG_TAG, "get chapters: " + e.getMessage());
-            }
-        }
+        ListChaptersResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
+        mAdapter.setChapters(result == null ? null : result.getChapters());
     }
 }

@@ -3,6 +3,7 @@ package com.example.elmbay.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ *
  * Created by kgu on 4/6/18.
  */
 
@@ -27,23 +28,6 @@ public class Lesson {
     private ContentDescriptor mTranscript;
 
     private int mStatus;
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{id=").append(mId).append(",chapterId=").append(mChapterId).append(",keyword=").append(mKeyword);
-        if (mVideo!= null) {
-            builder.append(",video=").append(mVideo.toString());
-        }
-        if (mAudio!= null) {
-            builder.append(",ausio=").append(mAudio.toString());
-        }
-        if (mTranscript!= null) {
-            builder.append(",transcript=").append(mTranscript.toString());
-        }
-        builder.append("}");
-        return builder.toString();
-    }
 
     public int getId() { return mId; }
     public void setId(int id) { mId = id; }
@@ -92,4 +76,21 @@ public class Lesson {
 
     public int getStatus() { return mStatus; }
     public void setStatus(int status) { mStatus = status; }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{id=").append(mId).append(",chapterId=").append(mChapterId).append(",keyword=").append(mKeyword);
+        if (mVideo!= null) {
+            builder.append(",video=").append(mVideo.toString());
+        }
+        if (mAudio!= null) {
+            builder.append(",ausio=").append(mAudio.toString());
+        }
+        if (mTranscript!= null) {
+            builder.append(",transcript=").append(mTranscript.toString());
+        }
+        builder.append("}");
+        return builder.toString();
+    }
 }

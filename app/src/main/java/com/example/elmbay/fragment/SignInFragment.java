@@ -5,8 +5,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,29 +20,33 @@ import com.example.elmbay.manager.SessionData;
 import com.example.elmbay.operation.SignInOperation;
 import com.example.elmbay.operation.SignInRequest;
 import com.example.elmbay.operation.SignInResponseEvent;
-import com.example.elmbay.operation.SignInResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import static android.text.InputType.TYPE_CLASS_PHONE;
+import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+
 /**
+ * The class manages the sign in page
+ *
  * Created by kgu on 4/12/18.
  */
 
 public class SignInFragment extends Fragment implements View.OnClickListener {
-    private static final String LOG_TAG = SignInFragment.class.getName();
-    private static final String EMAIL_PATTEN = ".+@.+[.com|.net|.org]";
-    private static final String PHONE_PATTEN = "[0-9]";
+    private static final String EMAIL_PATTEN = ".+@.+";
+    private static final String PHONE_START_PATTEN = "[+0-9]";
 
-    EditText mEmailView;
-    EditText mPhoneView;
+    EditText mUidView;
     EditText mPasswordView;
+    EditText mConfirmPasswordView;
     View mSignInContainer;
     View mSpinner;
     AlertDialog mDialog;
-    String mEmail;
-    String mPhone;
+    String mUid;
+    int mUidType;
     String mPassword;
 
     @Override
@@ -49,23 +54,45 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         View top = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         SessionData sessionData = AppManager.getInstance().getSessionData();
-        mEmail = sessionData.getEmail();
-        mPhone = sessionData.getPhone();
+        mUid = sessionData.getUid();
+        mUidType = sessionData.getUidType();
         mPassword = sessionData.getPassword();
 
-        mEmailView = top.findViewById(R.id.email);
-        mEmailView.setText(mEmail);
+        mUidView = top.findViewById(R.id.uid);
+        mUidView.setText(mUid);
+        if (!TextUtils.isEmpty(mUid)) {
+            mUidView.setInputType(mUidType == SessionData.UID_TYPE_PHONE ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        }
+        mUidView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        mPhoneView = top.findViewById(R.id.phone);
-        mPhoneView.setText(mPhone);
+            // This method is called to notify you that, within s, the count characters beginning at start
+            // have just replaced old text that had length before.
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    mUidView.setInputType(TYPE_CLASS_TEXT);
+                } else if (start == 0 && count == 1) {
+                    String firstChar = Character.toString(s.charAt(0));
+                    mUidType = firstChar.matches(PHONE_START_PATTEN) ? SessionData.UID_TYPE_PHONE : SessionData.UID_TYPE_EMAIL;
+                    mUidView.setInputType(mUidType == SessionData.UID_TYPE_PHONE ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         mPasswordView = top.findViewById(R.id.password);
         mPasswordView.setText(mPassword);
+        mConfirmPasswordView = top.findViewById(R.id.confirm_password);
 
         mSignInContainer = top.findViewById(R.id.signin_container);
         mSpinner = top.findViewById(R.id.spinner);
 
         top.findViewById(R.id.sign_in).setOnClickListener(this);
+        top.findViewById(R.id.create_account).setOnClickListener(this);
         top.findViewById(R.id.forget_password).setOnClickListener(this);
 
         return top;
@@ -76,13 +103,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         super.onResume();
 
         EventBus.getDefault().register(this);
-
-        SessionData sessionData = AppManager.getInstance().getSessionData();
-        if (sessionData.getUserTokenExpirationTime() <= System.currentTimeMillis()) {
-            loadData();
-        } else {
-            ((SignInActivity) getActivity()).postSignedIn();
-        }
     }
 
     @Override
@@ -98,7 +118,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in:
-                loadData();
+                loadData(false);
+                break;
+
+            case R.id.create_account:
+                mConfirmPasswordView.setVisibility(View.VISIBLE);
+                loadData(true);
                 break;
 
             case R.id.forget_password:
@@ -111,51 +136,32 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onEvent(SignInResponseEvent event) {
         mSpinner.setVisibility(View.GONE);
         if (event == null || !event.hasError()) {
-            processData();
+            onDataLoaded();
         } else {
             //TODO: show error
         }
     }
 
-    private void loadData() {
-        if (!isValidEmail() && !isValidPhone()) {
-            showDialog(R.string.invalid_user_id);
+    private void loadData(boolean createAccount) {
+        if (!validateSignIn(createAccount)) {
+            return;
         }
-
-        if (!isValidPassword()) {
-            showDialog(R.string.invalid_password);
-        }
-
         mSignInContainer.setVisibility(View.GONE);
         mSpinner.setVisibility(View.VISIBLE);
 
         // Save the current sign in data
         SessionData sessionData = AppManager.getInstance().getSessionData();
-        sessionData.setEmail(mEmail);
-        sessionData.setPhone(mPhone);
+        sessionData.setUid(mUid, mUidType);
         sessionData.setPassword(mPassword);
 
-        SignInRequest request = new SignInRequest(mEmail, mPhone, mPassword);
+        SignInRequest request = new SignInRequest(mUid, mUid, mPassword);
         SignInOperation op = new SignInOperation(request);
         op.submit();
     }
 
-    private void processData() {
+    private void onDataLoaded() {
         mSpinner.setVisibility(View.GONE);
-        try {
-            SignInResult result = AppManager.getInstance().getSessionData().getSignInResult();
-            SessionData sessionData = AppManager.getInstance().getSessionData();
-            sessionData.setUserToken(result.getUserToken());
-            sessionData.setUserTokenExpirationTime(System.currentTimeMillis() + result.getUserTokenLifeInHours() * SessionData.HOUR_TO_MILLIS);
-            sessionData.setHighMark(result.getHighMark());
-
-            ((SignInActivity) getActivity()).postSignedIn();
-
-        } catch (Exception e) {
-            if (AppManager.DEBUG) {
-                Log.w(LOG_TAG, "signin: " + e.getMessage());
-            }
-        }
+        ((SignInActivity) getActivity()).postSignedIn();
     }
 
     private void showDialog(int stringId) {
@@ -170,20 +176,35 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mDialog.show();
     }
 
-    private boolean isValidEmail() {
-        mEmail = null;
-        if (!TextUtils.isEmpty(mEmailView.getText())) {
-            mEmail = mEmailView.getText().toString();
+    private boolean validateSignIn(boolean createAccount) {
+        if (!isValidUid()) {
+            showDialog(R.string.invalid_uid);
+            return false;
         }
-        return mEmail != null && mEmail.matches(EMAIL_PATTEN);
+
+        if (!isValidPassword()) {
+            showDialog(R.string.invalid_password);
+            return false;
+        }
+
+        if (createAccount) {
+            if (TextUtils.isEmpty(mConfirmPasswordView.getText())) {
+                showDialog(R.string.enter_confirmed_password);
+                return false;
+            } else if (!mPassword.equals(mConfirmPasswordView.getText().toString())){
+                showDialog(R.string.passwords_mismatch);
+                return false;
+            }
+        }
+        return true;
     }
 
-    private boolean isValidPhone() {
-        mPhone = null;
-        if (!TextUtils.isEmpty(mPhoneView.getText())) {
-            mPhone = mPhoneView.getText().toString();
+    private boolean isValidUid() {
+        mUid = null;
+        if (!TextUtils.isEmpty(mUidView.getText())) {
+            mUid = mUidView.getText().toString();
         }
-        return mPhone != null && mPhone.matches(PHONE_PATTEN);
+        return mUid != null && (mUidType == SessionData.UID_TYPE_PHONE ? mUid.length() >= 6 : mUid.length() >= 8 && mUid.matches(EMAIL_PATTEN));
     }
 
     private boolean isValidPassword() {

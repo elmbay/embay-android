@@ -13,10 +13,10 @@ import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 
 import java.util.List;
+import java.util.Locale;
 
-import static com.example.elmbay.manager.SessionData.STATUS_INPROGRESS;
-import static com.example.elmbay.manager.SessionData.STATUS_LOCKED;
-import static com.example.elmbay.manager.SessionData.STATUS_READY;
+import static com.example.elmbay.manager.SessionData.CLASS_STATUS_INPROGRESS;
+import static com.example.elmbay.manager.SessionData.CLASS_STATUS_LOCKED;
 
 /**
  * Created by kgu on 4/20/18.
@@ -53,23 +53,22 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.chapter_row, null);
         }
-        TextView textView = (TextView) convertView.findViewById(R.id.chapter_id);
+        TextView textView = convertView.findViewById(R.id.chapter_id);
         textView.setTypeface(null, Typeface.BOLD);
-        textView.setText("" + chapter.getId());
+        textView.setText(String.format(Locale.getDefault(),"%d", chapter.getId()));
 
-        textView = (TextView) convertView.findViewById(R.id.topic);
+        textView = convertView.findViewById(R.id.topic);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setText(chapter.getTopic());
 
         View checkMark = convertView.findViewById(R.id.status);
         View rowView = convertView.findViewById(R.id.chapter_row);
         switch(chapter.getStatus()) {
-            case STATUS_LOCKED:
+            case CLASS_STATUS_LOCKED:
                 rowView.setAlpha((float) 0.2);
                 checkMark.setVisibility(View.GONE);
                 break;
-            case STATUS_READY:
-            case STATUS_INPROGRESS:
+            case CLASS_STATUS_INPROGRESS:
                 rowView.setAlpha((float) 1.0);
                 checkMark.setVisibility(View.GONE);
                 break;
@@ -83,7 +82,8 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return mChapters.get(groupPosition).getLessons().size();
+        List<Lesson> lessons = mChapters.get(groupPosition).getLessons();
+        return lessons == null ? 0 : lessons.size();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
         }
 
         TextView textView = convertView.findViewById(R.id.lesson_id);
-        textView.setText("" + lesson.getId());
+        textView.setText(String.format(Locale.getDefault(),"%d", lesson.getId()));
 
         textView = convertView.findViewById(R.id.keyword);
         textView.setText(lesson.getKeyword());
@@ -112,12 +112,11 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
         View checkMark = convertView.findViewById(R.id.status);
         View rowView = convertView.findViewById(R.id.lesson_row);
         switch(lesson.getStatus()) {
-            case STATUS_LOCKED:
+            case CLASS_STATUS_LOCKED:
                 rowView.setAlpha((float) 0.2);
                 checkMark.setVisibility(View.GONE);
                 break;
-            case STATUS_READY:
-            case STATUS_INPROGRESS:
+            case CLASS_STATUS_INPROGRESS:
                 rowView.setAlpha((float) 1.0);
                 checkMark.setVisibility(View.GONE);
                 break;
@@ -141,7 +140,8 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return mChapters.get(groupPosition).getLessons().get(childPosititon);
+        List<Lesson> lessons = mChapters.get(groupPosition).getLessons();
+        return lessons == null ? null : lessons.get(childPosititon);
     }
 
     @Override

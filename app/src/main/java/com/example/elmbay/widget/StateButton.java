@@ -7,23 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * A base class for a state button which responses to state changes
  *
  * Created by kgu on 4/25/18.
  */
 
 public abstract class StateButton {
-    static final int STATE_READY = 0;
-    static final int STATE_PLAYING = 1;
-    static final int STATE_RECORDING = 2;
+    static final int MEDIA_STATE_READY = 0;
+    static final int MEDIA_STATE_PLAYING = 1;
+    static final int MEDIA_STATE_RECORDING = 2;
 
     ImageButton mButton;
-    boolean mIsEnabled = true;
-    List<StateButton> mObservers;
+    private boolean mIsEnabled = true;
+    private List<StateButton> mObservers;
 
     abstract public void onAction();
     abstract public void onStateChange();
 
-    public StateButton(ImageButton button, int visibility, boolean enabled) {
+    StateButton(ImageButton button, int visibility, boolean enabled) {
         mButton = button;
         if (mButton != null) {
             mButton.setVisibility(visibility);
@@ -37,15 +38,15 @@ public abstract class StateButton {
         }
     }
 
-    public void setObservers(List<StateButton> observers) { mObservers = observers; }
-    public void addObserver(StateButton observer) {
+    void setObservers(List<StateButton> observers) { mObservers = observers; }
+    void addObserver(StateButton observer) {
         if (mObservers == null) {
             mObservers = new ArrayList<>();
         }
         mObservers.add(observer);
     }
 
-    public void notifyStateChange() {
+    void notifyStateChange() {
         if (mObservers != null) {
             for (StateButton button : mObservers) {
                 button.onStateChange();
@@ -53,7 +54,7 @@ public abstract class StateButton {
         }
     }
 
-    public void enableButton(boolean enabled) {
+    void enableButton(boolean enabled) {
         if (mIsEnabled != enabled) {
             mIsEnabled = enabled;
             mButton.setEnabled(enabled);

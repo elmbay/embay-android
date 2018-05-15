@@ -18,17 +18,18 @@ import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.widget.RecorderBar;
 
+import java.util.Locale;
+
 /**
+ * The class manage buttons for recording user voice
  *
  * Created by kgu on 3/21/18.
  */
 
 public class RecorderFragment extends Fragment {
-    private static final String LOG_TAG = RecorderFragment.class.getName();
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = { Manifest.permission.RECORD_AUDIO};
-    private Lesson mLesson;
     private RecorderBar mRecorderBar;
 
     @Override
@@ -38,13 +39,13 @@ public class RecorderFragment extends Fragment {
         Activity activity = getActivity();
         ActivityCompat.requestPermissions(activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-        mLesson = AppManager.getInstance().getSessionData().getCurrentLesson();
-
-        mRecorderBar = new RecorderBar(getContext(), mLesson.getChapterId() + "_" + mLesson.getId());
+        Lesson lesson = AppManager.getInstance().getSessionData().getCurrentLesson();
+        String fileBaseName = String.format(Locale.getDefault(), "%d_%d", lesson == null ? 0 : lesson.getChapterId(), lesson == null ? 0 : lesson.getId());
+        mRecorderBar = new RecorderBar(getContext(), fileBaseName);
         mRecorderBar.setRecordButtons((ImageButton) top.findViewById(R.id.record_start), (ImageButton) top.findViewById(R.id.record_stop));
-        mRecorderBar.setReplayButtons((ImageButton)top.findViewById(R.id.replay), (ImageButton)top.findViewById(R.id.replay_stop));
-        mRecorderBar.setShareButton((ImageButton)top.findViewById(R.id.share), mLesson.getKeyword());
-        mRecorderBar.setDeleteButton((ImageButton)top.findViewById(R.id.delete));
+        mRecorderBar.setReplayButtons((ImageButton) top.findViewById(R.id.replay), (ImageButton) top.findViewById(R.id.replay_stop));
+        mRecorderBar.setShareButton((ImageButton) top.findViewById(R.id.share), lesson == null ? "None" : lesson.getKeyword());
+        mRecorderBar.setDeleteButton((ImageButton) top.findViewById(R.id.delete));
         mRecorderBar.setObservers();
 
         return top;

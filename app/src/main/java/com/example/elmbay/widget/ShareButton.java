@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import com.example.elmbay.model.ContentDescriptor;
 
 /**
+ * The class defines a button for content sharing
  *
  * Created by kgu on 4/27/18.
  */

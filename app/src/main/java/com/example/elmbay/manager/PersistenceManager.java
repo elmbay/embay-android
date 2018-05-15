@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
+ *
  * Created by kgu on 5/9/18.
  */
 
@@ -17,21 +18,19 @@ class PersistenceManager {
     static void setString(SharedPreferences persistenceStore, String key, String value) {
         SharedPreferences.Editor editor = persistenceStore.edit();
         editor.putString(key, value);
-        // apply() is async and faster than commit() as it doesn't return the operation mCurrStatus
+        // apply() is async and faster than commit() as it doesn't return the operation status
         editor.apply();
     }
 
     static void setInt(SharedPreferences persistenceStore, String key, int value) {
         SharedPreferences.Editor editor = persistenceStore.edit();
         editor.putInt(key, value);
-        // apply() is async and faster than commit() as it doesn't return the operation mCurrStatus
         editor.apply();
     }
 
     static void setLong(SharedPreferences persistenceStore, String key, long value) {
         SharedPreferences.Editor editor = persistenceStore.edit();
         editor.putLong(key, value);
-        // apply() is async and faster than commit() as it doesn't return the operation mCurrStatus
         editor.apply();
     }
 }

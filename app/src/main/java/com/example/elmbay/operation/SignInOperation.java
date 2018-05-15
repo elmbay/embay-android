@@ -1,6 +1,7 @@
 package com.example.elmbay.operation;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -24,7 +25,7 @@ public class SignInOperation {
     private static final String LOG_TAG = SignInOperation.class.getName();
     private SignInRequest mRequest;
 
-    public SignInOperation(SignInRequest request) {
+    public SignInOperation(@NonNull SignInRequest request) {
         mRequest = request;
     }
 

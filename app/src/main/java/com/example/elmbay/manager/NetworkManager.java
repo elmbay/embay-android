@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -31,18 +33,17 @@ public class NetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getName();
 
     // urls
+//    public static final String BASE_URL_MOCK = "http://107.3.138.187";
     public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
     public static final String ENDPOINT_USERS = "/v1/elmbay/users";
     public static final String ENDPOINT_CHAPTERS = "/v1/elmbay/chapters";
-//    public static final String BASE_URL_MOCK = "http://107.3.138.187";
-//    public static final String ENDPOINT_USERS = "/signup.php";
 
     private static NetworkManager sInstance;
     private Context mAppContext;
     private RequestQueue mRequestQueue;
     private DefaultRetryPolicy mRetryPolicy;
 
-    public static NetworkManager getInstance() {
+    public @NonNull static NetworkManager getInstance() {
         if (sInstance == null) {
             setup();
         }
@@ -51,10 +52,8 @@ public class NetworkManager {
 
     /**
      * Enqueue an http JsonObjectRequest
-     *
-     * @param request
      */
-    public void submit(JsonObjectRequest request) {
+    public void submit(@NonNull JsonObjectRequest request) {
         if (AppManager.DEBUG) {
             Log.i(LOG_TAG, "method:\t" + S_REQUEST_METHODS[request.getMethod()]
                     + "\n\turl:\t" + request.getUrl()
@@ -66,13 +65,8 @@ public class NetworkManager {
 
     /**
      * Convert a JsonObjectRequest (from network response) to a target object
-     *
-     * @param jsonObject
-     * @param targetType
-     * @param <T>
-     * @return
      */
-    public static <T> T fromJSONObject(JSONObject jsonObject, Type targetType) {
+    public static @Nullable <T> T fromJSONObject(@NonNull JSONObject jsonObject, @NonNull Type targetType) {
         Gson gson = new Gson();
         String str = jsonObject.toString();
         if (AppManager.DEBUG) {
@@ -81,7 +75,7 @@ public class NetworkManager {
         return gson.fromJson(str, targetType);
     }
 
-    public static JSONObject toJSONObject(Object object) {
+    public static @Nullable JSONObject toJSONObject(@NonNull Object object) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(object);
         try {
@@ -99,11 +93,17 @@ public class NetworkManager {
         boolean isMobileConn = false;
         ConnectivityManager connMgr = (ConnectivityManager) mAppContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (ContextCompat.checkSelfPermission(mAppContext, Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
-            NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            isWifiConn = networkInfo.isConnected();
-            if (!isWifiConn) {
-                networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                isMobileConn = networkInfo.isConnected();
+            try {
+                NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                isWifiConn = networkInfo.isConnected();
+                if (!isWifiConn) {
+                    networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                    isMobileConn = networkInfo.isConnected();
+                }
+            } catch (NullPointerException ex) {
+                if (AppManager.DEBUG) {
+                    Log.w(LOG_TAG, "Null NetworkInfo: " + ex.getMessage());
+                }
             }
         }
         return isWifiConn || isMobileConn;

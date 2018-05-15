@@ -3,14 +3,18 @@
     <string name="app_name">Elm Bay * 榆树湾</string>
 
     <!-- sign in -->
+    <string name="uid_hint">Email/Phone</string>
     <string name="email">Email</string>
-    <string name="or">-OR-</string>
     <string name="phone">Phone</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="sign_in">Sign In</string>
-    <string name="invalid_user_id">Email or phone number is not valid</string>
-    <string name="invalid_password">Invalid password</string>
+    <string name="create_account">Create Account</string>
+    <string name="invalid_uid">Please specify a valid email address or phone number.</string>
+    <string name="invalid_password">Password must be set.</string>
+    <string name="enter_confirmed_password">Please confirm password.</string>
+    <string name="passwords_mismatch">Passwords mismatch, try again</string>
     <string name="ok">OK</string>
 
     <!-- image buttons -->
