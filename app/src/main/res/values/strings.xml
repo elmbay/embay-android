@@ -16,6 +16,7 @@
     <string name="enter_confirmed_password">Please confirm password.</string>
     <string name="passwords_mismatch">Passwords mismatch, try again</string>
     <string name="ok">OK</string>
+    <string name="switch_account">Switch Account</string>
 
     <!-- image buttons -->
     <string name="repeat_slowly">Repeat slowly</string>

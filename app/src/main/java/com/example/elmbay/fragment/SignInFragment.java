@@ -9,6 +9,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -54,9 +57,16 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         View top = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         SessionData sessionData = AppManager.getInstance().getSessionData();
-        mUid = sessionData.getUid();
-        mUidType = sessionData.getUidType();
-        mPassword = sessionData.getPassword();
+
+        if (TextUtils.isEmpty(sessionData.getUserToken())) {
+            // There is no account or user wants to switch account
+            mUidType = SessionData.UID_TYPE_UNKNOWN;
+            mPassword = "";
+        } else {
+            mUid = sessionData.getUid();
+            mUidType = sessionData.getUidType();
+            mPassword = sessionData.getPassword();
+        }
 
         mUidView = top.findViewById(R.id.uid);
         mUidView.setText(mUid);
@@ -99,6 +109,36 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_settings, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    /**
+     * react to the user tapping/selecting an options menu item
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_switch_account:
+                mUidView.setText("");
+                mUidView.setInputType(TYPE_CLASS_TEXT);
+                mPasswordView.setText("");
+                mConfirmPasswordView.setText("");
+                mConfirmPasswordView.setVisibility(View.GONE);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -118,6 +158,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in:
+                mConfirmPasswordView.setText("");
+                mConfirmPasswordView.setVisibility(View.GONE);
                 loadData(false);
                 break;
 

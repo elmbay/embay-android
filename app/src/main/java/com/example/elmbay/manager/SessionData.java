@@ -57,6 +57,10 @@ public class SessionData {
         fromPersistenceStore();
     }
 
+    public void switchUser() {
+        mUserToken = "";
+    }
+
     // PII data stays in persistence store only
     public @NonNull String getUid() { return mPersistenceStore.getString(KEY_UID, ""); }
     public int getUidType() { return mPersistenceStore.getInt(KEY_UID_TYPE, UID_TYPE_UNKNOWN); }
