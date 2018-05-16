@@ -36,9 +36,9 @@ public class SessionData {
     public static final int UID_TYPE_EMAIL = 1;
     public static final int UID_TYPE_PHONE = 2;
 
-    public static final int CLASS_STATUS_LOCKED = 0;
-    public static final int CLASS_STATUS_INPROGRESS = 1;
-    public static final int CLASS_STATUS_DONE = 2;
+    public static final int COURSE_STATUS_LOCKED = 0;
+    public static final int COURSE_STATUS_INPROGRESS = 1;
+    public static final int COURSE_STATUS_DONE = 2;
 
     private SharedPreferences mPersistenceStore;
 
@@ -48,8 +48,8 @@ public class SessionData {
 
     private ListChaptersResult mListChaptersResult;
     private long mNextLoadTime;
-    private int mReadyChapterIndex = -1;
-    private int mReadyLessonIndex = -1;
+    private int mInProgressChapterIndex = -1;
+    private int mInProgressLessonIndex = -1;
     private Lesson mCurrentLesson;
 
     SessionData(@NonNull Context context) {
@@ -119,29 +119,31 @@ public class SessionData {
         setChapterAndLessonStatus();
     }
 
-    public int getReadyChapterIndex() { return mReadyChapterIndex; }
+    public int getInProgressChapterIndex() { return mInProgressChapterIndex; }
 
     public @Nullable Lesson getCurrentLesson() { return mCurrentLesson; }
     public void setCurrentLesson(@Nullable Lesson lesson) { mCurrentLesson = lesson; }
 
     public void finishedCurrentLesson() {
-        if (mCurrentLesson == null || mReadyChapterIndex < 0 || mReadyLessonIndex < 0) {
+
+        // No highMark change if the current lesson is not the lesson marked as in progress
+
+        if (mCurrentLesson == null || mInProgressChapterIndex < 0 || mInProgressLessonIndex < 0) {
             return;
         }
 
         List<Chapter> chapters = mListChaptersResult.getChapters();
-        if (Helper.isEmpty(chapters) || chapters.size() <= mReadyChapterIndex) {
+        if (Helper.isEmpty(chapters) || chapters.size() <= mInProgressChapterIndex) {
             return;
         }
-        Chapter chapter = chapters.get(mReadyChapterIndex);
+        Chapter chapter = chapters.get(mInProgressChapterIndex);
 
         List<Lesson> lessons = chapter.getLessons();
-        if (Helper.isEmpty(lessons) || lessons.size() <= mReadyLessonIndex) {
+        if (Helper.isEmpty(lessons) || lessons.size() <= mInProgressLessonIndex) {
             return;
         }
-        Lesson lesson = lessons.get(mReadyLessonIndex);
+        Lesson lesson = lessons.get(mInProgressLessonIndex);
 
-        // No highMark change if the current lesson is not the lesson marked as in progress
         if (lesson != mCurrentLesson) {
             return;
         }
@@ -152,28 +154,28 @@ public class SessionData {
         persistHighMark();
 
         // Update chapter(optional) and lesson state, and locate the next in-progress lesson
-        lesson.setStatus(CLASS_STATUS_DONE);
-        if (mReadyLessonIndex < lessons.size() - 1) {
+        lesson.setStatus(COURSE_STATUS_DONE);
+        if (mInProgressLessonIndex < lessons.size() - 1) {
             // Advance to the next lesson in the same chapter
-            lessons.get(++mReadyLessonIndex).setStatus(CLASS_STATUS_INPROGRESS);
+            lessons.get(++mInProgressLessonIndex).setStatus(COURSE_STATUS_INPROGRESS);
         } else {
-            chapter.setStatus(CLASS_STATUS_DONE);
-            while (mReadyChapterIndex < chapters.size() - 1) {
+            chapter.setStatus(COURSE_STATUS_DONE);
+            while (++mInProgressChapterIndex < chapters.size()) {
                 // Advance to the next chapter
-                lessons = chapters.get(mReadyChapterIndex).getLessons();
+                lessons = chapters.get(mInProgressChapterIndex).getLessons();
                 if (Helper.isEmpty(lessons)) {
-                    chapters.get(mReadyChapterIndex++).setStatus(CLASS_STATUS_DONE);
+                    chapters.get(mInProgressChapterIndex).setStatus(COURSE_STATUS_DONE);
                 } else {
-                    chapters.get(++mReadyChapterIndex).setStatus(CLASS_STATUS_INPROGRESS);
-                    lessons.get(0).setStatus(CLASS_STATUS_INPROGRESS);
-                    mReadyLessonIndex = 0;
+                    chapters.get(mInProgressChapterIndex).setStatus(COURSE_STATUS_INPROGRESS);
+                    lessons.get(0).setStatus(COURSE_STATUS_INPROGRESS);
+                    mInProgressLessonIndex = 0;
                     break;
                 }
             }
-            if (mReadyChapterIndex >= chapters.size()) {
+            if (mInProgressChapterIndex >= chapters.size()) {
                 // All lessons are done
-                mReadyChapterIndex = -1;
-                mReadyLessonIndex = -1;
+                mInProgressChapterIndex = -1;
+                mInProgressLessonIndex = -1;
             }
         }
     }
@@ -189,8 +191,8 @@ public class SessionData {
 
     private boolean validateChapters() {
         if (mListChaptersResult == null || Helper.isEmpty(mListChaptersResult.getChapters())) {
-            mReadyChapterIndex = -1;
-            mReadyLessonIndex = -1;
+            mInProgressChapterIndex = -1;
+            mInProgressLessonIndex = -1;
             mCurrentLesson = null;
             return false;
         }
@@ -202,8 +204,8 @@ public class SessionData {
 
         int lastDoneChapter = mHighMark.getChapterId();
         int lastDoneLesson = mHighMark.getLessonId();
-        mReadyChapterIndex = -1;
-        mReadyLessonIndex = -1;
+        mInProgressChapterIndex = -1;
+        mInProgressLessonIndex = -1;
 
         List<Chapter> chapters = mListChaptersResult.getChapters();
         for (int i = 0; i < chapters.size(); ++i) {
@@ -211,43 +213,43 @@ public class SessionData {
             List<Lesson> lessons = chapter.getLessons();
 
             if (Helper.isEmpty(lessons)) {
-                chapter.setStatus(CLASS_STATUS_DONE);
+                chapter.setStatus(COURSE_STATUS_DONE);
                 continue;
             }
 
             int cmpChapter = chapter.getId() - lastDoneChapter;
             int chapterStatus;
             if (cmpChapter < 0) {
-                chapterStatus = CLASS_STATUS_DONE;
+                chapterStatus = COURSE_STATUS_DONE;
             } else if (cmpChapter == 0) {
                 if (lessons.get(lessons.size() - 1).getId() > lastDoneLesson) {
-                    chapterStatus = CLASS_STATUS_INPROGRESS;
-                    mReadyChapterIndex = i;
+                    chapterStatus = COURSE_STATUS_INPROGRESS;
+                    mInProgressChapterIndex = i;
                 } else {
-                    chapterStatus = CLASS_STATUS_DONE;
+                    chapterStatus = COURSE_STATUS_DONE;
                     lastDoneLesson = 0;
                 }
-            } else if (mReadyChapterIndex < 0) {
-                chapterStatus = CLASS_STATUS_INPROGRESS;
-                mReadyChapterIndex = i;
+            } else if (mInProgressChapterIndex < 0) {
+                chapterStatus = COURSE_STATUS_INPROGRESS;
+                mInProgressChapterIndex = i;
             } else {
-                chapterStatus = CLASS_STATUS_LOCKED;
+                chapterStatus = COURSE_STATUS_LOCKED;
             }
             chapter.setStatus(chapterStatus);
 
             for (int j = 0; j < lessons.size(); ++j) {
                 Lesson lesson = lessons.get(j);
-                if (chapterStatus != CLASS_STATUS_INPROGRESS) {
+                if (chapterStatus != COURSE_STATUS_INPROGRESS) {
                     lesson.setStatus(chapterStatus);
                 } else {
                     int cmpLesson = lesson.getId() - lastDoneLesson;
                     if (cmpLesson <= 0) {
-                        lesson.setStatus(CLASS_STATUS_DONE);
-                    } else if (mReadyLessonIndex < 0){
-                        lesson.setStatus(CLASS_STATUS_INPROGRESS);
-                        mReadyLessonIndex = j;
+                        lesson.setStatus(COURSE_STATUS_DONE);
+                    } else if (mInProgressLessonIndex < 0){
+                        lesson.setStatus(COURSE_STATUS_INPROGRESS);
+                        mInProgressLessonIndex = j;
                     } else {
-                        lesson.setStatus(CLASS_STATUS_LOCKED);
+                        lesson.setStatus(COURSE_STATUS_LOCKED);
                     }
                 }
             }

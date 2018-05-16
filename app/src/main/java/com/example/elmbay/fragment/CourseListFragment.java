@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.example.elmbay.R;
 import com.example.elmbay.activity.CourseDetailActivity;
-import com.example.elmbay.activity.SignInActivity;
 import com.example.elmbay.adapter.ExpandableCourseAdapter;
 import com.example.elmbay.adapter.IViewHolderClickListener;
 import com.example.elmbay.manager.AppManager;
@@ -46,7 +42,6 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
         return top;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -65,34 +60,6 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     public void onPause() {
         EventBus.getDefault().unregister(this);
         super.onPause();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.menu_settings, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-    }
-
-    /**
-     * react to the user tapping/selecting an options menu item
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_switch_account:
-                AppManager.getInstance().getSessionData().switchUser();
-                Intent intent = new Intent(getContext(), SignInActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -122,7 +89,7 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
         SessionData sessionData = AppManager.getInstance().getSessionData();
         ListChaptersResult result = sessionData.getListChaptersResult();
         return result == null
-                || sessionData.getNextLoadTime() < System.currentTimeMillis() && sessionData.getReadyChapterIndex() < 0;
+                || sessionData.getNextLoadTime() < System.currentTimeMillis() && sessionData.getInProgressChapterIndex() < 0;
     }
 
     private void loadData() {

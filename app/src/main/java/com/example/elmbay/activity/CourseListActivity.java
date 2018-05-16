@@ -3,7 +3,6 @@ package com.example.elmbay.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.elmbay.R;
@@ -20,7 +19,7 @@ import com.example.elmbay.manager.AppManager;
  *
  * sectioned-recyclerview https://github.com/afollestad/sectioned-recyclerview/blob/master/sample/src/main/java/com/afollestad/sectionedrecyclerviewsample/MainAdapter.java
  */
-public class CourseListActivity extends AppCompatActivity {
+public class CourseListActivity extends BaseCourseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,10 +41,5 @@ public class CourseListActivity extends AppCompatActivity {
             ft.add(R.id.activity_frame, f);
             ft.commit();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Do not go back to a blank page
     }
 }

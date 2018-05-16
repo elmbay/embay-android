@@ -15,8 +15,8 @@ import com.example.elmbay.model.Lesson;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.elmbay.manager.SessionData.CLASS_STATUS_INPROGRESS;
-import static com.example.elmbay.manager.SessionData.CLASS_STATUS_LOCKED;
+import static com.example.elmbay.manager.SessionData.COURSE_STATUS_INPROGRESS;
+import static com.example.elmbay.manager.SessionData.COURSE_STATUS_LOCKED;
 
 /**
  * Created by kgu on 4/20/18.
@@ -51,7 +51,7 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.chapter_row, null);
+            convertView = infalInflater.inflate(R.layout.row_chapter, null);
         }
         TextView textView = convertView.findViewById(R.id.chapter_id);
         textView.setTypeface(null, Typeface.BOLD);
@@ -64,11 +64,11 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
         View checkMark = convertView.findViewById(R.id.status);
         View rowView = convertView.findViewById(R.id.chapter_row);
         switch(chapter.getStatus()) {
-            case CLASS_STATUS_LOCKED:
+            case COURSE_STATUS_LOCKED:
                 rowView.setAlpha((float) 0.2);
                 checkMark.setVisibility(View.GONE);
                 break;
-            case CLASS_STATUS_INPROGRESS:
+            case COURSE_STATUS_INPROGRESS:
                 rowView.setAlpha((float) 1.0);
                 checkMark.setVisibility(View.GONE);
                 break;
@@ -93,7 +93,7 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.lesson_row, null);
+            convertView = infalInflater.inflate(R.layout.row_lesson, null);
         }
 
         TextView textView = convertView.findViewById(R.id.lesson_id);
@@ -112,11 +112,11 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
         View checkMark = convertView.findViewById(R.id.status);
         View rowView = convertView.findViewById(R.id.lesson_row);
         switch(lesson.getStatus()) {
-            case CLASS_STATUS_LOCKED:
+            case COURSE_STATUS_LOCKED:
                 rowView.setAlpha((float) 0.2);
                 checkMark.setVisibility(View.GONE);
                 break;
-            case CLASS_STATUS_INPROGRESS:
+            case COURSE_STATUS_INPROGRESS:
                 rowView.setAlpha((float) 1.0);
                 checkMark.setVisibility(View.GONE);
                 break;

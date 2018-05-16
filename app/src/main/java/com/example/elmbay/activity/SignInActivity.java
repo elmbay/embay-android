@@ -46,8 +46,14 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() { /* Disable back button */ }
+
     public void postSignedIn() {
         Intent intent = new Intent(this, CourseListActivity.class);
         startActivity(intent);
+
+        // Don't come back to this activity anymore
+        finish();
     }
 }

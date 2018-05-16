@@ -2,6 +2,13 @@
     <!-- manifest -->
     <string name="app_name">Elm Bay * 榆树湾</string>
 
+    <!-- options menu -->
+    <string name="log_out">Log out</string>
+    <string name="help">Help</string>
+    <string name="confirm_log_out">Log out?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+
     <!-- sign in -->
     <string name="uid_hint">Email/Phone</string>
     <string name="email">Email</string>
@@ -16,7 +23,6 @@
     <string name="enter_confirmed_password">Please confirm password.</string>
     <string name="passwords_mismatch">Passwords mismatch, try again</string>
     <string name="ok">OK</string>
-    <string name="switch_account">Switch Account</string>
 
     <!-- image buttons -->
     <string name="repeat_slowly">Repeat slowly</string>

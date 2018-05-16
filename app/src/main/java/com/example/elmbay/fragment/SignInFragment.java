@@ -8,12 +8,14 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.elmbay.R;
@@ -39,18 +41,22 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
  */
 
 public class SignInFragment extends Fragment implements View.OnClickListener {
-    private static final String EMAIL_PATTEN = ".+@.+";
+    private static final String EMAIL_PATTEN = ".+@.+\\..+";
     private static final String PHONE_START_PATTEN = "[+0-9]";
+    private static final String PHONE_PATTEN = "[+0-9][0-9\\-]+[0-9]";
 
     EditText mUidView;
     EditText mPasswordView;
     EditText mConfirmPasswordView;
     View mSignInContainer;
+    Button mSignInButton;
+    Button mCreateAccountButton;
     View mSpinner;
     AlertDialog mDialog;
     String mUid;
     int mUidType;
     String mPassword;
+    boolean mEnableButtons = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,18 +97,39 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                enableOrDisableButtons();
+            }
         });
 
         mPasswordView = top.findViewById(R.id.password);
         mPasswordView.setText(mPassword);
+        mPasswordView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                enableOrDisableButtons();
+            }
+        });
+
         mConfirmPasswordView = top.findViewById(R.id.confirm_password);
 
         mSignInContainer = top.findViewById(R.id.signin_container);
         mSpinner = top.findViewById(R.id.spinner);
 
-        top.findViewById(R.id.sign_in).setOnClickListener(this);
-        top.findViewById(R.id.create_account).setOnClickListener(this);
+        mSignInButton = top.findViewById(R.id.sign_in);
+        mSignInButton.setOnClickListener(this);
+
+        mCreateAccountButton = top.findViewById(R.id.create_account);
+        mCreateAccountButton.setOnClickListener(this);
+
+        enableOrDisableButtons();
+
         top.findViewById(R.id.forget_password).setOnClickListener(this);
 
         return top;
@@ -116,7 +143,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.menu_settings, menu);
+        menuInflater.inflate(R.menu.menu_options, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 
@@ -126,7 +153,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_switch_account:
+            case R.id.menu_item_log_out:
                 mUidView.setText("");
                 mUidView.setInputType(TYPE_CLASS_TEXT);
                 mPasswordView.setText("");
@@ -165,6 +192,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
             case R.id.create_account:
                 mConfirmPasswordView.setVisibility(View.VISIBLE);
+                mConfirmPasswordView.requestFocus();
                 loadData(true);
                 break;
 
@@ -207,7 +235,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showDialog(int stringId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
         builder.setMessage(stringId);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -231,9 +259,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         if (createAccount) {
             if (TextUtils.isEmpty(mConfirmPasswordView.getText())) {
-                showDialog(R.string.enter_confirmed_password);
+//                showDialog(R.string.enter_confirmed_password);
                 return false;
-            } else if (!mPassword.equals(mConfirmPasswordView.getText().toString())){
+            }
+            if (!mPassword.equals(mConfirmPasswordView.getText().toString())){
                 showDialog(R.string.passwords_mismatch);
                 return false;
             }
@@ -255,5 +284,17 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             mPassword = mPasswordView.getText().toString();
         }
         return mPassword != null;
+    }
+
+    private void enableOrDisableButtons() {
+        boolean enableButtons = isValidUid() && isValidPassword();
+        if (enableButtons != mEnableButtons) {
+            mEnableButtons = enableButtons;
+            float alpha = (float) (mEnableButtons ? 1.0 : 0.2);
+            mSignInButton.setEnabled(mEnableButtons);
+            mSignInButton.setAlpha(alpha);
+            mCreateAccountButton.setEnabled(mEnableButtons);
+            mCreateAccountButton.setAlpha(alpha);
+        }
     }
 }

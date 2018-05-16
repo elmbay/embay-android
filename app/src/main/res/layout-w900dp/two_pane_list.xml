@@ -28,7 +28,7 @@
             android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"
             tools:context="com.example.elmbay.activity.CourseListActivity"
-            tools:listitem="@layout/lesson_row"/>
+            tools:listitem="@layout/row_lesson"/>
 
     <FrameLayout
             android:id="@+id/item_detail_container"

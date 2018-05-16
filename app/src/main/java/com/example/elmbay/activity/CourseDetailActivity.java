@@ -3,6 +3,8 @@ package com.example.elmbay.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 
 import com.example.elmbay.R;
 import com.example.elmbay.fragment.AudioFragment;
@@ -18,7 +20,7 @@ import com.example.elmbay.widget.TouchImageView;
  * item details are presented side-by-side with a list of items
  * in a {@link CourseListActivity}.
  */
-public class CourseDetailActivity extends BaseDetailActivity {
+public class CourseDetailActivity extends BaseCourseActivity {
     TouchImageView mTranscriptView;
 
     @Override
@@ -26,7 +28,7 @@ public class CourseDetailActivity extends BaseDetailActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_course_detail);
-        setupActionBar();
+        setupLessonActionBar();
 
         mTranscriptView = findViewById(R.id.transcript);
         displayTranscript();
@@ -45,6 +47,23 @@ public class CourseDetailActivity extends BaseDetailActivity {
             ft.add(R.id.recorder_container, f);
 
             ft.commit();
+        }
+    }
+
+    protected void setupLessonActionBar() {
+        if (mLesson != null && mLesson.getKeyword() != null) {
+            setTitle(mLesson.getKeyword());
+        }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
