@@ -54,7 +54,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     View mSpinner;
     AlertDialog mDialog;
     String mUid;
-    int mUidType;
+    String mUidType;
     String mPassword;
     boolean mEnableButtons = true;
 
@@ -224,7 +224,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         sessionData.setUid(mUid, mUidType);
         sessionData.setPassword(mPassword);
 
-        SignInRequest request = new SignInRequest(mUid, mUid, mPassword);
+        SignInRequest request = new SignInRequest(mUid, mUidType, mPassword, createAccount);
         SignInOperation op = new SignInOperation(request);
         op.submit();
     }

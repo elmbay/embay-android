@@ -14,7 +14,6 @@ import static android.view.View.VISIBLE;
  */
 
 public class RecorderBar {
-    private static final String RECORDING_FILE_MIME_TYPE = "audio/3gpp";
     private static final String RECORDING_FILE_SUFFIX = ".3gp";
 
     private Context mContext;
@@ -31,8 +30,7 @@ public class RecorderBar {
 
         // Record to the external cache directory for visibility
         mOutputFile = new ContentDescriptor();
-        mOutputFile.setType(ContentDescriptor.CONTENT_TYPE_OUTPUT_FILE);
-        mOutputFile.setMimeType(RECORDING_FILE_MIME_TYPE);
+        mOutputFile.setMimeType(ContentDescriptor.CONTENT_TYPE_AUDIO_RECORDING);
         mOutputFile.setUriString(outputFileName + RECORDING_FILE_SUFFIX);
         mOutputFile.initUri();
 

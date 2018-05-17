@@ -15,4 +15,15 @@
             android:id="@+id/expendable_list"
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
+
+        <TextView
+            android:id="@+id/info_banner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"/>
 </RelativeLayout>

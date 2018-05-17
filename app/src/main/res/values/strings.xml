@@ -24,6 +24,10 @@
     <string name="passwords_mismatch">Passwords mismatch, try again</string>
     <string name="ok">OK</string>
 
+    <!-- list of courses -->
+    <string name="come_back_singular">New courses may be available in %d hour.</string>
+    <string name="come_back_plural">New courses may be available in %d hours.</string>
+
     <!-- image buttons -->
     <string name="repeat_slowly">Repeat slowly</string>
     <string name="show_transcript">Show transcript</string>

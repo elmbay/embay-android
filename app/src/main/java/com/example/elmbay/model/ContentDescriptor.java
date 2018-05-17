@@ -1,7 +1,6 @@
 package com.example.elmbay.model;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.net.Uri;
 
 import com.example.elmbay.manager.AppManager;
@@ -18,42 +17,19 @@ import static com.example.elmbay.manager.AppManager.PACKAGE_NAME;
  */
 
 public class ContentDescriptor {
-    public static final int CONTENT_TYPE_VIDEO = 1;
-    public static final int CONTENT_TYPE_AUDIO = 2;
-    public static final int CONTENT_TYPE_IMAGE = 3;
-    public static final int CONTENT_TYPE_OUTPUT_FILE = 4;
+    public static final String CONTENT_TYPE_VIDEO = "video/mp4";
+    public static final String CONTENT_TYPE_AUDIO = "audio/*";
+    public static final String CONTENT_TYPE_IMAGE = "image/*";
+    public static final String CONTENT_TYPE_AUDIO_RECORDING = "audio/3gpp";
 
-    private static Resources sResources;
-    private static File sOutputDir;
-
-    @SerializedName("type")
-    private int mType;
+    @SerializedName("mimeType")
+    private String mMimeType;
 
     @SerializedName("uriString")
     private String mUriString;
 
     private transient Uri mUri;
     private transient File mFile;
-    private String mMimeType;
-
-    public ContentDescriptor() {
-        if (sResources == null) {
-            synchronized (this) {
-                if (sResources == null) {
-                    Context context = AppManager.getInstance().getAppContext();
-                    sResources = context.getResources();
-                    // child must matches "path" in xml/filepaths.xml
-                    sOutputDir = new File(context.getExternalCacheDir(), "output");
-                    if (!sOutputDir.exists()) {
-                        sOutputDir.mkdir();
-                    }
-                }
-            }
-        }
-    }
-
-    public void setType(int type) { mType = type; }
-    public int getType() { return mType; }
 
     public String getMimeType() { return mMimeType; }
     public void setMimeType(String mimeType) { mMimeType = mimeType; }
@@ -72,13 +48,14 @@ public class ContentDescriptor {
         if (mUriString == null) {
             mUri = null;
         } else {
-            if (mType == CONTENT_TYPE_OUTPUT_FILE) {
-                mFile = new File(sOutputDir, mUriString);
-                mUri = getUriForFile(AppManager.getInstance().getAppContext(), AppManager.PACKAGE_NAME, mFile);
+            Context context = AppManager.getInstance().getAppContext();
+            if (CONTENT_TYPE_AUDIO_RECORDING.equals(mMimeType)) {
+                mFile = new File(AppManager.getInstance().getSessionData().getOutputFileDir(), mUriString);
+                mUri = getUriForFile(context, AppManager.PACKAGE_NAME, mFile);
             } else if (mUriString.startsWith("http") ){
                 mUri = Uri.parse(mUriString);
             } else {
-                int resourceId = sResources.getIdentifier(mUriString, "raw", PACKAGE_NAME);
+                int resourceId = AppManager.getInstance().getAppContext().getResources().getIdentifier(mUriString, "raw", PACKAGE_NAME);
                 mUri = Uri.parse("android.resource://" + PACKAGE_NAME + "/" + resourceId);
             }
         }
@@ -94,14 +71,14 @@ public class ContentDescriptor {
         return mFile == null ? null : mFile.getAbsolutePath();
     }
 
-    public boolean deleteFile() { return mFile == null ? true : mFile.delete(); }
+    public boolean deleteFile() { return mFile == null || mFile.delete(); }
 
     public boolean exists() { return mFile != null && mFile.exists(); }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("{type=").append(mType).append(",uriString=").append(mUriString).append("}");
+        builder.append("{mimeType=").append(mMimeType).append(",uriString=").append(mUriString).append("}");
         return builder.toString();
     }
 }

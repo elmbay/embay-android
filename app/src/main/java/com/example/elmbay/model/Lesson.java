@@ -45,7 +45,7 @@ public class Lesson {
             mVideo = null;
         } else {
             mVideo = new ContentDescriptor();
-            mVideo.setType(ContentDescriptor.CONTENT_TYPE_VIDEO);
+            mVideo.setMimeType(ContentDescriptor.CONTENT_TYPE_VIDEO);
             mVideo.setUriString(videoString);
         }
     }
@@ -57,7 +57,7 @@ public class Lesson {
             mAudio = null;
         } else {
             mAudio = new ContentDescriptor();
-            mAudio.setType(ContentDescriptor.CONTENT_TYPE_AUDIO);
+            mAudio.setMimeType(ContentDescriptor.CONTENT_TYPE_AUDIO);
             mAudio.setUriString(audioString);
         }
     }
@@ -69,7 +69,7 @@ public class Lesson {
             mTranscript = null;
         } else {
             mTranscript = new ContentDescriptor();
-            mTranscript.setType(ContentDescriptor.CONTENT_TYPE_IMAGE);
+            mTranscript.setMimeType(ContentDescriptor.CONTENT_TYPE_IMAGE);
             mTranscript.setUriString(transcriptString);
         }
     }

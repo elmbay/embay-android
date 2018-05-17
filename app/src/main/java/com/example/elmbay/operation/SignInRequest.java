@@ -10,27 +10,34 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class SignInRequest {
-    @SerializedName("email")
-    private String mEmail;
+    @SerializedName("uid")
+    private String mUid;
 
-    @SerializedName("phone")
-    private String mPhone;
+    @SerializedName("uidType")
+    private String mUidType;
 
     @SerializedName("password")
     private String mPassword;
 
-    public SignInRequest(String email, String phone, @NonNull String password) {
-        mEmail = email;
-        mPhone = phone;
+    @SerializedName("isSignUp")
+    private boolean mIsSignUp;
+
+    public SignInRequest(@NonNull String uid, @NonNull String uidType, @NonNull String password, boolean isSignUp) {
+        mUid = uid;
+        mUidType = uidType;
         mPassword = password;
+        mIsSignUp = isSignUp;
     }
 
-    public void setEmail(String email) { mEmail = email; }
-    public String getEmail() { return mEmail; }
+    public void setUid(String uid) { mUid = uid; }
+    public String getUid() { return mUid; }
 
-    public void setPhone(String phone) { mPhone = phone; }
-    public String getPhone() { return mPhone; }
+    public void setUidType(String type) { mUidType = type; }
+    public String getUidType() { return mUidType; }
 
     public void setPassword(String password) { mPassword = password;}
     public String getPassword() { return mPassword; }
+
+    public void setIsSignUp(boolean isSignUp) { mIsSignUp = isSignUp; }
+    public boolean isSignUp() { return mIsSignUp; }
 }

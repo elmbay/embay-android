@@ -11,6 +11,7 @@ import com.example.elmbay.model.ProgressMark;
 import com.example.elmbay.operation.ListChaptersResult;
 import com.example.elmbay.operation.SignInResult;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ import java.util.List;
  */
 
 public class SessionData {
-    private static final int HOUR_TO_MILLIS = 3600000;
+    public static final int HOUR_TO_MILLIS = 3600000;
 
     // persistence keys
     private static final String KEY_UID = "uid";
@@ -32,15 +33,16 @@ public class SessionData {
     private static final String KEY_PROGRESS_HIGHMARK_LID = "high_lid";
     private static final String KEY_NEXT_LOAD_TIME = "load_tm";
 
-    public static final int UID_TYPE_UNKNOWN = 0;
-    public static final int UID_TYPE_EMAIL = 1;
-    public static final int UID_TYPE_PHONE = 2;
+    public static final String UID_TYPE_UNKNOWN = "U";
+    public static final String UID_TYPE_EMAIL = "E";
+    public static final String UID_TYPE_PHONE = "P";
 
     public static final int COURSE_STATUS_LOCKED = 0;
     public static final int COURSE_STATUS_INPROGRESS = 1;
     public static final int COURSE_STATUS_DONE = 2;
 
     private SharedPreferences mPersistenceStore;
+    private File mOutputFileDir;
 
     private String mUserToken;
     private long mUserTokenExpirationTime;
@@ -55,18 +57,26 @@ public class SessionData {
     SessionData(@NonNull Context context) {
         mPersistenceStore = PersistenceManager.getSharedPersistenceStore(context);
         fromPersistenceStore();
+
+        // child (the second param) must matches "path" in xml/filepaths.xml
+        mOutputFileDir = new File(context.getExternalCacheDir(), "output");
+        if (!mOutputFileDir.exists()) {
+            mOutputFileDir.mkdir();
+        }
     }
 
-    public void switchUser() {
+    public void logout() {
         mUserToken = "";
     }
 
+    public File getOutputFileDir() { return mOutputFileDir; }
+
     // PII data stays in persistence store only
     public @NonNull String getUid() { return mPersistenceStore.getString(KEY_UID, ""); }
-    public int getUidType() { return mPersistenceStore.getInt(KEY_UID_TYPE, UID_TYPE_UNKNOWN); }
-    public void setUid(@NonNull String uid, int uidType) {
+    public String getUidType() { return mPersistenceStore.getString(KEY_UID_TYPE, UID_TYPE_UNKNOWN); }
+    public void setUid(@NonNull String uid, String uidType) {
         PersistenceManager.setString(mPersistenceStore, KEY_UID, uid);
-        PersistenceManager.setInt(mPersistenceStore, KEY_UID_TYPE, uidType);
+        PersistenceManager.setString(mPersistenceStore, KEY_UID_TYPE, uidType);
     }
 
     public @NonNull String getPassword() { return mPersistenceStore.getString(KEY_PASSWORD, ""); }
@@ -75,7 +85,7 @@ public class SessionData {
     public void setSignInResult(@NonNull SignInResult result) {
         setUserToken(result.getUserToken());
         setUserTokenExpirationTime(System.currentTimeMillis() + result.getUserTokenLifeInHours() * SessionData.HOUR_TO_MILLIS);
-        setHighMark(result.getHighMark());
+        advanceHighMark(result.getHighMark());
     }
 
     public @NonNull String getUserToken() { return mUserToken; }
@@ -93,10 +103,23 @@ public class SessionData {
     }
 
     public @NonNull ProgressMark getHighMark() { return mHighMark; }
-    private void setHighMark(@Nullable ProgressMark mark) {
-        // highMark can only be advanced
-        if (mark != null && (mHighMark.getChapterId() < mark.getChapterId() || mHighMark.getLessonId() < mark.getLessonId())) {
-            mHighMark = mark;
+    private void advanceHighMark(@Nullable ProgressMark mark) {
+        if (mark != null) {
+            advanceHighMark(mark.getChapterId(), mark.getLessonId());
+        }
+    }
+    public void advanceHighMark(int chapterId, int lessonId) {
+        boolean needUpdate = false;
+        if (mHighMark.getChapterId() < chapterId) {
+            needUpdate = true;
+        } else if (mHighMark.getChapterId() == chapterId) {
+            if (mHighMark.getLessonId() < lessonId) {
+                needUpdate = true;
+            }
+        }
+        if (needUpdate) {
+            mHighMark.setChapterId(chapterId);
+            mHighMark.setLessonId(lessonId);
             persistHighMark();
         }
     }
@@ -115,7 +138,15 @@ public class SessionData {
     public @Nullable ListChaptersResult getListChaptersResult() { return mListChaptersResult; }
     public void setListChaptersResult(@Nullable ListChaptersResult result) {
         mListChaptersResult = result;
-        setNextLoadTime(result == null ? HOUR_TO_MILLIS : result.getNextLoadInHours() * HOUR_TO_MILLIS);
+        long now = System.currentTimeMillis();
+        long nextLoadTime = now + HOUR_TO_MILLIS;
+        if (result != null) {
+            advanceHighMark(result.getHighMark());
+            if (result.getNextLoadInHours() > 0) {
+                nextLoadTime = now + result.getNextLoadInHours() * HOUR_TO_MILLIS;
+            }
+        }
+        setNextLoadTime(nextLoadTime);
         setChapterAndLessonStatus();
     }
 
@@ -148,10 +179,7 @@ public class SessionData {
             return;
         }
 
-        // Advance highMark
-        mHighMark.setChapterId(chapter.getId());
-        mHighMark.setLessonId(lesson.getId());
-        persistHighMark();
+        advanceHighMark(chapter.getId(), lesson.getId());
 
         // Update chapter(optional) and lesson state, and locate the next in-progress lesson
         lesson.setStatus(COURSE_STATUS_DONE);

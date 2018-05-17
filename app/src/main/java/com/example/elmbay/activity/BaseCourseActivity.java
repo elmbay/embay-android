@@ -73,7 +73,7 @@ public abstract class BaseCourseActivity extends AppCompatActivity {
     }
 
     private void doLogOut() {
-        AppManager.getInstance().getSessionData().switchUser();
+        AppManager.getInstance().getSessionData().logout();
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
 

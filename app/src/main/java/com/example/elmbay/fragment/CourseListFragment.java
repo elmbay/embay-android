@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.example.elmbay.R;
 import com.example.elmbay.activity.CourseDetailActivity;
@@ -33,12 +35,14 @@ import org.greenrobot.eventbus.ThreadMode;
 public class CourseListFragment extends Fragment implements IViewHolderClickListener {
     private ExpandableCourseAdapter mAdapter;
     private View mSpinner;
+    private TextView mInfoBanner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_course_list, container, false);
         setupExpandableListView(top);
         mSpinner = top.findViewById(R.id.spinner);
+        mInfoBanner = top.findViewById(R.id.info_banner);
         return top;
     }
 
@@ -53,6 +57,7 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
             onDataLoaded();
         } else {
             mAdapter.notifyDataSetChanged();
+            checkInfoBanner();
         }
     }
 
@@ -108,5 +113,23 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
 
         ListChaptersResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
         mAdapter.setChapters(result == null ? null : result.getChapters());
+        checkInfoBanner();
+    }
+
+    private void checkInfoBanner() {
+        SessionData sessionData = AppManager.getInstance().getSessionData();
+        if (sessionData.getInProgressChapterIndex() < 0) {
+            Log.i("Parrot", "loadTime=" + sessionData.getNextLoadTime() + " now=" + System.currentTimeMillis());
+            long elapsedHour = (sessionData.getNextLoadTime() - System.currentTimeMillis()) / SessionData.HOUR_TO_MILLIS;
+            if (elapsedHour <= 1) {
+                elapsedHour = 1;
+                mInfoBanner.setText(getContext().getString(R.string.come_back_singular, elapsedHour));
+            } else {
+                mInfoBanner.setText(getContext().getString(R.string.come_back_plural, elapsedHour));
+            }
+            mInfoBanner.setVisibility(View.VISIBLE);
+        } else {
+            mInfoBanner.setVisibility(View.GONE);
+        }
     }
 }

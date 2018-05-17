@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.elmbay.model.ContentDescriptor.CONTENT_TYPE_OUTPUT_FILE;
+import static com.example.elmbay.model.ContentDescriptor.CONTENT_TYPE_AUDIO_RECORDING;
 import static com.example.elmbay.widget.StateButton.MEDIA_STATE_READY;
 
 /**
@@ -66,7 +66,7 @@ public class AudioPlayerButtonSet {
                     }
                 });
                 try {
-                    if (mContentDescriptor.getType() == CONTENT_TYPE_OUTPUT_FILE) {
+                    if (mContentDescriptor.getMimeType() == CONTENT_TYPE_AUDIO_RECORDING) {
                         mMediaPlayer.setDataSource(mContentDescriptor.getAbsolutePath());
                     } else {
                         mMediaPlayer.setDataSource(mContext, mContentDescriptor.getUri());
@@ -84,7 +84,7 @@ public class AudioPlayerButtonSet {
 
         public void onStateChange() {
             mButton.setVisibility(mState == MEDIA_STATE_READY ? View.VISIBLE : View.GONE);
-            if (mContentDescriptor.getType() == CONTENT_TYPE_OUTPUT_FILE) {
+            if (mContentDescriptor.getMimeType() == CONTENT_TYPE_AUDIO_RECORDING) {
                 enableButton(mContentDescriptor.exists());
             }
         }
@@ -106,7 +106,7 @@ public class AudioPlayerButtonSet {
 
         public void onStateChange() {
             mButton.setVisibility(mState == MEDIA_STATE_READY ? View.GONE : View.VISIBLE);
-            if (mContentDescriptor.getType() == CONTENT_TYPE_OUTPUT_FILE) {
+            if (mContentDescriptor.getMimeType() == CONTENT_TYPE_AUDIO_RECORDING) {
                 enableButton(mContentDescriptor.exists());
             }
         }

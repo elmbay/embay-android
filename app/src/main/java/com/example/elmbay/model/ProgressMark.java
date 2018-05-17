@@ -19,4 +19,11 @@ public class ProgressMark {
 
     public void setLessonId(int lessonId) { mLessonId = lessonId; }
     public int getLessonId() { return mLessonId; }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{chapterId=").append(mChapterId).append(",lessonId=").append(mLessonId).append("}");
+        return builder.toString();
+    }
 }

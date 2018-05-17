@@ -9,148 +9,155 @@ Polls is a simple API allowing consumers to view polls and vote in them.
 
 ### Ping [GET]
 
-+ Response 200 (application/json)
+  + Response 200 (application/json)
 
-+ Headers
+  + Headers
 
-+ Body
+  + Body
 
-{
-"Ping": {
-"endpoint": "/v1/elmbay/ping"
-}
-}
+    {
+        "Ping": {
+            "endpoint": "/v1/elmbay/ping"
+        }
+    }
 
 
 ## Users [/v1/elmbay/users]
 
 ### Sign Up [POST]
 
-+ Request (application/json)
+  + Request (application/json)
 
-{
-"SignInRequest": {
-"email": "someone@some.com",
-"phone": "+1-888-111-1111
-"password": "1234"
-}
-}
+    {
+        "SignInRequest": {
+            "uid": "someone@some.com",
+            "uidType": "E",
+            "password": "1234",
+            "isSignUp": true
+        }
+    }
 
-+ Response 201 (application/json)
-+ Headers
-+ Body
+  + Response 201 (application/json)
+  + Headers
+  + Body
 
-{ "userToken" : "USER01",
-"userTokenLifeInHours" : 86400,
-"highMark" : {
-"chapterId" : 0,
-"lessonId" : 0
-}
-}
+    {
+        "userToken" : "USER01",
+        "userTokenLifeInHours" : 2,
+        "highMark" : {
+            "chapterId" : 0,
+            "lessonId" : 0
+        }
+    }
 
 ## Lessons [/v1/elmbay/chapters]
 
 ### List All Chapters [GET]
 
-+ Response 200 (application/json)
+  + Response 200 (application/json)
 
+  + Headers
 
-+ Headers
+  + Body
 
-+ Body
-
-{ "nextLoadInHours" : 1,
-"chapters" : [
-{
-"course": "English 101",
-"id": 1,
-"lessons": [
-{
-"audio": {
-"type": 2,
-"uriString": "change_channel_01_ad"
-},
-"chapterId": 1,
-"id": 1,
-"keyword": "Change Channel",
-"transcript": {
-"type": 3,
-"uriString": "change_channel_01_tx"
-},
-"video": {
-"type": 1,
-"uriString": "change_channel_01_vd"
-}
-},
-{
-"audio": {
-"type": 2,
-"uriString": "juicy_02_ad"
-},
-"chapterId": 1,
-"id": 2,
-"keyword": "Juicy",
-"transcript": {
-"type": 3,
-"uriString": "juicy_02_tx"
-},
-"video": {
-"type": 1,
-"uriString": "juicy_02_vd"
-}
-},
-{
-"audio": {
-"type": 2,
-"uriString": "literally_03_ad"
-},
-"chapterId": 1,
-"id": 3,
-"keyword": "literally",
-"transcript": {
-"type": 3,
-"uriString": "literally_03_tx"
-},
-"video": {
-"type": 1,
-"uriString": "literally_03_vd"
-}
-}
-],
-"topic": "Kids"
-},
-{
-"course": "English 101",
-"id": 2,
-"lessons": [
-{
-"chapterId": 2,
-"id": 1,
-"keyword": "Blue Sea",
-"video": {
-"type": 1,
-"uriString": "http://abhiandroid-8fb4.kxcdn.com/ui/wp-content/uploads/2016/04/videoviewtestingvideo.mp4"
-}
-}
-],
-"topic": "Nature"
-},
-{
-"course": "English 101",
-"id": 3,
-"lessons": [
-{
-"chapterId": 3,
-"id": 1,
-"keyword": "Venice",
-"video": {
-"type": 1,
-"uriString": "ppcash"
-}
-}
-],
-"topic": "Business"
-}
-] }
+    {
+        "highMark" : {
+            "chapterId" : 0,
+            "lessonId" : 0
+        },
+        "nextLoadInHours" : 1,
+        "chapters" : [
+            {
+                "course": "English 101",
+                "id": 1,
+                "topic": "Kids",
+                "lessons": [
+                    {
+                        "chapterId": 1,
+                        "id": 1,
+                        "keyword": "Change Channel",
+                        "audio": {
+                            "mimeType": "audio/*",
+                            "uriString": "change_channel_01_ad"
+                        },
+                        "transcript": {
+                            "mimeType": "image/*",
+                            "uriString": "change_channel_01_tx"
+                        },
+                        "video": {
+                            "mimeType": "video/mp4",
+                            "uriString": "change_channel_01_vd"
+                        }
+                    },
+                    {
+                        "chapterId": 1,
+                        "id": 2,
+                        "keyword": "Juicy",
+                        "transcript": {
+                            "mimeType": "image/*",
+                            "uriString": "juicy_02_tx"
+                        },
+                        "audio": {
+                            "mimeType": "audio/*",
+                            "uriString": "juicy_02_ad"
+                        },
+                        "video": {
+                            "mimeType": "video/mp4",
+                            "uriString": "juicy_02_vd"
+                        }
+                    },
+                    {
+                        "chapterId": 1,
+                        "id": 3,
+                        "keyword": "literally",
+                        "transcript": {
+                            "mimeType": "image/*",
+                            "uriString": "literally_03_tx"
+                        },
+                        "audio": {
+                            "mimeType": "audio/*",
+                            "uriString": "literally_03_ad"
+                        },
+                        "video": {
+                            "mimeType": "video/mp4",
+                            "uriString": "literally_03_vd"
+                        }
+                    }
+                ]
+            },
+            {
+                "course": "English 101",
+                "id": 2,
+                "topic": "Nature",
+                "lessons": [
+                    {
+                        "chapterId": 2,
+                        "id": 1,
+                        "keyword": "Blue Sea",
+                        "video": {
+                        "mimeType": "video/mp4",
+                        "uriString": "http://abhiandroid-8fb4.kxcdn.com/ui/wp-content/uploads/2016/04/videoviewtestingvideo.mp4"
+                        }
+                    }
+                ]
+            },
+            {
+                "course": "English 101",
+                "id": 3,
+                "topic": "Business",
+                "lessons": [
+                    {
+                        "chapterId": 3,
+                        "id": 1,
+                        "keyword": "Venice",
+                        "video": {
+                            "mimeType": "video/mp4",
+                            "uriString": "ppcash"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 
 
