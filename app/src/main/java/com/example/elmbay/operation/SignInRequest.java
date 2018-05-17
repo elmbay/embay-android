@@ -10,16 +10,16 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class SignInRequest {
-    @SerializedName("uid")
+    @SerializedName("u")
     private String mUid;
 
-    @SerializedName("uidType")
+    @SerializedName("t")
     private String mUidType;
 
-    @SerializedName("password")
+    @SerializedName("p")
     private String mPassword;
 
-    @SerializedName("isSignUp")
+    @SerializedName("new")
     private boolean mIsSignUp;
 
     public SignInRequest(@NonNull String uid, @NonNull String uidType, @NonNull String password, boolean isSignUp) {

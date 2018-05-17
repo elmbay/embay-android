@@ -12,10 +12,10 @@ public class Lesson {
     @SerializedName("id")
     private int mId;
 
-    @SerializedName("chapterId")
+    @SerializedName("cid")
     private int mChapterId;
 
-    @SerializedName("keyword")
+    @SerializedName("key")
     private String mKeyword;
 
     @SerializedName("video")
@@ -24,8 +24,8 @@ public class Lesson {
     @SerializedName("audio")
     private ContentDescriptor mAudio;
 
-    @SerializedName("transcript")
-    private ContentDescriptor mTranscript;
+    @SerializedName("note")
+    private ContentDescriptor mNote;
 
     private int mStatus;
 
@@ -62,15 +62,15 @@ public class Lesson {
         }
     }
 
-    public ContentDescriptor getTranscript() { return mTranscript; }
-    public void setTranscript(ContentDescriptor transcript) { mTranscript = transcript; }
-    public void setTranscript(String transcriptString) {
-        if (transcriptString == null) {
-            mTranscript = null;
+    public ContentDescriptor getNote() { return mNote; }
+    public void setNote(ContentDescriptor note) { mNote = note; }
+    public void setNote(String noteString) {
+        if (noteString == null) {
+            mNote = null;
         } else {
-            mTranscript = new ContentDescriptor();
-            mTranscript.setMimeType(ContentDescriptor.CONTENT_TYPE_IMAGE);
-            mTranscript.setUriString(transcriptString);
+            mNote = new ContentDescriptor();
+            mNote.setMimeType(ContentDescriptor.CONTENT_TYPE_IMAGE);
+            mNote.setUriString(noteString);
         }
     }
 
@@ -87,8 +87,8 @@ public class Lesson {
         if (mAudio!= null) {
             builder.append(",ausio=").append(mAudio.toString());
         }
-        if (mTranscript!= null) {
-            builder.append(",transcript=").append(mTranscript.toString());
+        if (mNote != null) {
+            builder.append(",note=").append(mNote.toString());
         }
         builder.append("}");
         return builder.toString();

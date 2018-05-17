@@ -30,10 +30,10 @@ Polls is a simple API allowing consumers to view polls and vote in them.
 
     {
         "SignInRequest": {
-            "uid": "someone@some.com",
-            "uidType": "E",
-            "password": "1234",
-            "isSignUp": true
+            "u": "someone@some.com",
+            "t": "E",
+            "p": "1234",
+            "new": true
         }
     }
 
@@ -42,11 +42,11 @@ Polls is a simple API allowing consumers to view polls and vote in them.
   + Body
 
     {
-        "userToken" : "USER01",
-        "userTokenLifeInHours" : 2,
-        "highMark" : {
-            "chapterId" : 0,
-            "lessonId" : 0
+        "token" : "USER01",
+        "hour" : 2,
+        "mark" : {
+            "cid" : 0,
+            "lid" : 0
         }
     }
 
@@ -61,11 +61,11 @@ Polls is a simple API allowing consumers to view polls and vote in them.
   + Body
 
     {
-        "highMark" : {
-            "chapterId" : 0,
-            "lessonId" : 0
+        "mark" : {
+            "cid" : 0,
+            "lid" : 0
         },
-        "nextLoadInHours" : 1,
+        "hour" : 1,
         "chapters" : [
             {
                 "course": "English 101",
@@ -73,54 +73,54 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                 "topic": "Kids",
                 "lessons": [
                     {
-                        "chapterId": 1,
+                        "cid": 1,
                         "id": 1,
-                        "keyword": "Change Channel",
+                        "key": "Change Channel",
                         "audio": {
-                            "mimeType": "audio/*",
-                            "uriString": "change_channel_01_ad"
+                            "t": "audio/*",
+                            "url": "change_channel_01_ad"
                         },
-                        "transcript": {
-                            "mimeType": "image/*",
-                            "uriString": "change_channel_01_tx"
+                        "note": {
+                            "t": "image/*",
+                            "url": "change_channel_01_tx"
                         },
                         "video": {
-                            "mimeType": "video/mp4",
-                            "uriString": "change_channel_01_vd"
+                            "t": "video/mp4",
+                            "url": "change_channel_01_vd"
                         }
                     },
                     {
-                        "chapterId": 1,
+                        "cid": 1,
                         "id": 2,
-                        "keyword": "Juicy",
-                        "transcript": {
-                            "mimeType": "image/*",
-                            "uriString": "juicy_02_tx"
+                        "key": "Juicy",
+                        "note": {
+                            "t": "image/*",
+                            "url": "juicy_02_tx"
                         },
                         "audio": {
-                            "mimeType": "audio/*",
-                            "uriString": "juicy_02_ad"
+                            "t": "audio/*",
+                            "url": "juicy_02_ad"
                         },
                         "video": {
-                            "mimeType": "video/mp4",
-                            "uriString": "juicy_02_vd"
+                            "t": "video/mp4",
+                            "url": "juicy_02_vd"
                         }
                     },
                     {
-                        "chapterId": 1,
+                        "cid": 1,
                         "id": 3,
-                        "keyword": "literally",
-                        "transcript": {
-                            "mimeType": "image/*",
-                            "uriString": "literally_03_tx"
+                        "key": "literally",
+                        "note": {
+                            "t": "image/*",
+                            "url": "literally_03_tx"
                         },
                         "audio": {
-                            "mimeType": "audio/*",
-                            "uriString": "literally_03_ad"
+                            "t": "audio/*",
+                            "url": "literally_03_ad"
                         },
                         "video": {
-                            "mimeType": "video/mp4",
-                            "uriString": "literally_03_vd"
+                            "t": "video/mp4",
+                            "url": "literally_03_vd"
                         }
                     }
                 ]
@@ -131,12 +131,12 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                 "topic": "Nature",
                 "lessons": [
                     {
-                        "chapterId": 2,
+                        "cid": 2,
                         "id": 1,
-                        "keyword": "Blue Sea",
+                        "key": "Blue Sea",
                         "video": {
-                        "mimeType": "video/mp4",
-                        "uriString": "http://abhiandroid-8fb4.kxcdn.com/ui/wp-content/uploads/2016/04/videoviewtestingvideo.mp4"
+                            "t": "video/mp4",
+                            "url": "http://abhiandroid-8fb4.kxcdn.com/ui/wp-content/uploads/2016/04/videoviewtestingvideo.mp4"
                         }
                     }
                 ]
@@ -147,12 +147,12 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                 "topic": "Business",
                 "lessons": [
                     {
-                        "chapterId": 3,
+                        "cid": 3,
                         "id": 1,
-                        "keyword": "Venice",
+                        "key": "Venice",
                         "video": {
-                            "mimeType": "video/mp4",
-                            "uriString": "ppcash"
+                            "t": "video/mp4",
+                            "url": "ppcash"
                         }
                     }
                 ]

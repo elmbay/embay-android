@@ -88,7 +88,7 @@ class MockDataProvider {
         lesson.setKeyword(keyword);
         lesson.setVideo(videoString);
         lesson.setAudio(audioString);
-        lesson.setTranscript(transcriptString);
+        lesson.setNote(transcriptString);
 
         return lesson;
     }

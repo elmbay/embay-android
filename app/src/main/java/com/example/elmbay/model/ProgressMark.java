@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ProgressMark {
-    @SerializedName("chapterId")
+    @SerializedName("cid")
     private int mChapterId;
 
-    @SerializedName("lessonId")
+    @SerializedName("lid")
     private int mLessonId;
 
     public void setChapterId(int chapterId) { mChapterId = chapterId; }

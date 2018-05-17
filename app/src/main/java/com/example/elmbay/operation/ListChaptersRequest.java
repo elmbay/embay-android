@@ -11,10 +11,10 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ListChaptersRequest {
-    @SerializedName("userToken")
+    @SerializedName("token")
     private String mUserToken;
 
-    @SerializedName("highMark")
+    @SerializedName("mark")
     private ProgressMark mHighMark;
 
     public void setUserToken(@NonNull String token) { mUserToken = token; }

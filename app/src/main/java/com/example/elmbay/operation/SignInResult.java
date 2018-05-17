@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class SignInResult {
-    @SerializedName("userToken")
+    @SerializedName("token")
     private String mUserToken;
 
-    @SerializedName("userTokenLifeInHours")
+    @SerializedName("hour")
     private int mUserTokenLifeInHours;
 
-    @SerializedName("highMark")
+    @SerializedName("mark")
     private ProgressMark mHighMark;
 
     public String getUserToken() { return mUserToken; }

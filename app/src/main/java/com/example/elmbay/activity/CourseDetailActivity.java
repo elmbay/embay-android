@@ -69,7 +69,7 @@ public class CourseDetailActivity extends BaseCourseActivity {
 
     private void displayTranscript() {
         if (mLesson != null) {
-            ContentDescriptor transCript = mLesson.getTranscript();
+            ContentDescriptor transCript = mLesson.getNote();
             if (transCript != null) {
                 ImageLoader imageLoader = new ImageLoader(mTranscriptView, transCript);
                 imageLoader.display();

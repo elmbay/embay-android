@@ -22,10 +22,10 @@ public class ContentDescriptor {
     public static final String CONTENT_TYPE_IMAGE = "image/*";
     public static final String CONTENT_TYPE_AUDIO_RECORDING = "audio/3gpp";
 
-    @SerializedName("mimeType")
+    @SerializedName("t")
     private String mMimeType;
 
-    @SerializedName("uriString")
+    @SerializedName("url")
     private String mUriString;
 
     private transient Uri mUri;

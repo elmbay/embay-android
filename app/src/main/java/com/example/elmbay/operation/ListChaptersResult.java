@@ -17,10 +17,10 @@ public class ListChaptersResult {
     @SerializedName("chapters")
     private List<Chapter> mChapters;
 
-    @SerializedName("highMark")
+    @SerializedName("mark")
     private ProgressMark mHighMark;
 
-    @SerializedName("nextLoadInHours")
+    @SerializedName("hour")
     private int mNextLoadInHours = 1;
 
     public void setChapters(List<Chapter> lessons) { mChapters = lessons; }
