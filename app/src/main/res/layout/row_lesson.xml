@@ -33,6 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_check_green_24dp"
-        android:contentDescription="@string/checked"/>
+        android:contentDescription="@string/done"/>
 
 </RelativeLayout>

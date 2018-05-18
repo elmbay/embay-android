@@ -1,28 +1,36 @@
 <resources>
     <!-- manifest -->
-    <string name="app_name">Elm Bay * 榆树湾</string>
+    <string name="app_name">ElmBay * 榆树湾</string>
+
+    <!-- common -->
+    <string name="unknown_error">Something went wrong.</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="try_again">Try again</string>
 
     <!-- options menu -->
     <string name="log_out">Log out</string>
     <string name="help">Help</string>
-    <string name="confirm_log_out">Log out?</string>
-    <string name="yes">Yes</string>
-    <string name="cancel">Cancel</string>
+    <string name="confirm_log_out">Are you sure to log out?</string>
 
     <!-- sign in -->
-    <string name="uid_hint">Email/Phone</string>
-    <string name="email">Email</string>
-    <string name="phone">Phone</string>
+    <string name="uid_hint">Phone</string>
     <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="forgot_password">Forgot password?</string>
     <string name="sign_in">Sign In</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="invalid_password">Please enter a valid password</string>
+
+    <!-- sign up -->
     <string name="create_account">Create Account</string>
-    <string name="invalid_uid">Please specify a valid email address or phone number.</string>
-    <string name="invalid_password">Password must be set.</string>
-    <string name="enter_confirmed_password">Please confirm password.</string>
+    <string name="send_code">Text verification code</string>
+    <string name="verify">Verify</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="passwords_mismatch">Passwords mismatch, try again</string>
-    <string name="ok">OK</string>
+    <string name="invalid_uid">Please enter a valid phone number</string>
+    <string name="sms_code">ElmBay * 榆树湾: %d</string>
+    <string name="enter_code">Enter verification code sent to your phone:</string>
+    <string name="invalid_code">Invalid verification code</string>
 
     <!-- list of courses -->
     <string name="come_back_singular">New courses may be available in %d hour.</string>
@@ -30,13 +38,12 @@
 
     <!-- image buttons -->
     <string name="repeat_slowly">Repeat slowly</string>
-    <string name="show_transcript">Show transcript</string>
-    <string name="transcript">transcript</string>
-    <string name="start_recording">Start recording</string>
-    <string name="stop_recording">Stop recording</string>
     <string name="start_playing">Start playing</string>
     <string name="stop_playing">Stop playing</string>
+    <string name="start_recording">Start recording</string>
+    <string name="stop_recording">Stop recording</string>
     <string name="share_recording">Share recording</string>
-    <string name="checked">Done</string>
+    <string name="erase_recording">Erase recording</string>
+    <string name="done">Done</string>
 
 </resources>

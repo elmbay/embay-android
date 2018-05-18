@@ -1,6 +1,8 @@
 package com.example.elmbay.activity;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -21,6 +23,8 @@ import com.example.elmbay.widget.TouchImageView;
  * in a {@link CourseListActivity}.
  */
 public class CourseDetailActivity extends BaseCourseActivity {
+    public static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+
     TouchImageView mTranscriptView;
 
     @Override
@@ -64,6 +68,16 @@ public class CourseDetailActivity extends BaseCourseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                finish();
+            }
         }
     }
 

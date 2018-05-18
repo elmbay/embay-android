@@ -2,9 +2,7 @@ package com.example.elmbay.fragment;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -14,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.elmbay.R;
+import com.example.elmbay.activity.CourseDetailActivity;
 import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.widget.RecorderBar;
@@ -27,9 +26,7 @@ import java.util.Locale;
  */
 
 public class RecorderFragment extends Fragment {
-    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    private boolean permissionToRecordAccepted = false;
-    private String [] permissions = { Manifest.permission.RECORD_AUDIO};
+    private String [] mPermissions = { Manifest.permission.RECORD_AUDIO };
     private RecorderBar mRecorderBar;
 
     @Override
@@ -37,7 +34,7 @@ public class RecorderFragment extends Fragment {
         View top = inflater.inflate(R.layout.fragment_recorder, container, false);
 
         Activity activity = getActivity();
-        ActivityCompat.requestPermissions(activity, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+        ActivityCompat.requestPermissions(activity, mPermissions, CourseDetailActivity.REQUEST_RECORD_AUDIO_PERMISSION);
 
         Lesson lesson = AppManager.getInstance().getSessionData().getCurrentLesson();
         String fileBaseName = String.format(Locale.getDefault(), "%d_%d", lesson == null ? 0 : lesson.getChapterId(), lesson == null ? 0 : lesson.getId());
@@ -56,19 +53,5 @@ public class RecorderFragment extends Fragment {
         super.onStop();
 
         mRecorderBar.onStop();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
-        }
-        if (!permissionToRecordAccepted ) {
-            getActivity().finish();
-        }
-
     }
 }
