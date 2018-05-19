@@ -1,5 +1,6 @@
 package com.example.elmbay.operation;
 
+import com.example.elmbay.manager.NetworkManager;
 import com.example.elmbay.model.ProgressMark;
 import com.google.gson.annotations.SerializedName;
 
@@ -26,4 +27,9 @@ public class SignInResult {
 
     public ProgressMark getHighMark() { return mHighMark; }
     public void setHighMark(ProgressMark mark) { mHighMark = mark; }
+
+    @Override
+    public String toString() {
+        return NetworkManager.getInstance().toJson(this);
+    }
 }

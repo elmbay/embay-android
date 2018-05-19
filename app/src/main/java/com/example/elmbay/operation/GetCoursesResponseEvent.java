@@ -6,10 +6,10 @@ import com.android.volley.VolleyError;
  * Created by kaininggu on 4/22/18.
  */
 
-public class ListChaptersResponseEvent {
+public class GetCoursesResponseEvent {
     VolleyError mError;
 
-    public ListChaptersResponseEvent(VolleyError error) {
+    public GetCoursesResponseEvent(VolleyError error) {
         mError = error;
     }
 

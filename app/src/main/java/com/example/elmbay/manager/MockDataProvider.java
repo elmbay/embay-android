@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Course;
 import com.example.elmbay.model.Lesson;
-import com.example.elmbay.operation.ListChaptersResult;
+import com.example.elmbay.operation.GetCoursesResult;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import java.util.List;
 
 class MockDataProvider {
 
-    static ListChaptersResult getSignInResult() {
-        ListChaptersResult result = new ListChaptersResult();
+    static GetCoursesResult getSignInResult() {
+        GetCoursesResult result = new GetCoursesResult();
 
         result.setNextLoadInHours(2);
 

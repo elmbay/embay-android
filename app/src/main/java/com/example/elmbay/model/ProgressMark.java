@@ -1,5 +1,6 @@
 package com.example.elmbay.model;
 
+import com.example.elmbay.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -28,8 +29,13 @@ public class ProgressMark {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{csid=").append(mCourseId).append("{cid=").append(mChapterId).append(",lid=").append(mLessonId).append("}");
-        return builder.toString();
+        return NetworkManager.getInstance().toJson(this);
     }
+
+//    @Override
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("{csid:").append(mCourseId).append("{id=").append(mChapterId).append(",lid=").append(mLessonId).append("}");
+//        return builder.toString();
+//    }
 }

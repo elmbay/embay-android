@@ -51,7 +51,7 @@ Polls is a simple API allowing consumers to view polls and vote in them.
         }
     }
 
-## Lessons [/v1/elmbay/chapters]
+## Lessons [/v1/elmbay/courses]
 
 ### List All Chapters [GET]
 

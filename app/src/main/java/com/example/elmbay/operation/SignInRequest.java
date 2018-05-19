@@ -2,7 +2,11 @@ package com.example.elmbay.operation;
 
 import android.support.annotation.NonNull;
 
+import com.example.elmbay.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -40,4 +44,18 @@ public class SignInRequest {
 
     public void setIsSignUp(boolean isSignUp) { mIsSignUp = isSignUp; }
     public boolean isSignUp() { return mIsSignUp; }
+
+    @Override
+    public String toString() {
+        return NetworkManager.getInstance().toJson(this);
+    }
+
+    Map<String, String> getParams() {
+        Map<String, String> params = new HashMap<>();
+        params.put("u", mUid);
+        params.put("t", mUidType);
+        params.put("p", mPassword);
+        params.put("new", mIsSignUp ? "1" : "0");
+        return params;
+    }
 }

@@ -12,12 +12,9 @@ import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 
@@ -28,7 +25,6 @@ import java.lang.reflect.Type;
  */
 
 public class NetworkManager {
-    private static final String S_REQUEST_METHODS[] = {"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH"};
     private static final int MY_SOCKET_TIMEOUT_MS = 60000;
     private static final String LOG_TAG = NetworkManager.class.getName();
 
@@ -36,12 +32,13 @@ public class NetworkManager {
 //    public static final String BASE_URL_MOCK = "http://107.3.138.187";
     public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
     public static final String ENDPOINT_USERS = "/v1/elmbay/users";
-    public static final String ENDPOINT_CHAPTERS = "/v1/elmbay/chapters";
+    public static final String ENDPOINT_CHAPTERS = "/v1/elmbay/courses";
 
     private static NetworkManager sInstance;
     private Context mAppContext;
     private RequestQueue mRequestQueue;
     private DefaultRetryPolicy mRetryPolicy;
+    private Gson mGson;
 
     public @NonNull static NetworkManager getInstance() {
         if (sInstance == null) {
@@ -50,43 +47,16 @@ public class NetworkManager {
         return sInstance;
     }
 
-    /**
-     * Enqueue an http JsonObjectRequest
-     */
-    public void submit(@NonNull JsonObjectRequest request) {
-        if (AppManager.DEBUG) {
-            Log.i(LOG_TAG, "method:\t" + S_REQUEST_METHODS[request.getMethod()]
-                    + "\n\turl:\t" + request.getUrl()
-                    + "\n\tbody:\t" + request.getBody());
-        }
+    public void submit(@NonNull StringRequest request) {
         request.setRetryPolicy(mRetryPolicy);
         mRequestQueue.add(request);
     }
 
-    /**
-     * Convert a JsonObjectRequest (from network response) to a target object
-     */
-    public static @Nullable <T> T fromJSONObject(@NonNull JSONObject jsonObject, @NonNull Type targetType) {
-        Gson gson = new Gson();
-        String str = jsonObject.toString();
-        if (AppManager.DEBUG) {
-            Log.i(LOG_TAG, str);
-        }
-        return gson.fromJson(str, targetType);
+    public @Nullable <T> T fromJson(@NonNull String jsonString, @NonNull Type targetType) {
+        return mGson.fromJson(jsonString, targetType);
     }
 
-    public static @Nullable JSONObject toJSONObject(@NonNull Object object) {
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(object);
-        try {
-            return new JSONObject(jsonString);
-        } catch (JSONException e) {
-            if (AppManager.DEBUG) {
-                Log.e(LOG_TAG, "Failed to convert " + object.getClass().getSimpleName() + " to JSONObject: " + e.getMessage() + ": " + jsonString);
-            }
-            return null;
-        }
-    }
+    public String toJson(@NonNull Object object) { return mGson.toJson(object); }
 
     public boolean hasNetworkConnection() {
         boolean isWifiConn = false;
@@ -124,8 +94,8 @@ public class NetworkManager {
 
         // Creates a default worker pool and calls {@link RequestQueue#start()} on it.
         mRequestQueue = Volley.newRequestQueue(appContext);
-
         mRetryPolicy = new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        mGson = new Gson();
     }
 
     private NetworkManager() {}

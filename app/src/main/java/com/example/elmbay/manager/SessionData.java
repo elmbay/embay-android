@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.model.ProgressMark;
-import com.example.elmbay.operation.ListChaptersResult;
+import com.example.elmbay.operation.GetCoursesResult;
 import com.example.elmbay.operation.SignInResult;
 
 import java.io.File;
@@ -49,7 +49,7 @@ public class SessionData {
     private long mUserTokenExpirationTime;
     private ProgressMark mHighMark;
 
-    private ListChaptersResult mListChaptersResult;
+    private GetCoursesResult mListChaptersResult;
     private long mNextLoadTime;
     private int mInProgressChapterIndex = -1;
     private int mInProgressLessonIndex = -1;
@@ -143,8 +143,9 @@ public class SessionData {
         PersistenceManager.setLong(mPersistenceStore, KEY_NEXT_LOAD_TIME, mNextLoadTime);
     }
 
-    public @Nullable ListChaptersResult getListChaptersResult() { return mListChaptersResult; }
-    public void setListChaptersResult(@Nullable ListChaptersResult result) {
+    public @Nullable
+    GetCoursesResult getListChaptersResult() { return mListChaptersResult; }
+    public void setListChaptersResult(@Nullable GetCoursesResult result) {
         mListChaptersResult = result;
         long now = System.currentTimeMillis();
         long nextLoadTime = now + HOUR_TO_MILLIS;

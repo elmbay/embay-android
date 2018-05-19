@@ -21,10 +21,10 @@ import com.example.elmbay.manager.SessionData;
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Course;
 import com.example.elmbay.model.Lesson;
-import com.example.elmbay.operation.ListChaptersOperation;
-import com.example.elmbay.operation.ListChaptersRequest;
-import com.example.elmbay.operation.ListChaptersResponseEvent;
-import com.example.elmbay.operation.ListChaptersResult;
+import com.example.elmbay.operation.GetCoursesOperation;
+import com.example.elmbay.operation.GetCoursesRequest;
+import com.example.elmbay.operation.GetCoursesResponseEvent;
+import com.example.elmbay.operation.GetCoursesResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -80,7 +80,7 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(ListChaptersResponseEvent event) {
+    public void onEvent(GetCoursesResponseEvent event) {
         if (event == null || !event.hasError()) {
             onDataLoaded();
         } else {
@@ -97,7 +97,7 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
 
     private boolean isReadyToLoad() {
         SessionData sessionData = AppManager.getInstance().getSessionData();
-        ListChaptersResult result = sessionData.getListChaptersResult();
+        GetCoursesResult result = sessionData.getListChaptersResult();
         return result == null
                 || sessionData.getNextLoadTime() < System.currentTimeMillis() && sessionData.getInProgressChapterIndex() < 0;
     }
@@ -106,17 +106,17 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
         mSpinner.setVisibility(View.VISIBLE);
 
         SessionData sessionData = AppManager.getInstance().getSessionData();
-        ListChaptersRequest request = new ListChaptersRequest();
+        GetCoursesRequest request = new GetCoursesRequest();
         request.setUserToken(sessionData.getUserToken());
         request.setHighMark(sessionData.getHighMark());
-        ListChaptersOperation op = new ListChaptersOperation(request);
+        GetCoursesOperation op = new GetCoursesOperation(request);
         op.submit();
     }
 
     private void onDataLoaded() {
         mSpinner.setVisibility(View.GONE);
 
-        ListChaptersResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
+        GetCoursesResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
         if (result != null && result.getCourse() != null) {
             Course course = result.getCourse();
             mAdapter.setChapters(course.getChapters());

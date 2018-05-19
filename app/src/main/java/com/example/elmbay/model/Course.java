@@ -1,6 +1,6 @@
 package com.example.elmbay.model;
 
-import com.example.elmbay.manager.Helper;
+import com.example.elmbay.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -30,15 +30,20 @@ public class Course {
     public List<Chapter> getChapters() { return mChapters; }
     public void setChapters(List<Chapter> chapters) { mChapters = chapters; }
 
+    @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{id=").append(mId);
-        if (mName != null) {
-            builder.append(",name=").append(mName);
-        }
-        if (mChapters != null) {
-            builder.append(",chapters=").append(Helper.listToString(mChapters));
-        }
-        return builder.toString();
+        return NetworkManager.getInstance().toJson(this);
     }
+
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("{id=").append(mId);
+//        if (mName != null) {
+//            builder.append(",name=").append(mName);
+//        }
+//        if (mChapters != null) {
+//            builder.append(",chapters=").append(Helper.listToString(mChapters));
+//        }
+//        return builder.toString();
+//    }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.example.elmbay.manager.AppManager;
+import com.example.elmbay.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.File;
@@ -77,8 +78,13 @@ public class ContentDescriptor {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{mimeType=").append(mMimeType).append(",uriString=").append(mUriString).append("}");
-        return builder.toString();
+        return NetworkManager.getInstance().toJson(this);
     }
+
+//    @Override
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("{mimeType=").append(mMimeType).append(",uriString=").append(mUriString).append("}");
+//        return builder.toString();
+//    }
 }

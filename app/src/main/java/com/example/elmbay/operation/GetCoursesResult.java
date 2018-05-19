@@ -1,5 +1,6 @@
 package com.example.elmbay.operation;
 
+import com.example.elmbay.manager.NetworkManager;
 import com.example.elmbay.model.Course;
 import com.example.elmbay.model.ProgressMark;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by kgu on 4/10/18.
  */
 
-public class ListChaptersResult {
+public class GetCoursesResult {
     @SerializedName("course")
     private Course mCourse;
 
@@ -30,19 +31,24 @@ public class ListChaptersResult {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{");
-        String comma = "";
-        if (mCourse != null) {
-            builder.append(comma).append("course=").append(mCourse.toString());
-            comma = ",";
-        }
-        if (mHighMark != null) {
-            builder.append(comma).append("mark=").append(mHighMark.toString());
-            comma = ",";
-        }
-        builder.append(comma).append("hour=").append(mNextLoadInHours);
-        builder.append("}");
-        return builder.toString();
+        return NetworkManager.getInstance().toJson(this);
     }
+
+//    @Override
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("{");
+//        String comma = "";
+//        if (mCourse != null) {
+//            builder.append(comma).append("course=").append(mCourse.toString());
+//            comma = ",";
+//        }
+//        if (mHighMark != null) {
+//            builder.append(comma).append("mark=").append(mHighMark.toString());
+//            comma = ",";
+//        }
+//        builder.append(comma).append("hour=").append(mNextLoadInHours);
+//        builder.append("}");
+//        return builder.toString();
+//    }
 }

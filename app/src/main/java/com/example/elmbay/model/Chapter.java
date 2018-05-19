@@ -2,7 +2,7 @@ package com.example.elmbay.model;
 
 import android.support.annotation.Nullable;
 
-import com.example.elmbay.manager.Helper;
+import com.example.elmbay.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -38,14 +38,19 @@ public class Chapter {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{id=").append(mId);
-        if (mTopic != null) {
-            builder.append(",topic=").append(mTopic);
-        }
-        if (mLessons != null) {
-            builder.append(",lessons=[").append(Helper.listToString(mLessons)).append("]");
-        }
-        return builder.toString();
+        return NetworkManager.getInstance().toJson(this);
     }
+
+//    @Override
+//    public String toString() {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("{id=").append(mId);
+//        if (mTopic != null) {
+//            builder.append(",topic=").append(mTopic);
+//        }
+//        if (mLessons != null) {
+//            builder.append(",lessons=[").append(Helper.listToString(mLessons)).append("]");
+//        }
+//        return builder.toString();
+//    }
 }

@@ -7,18 +7,20 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.manager.NetworkManager;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
+
+import java.util.Map;
 
 import static com.example.elmbay.manager.NetworkManager.ENDPOINT_USERS;
 
 /**
  *
- * Created by kgu on 4/10/18.
+ * Created by kgu on 5/18/18.
  */
 
 public class SignInOperation {
@@ -35,17 +37,20 @@ public class SignInOperation {
         Uri.Builder builder = Uri.parse(NetworkManager.BASE_URL_MOCK + ENDPOINT_USERS).buildUpon();
         String url = builder.build().toString();
 
-        JSONObject jsonObject = NetworkManager.toJSONObject(mRequest);
-
-        JsonObjectRequest request = new JsonObjectRequest(method, url, jsonObject, onResult(), onError());
+        StringRequest request = new StringRequest(method, url, onResult(), onError()) {
+            @Override
+            protected Map<String, String> getParams() {
+                return mRequest.getParams();
+            }
+        };
         NetworkManager.getInstance().submit(request);
     }
 
-    private Response.Listener<JSONObject> onResult() {
-        return new Response.Listener<JSONObject>() {
+    private Response.Listener<String> onResult() {
+        return new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
-                SignInResult result = NetworkManager.fromJSONObject(response, SignInResult.class);
+            public void onResponse(String response) {
+                SignInResult result = NetworkManager.getInstance().fromJson(response, SignInResult.class);
                 if (AppManager.DEBUG) {
                     Log.i(LOG_TAG, "SignInResult=" + (result == null ? "null" : result.toString()));
                 }
@@ -60,7 +65,7 @@ public class SignInOperation {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (AppManager.DEBUG) {
-                    Log.w(LOG_TAG, "ListChaptersResult error" + error.getMessage());
+                    Log.w(LOG_TAG, "GetCoursesResult error" + error.getMessage());
                 }
                 EventBus.getDefault().post(new SignInResponseEvent(error)
                 );
