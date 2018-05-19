@@ -40,17 +40,4 @@ public class Chapter {
     public String toString() {
         return NetworkManager.getInstance().toJson(this);
     }
-
-//    @Override
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("{id=").append(mId);
-//        if (mTopic != null) {
-//            builder.append(",topic=").append(mTopic);
-//        }
-//        if (mLessons != null) {
-//            builder.append(",lessons=[").append(Helper.listToString(mLessons)).append("]");
-//        }
-//        return builder.toString();
-//    }
 }

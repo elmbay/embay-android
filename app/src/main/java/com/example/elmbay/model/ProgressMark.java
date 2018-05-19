@@ -31,11 +31,4 @@ public class ProgressMark {
     public String toString() {
         return NetworkManager.getInstance().toJson(this);
     }
-
-//    @Override
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("{csid:").append(mCourseId).append("{id=").append(mChapterId).append(",lid=").append(mLessonId).append("}");
-//        return builder.toString();
-//    }
 }

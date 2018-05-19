@@ -80,11 +80,4 @@ public class ContentDescriptor {
     public String toString() {
         return NetworkManager.getInstance().toJson(this);
     }
-
-//    @Override
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("{mimeType=").append(mMimeType).append(",uriString=").append(mUriString).append("}");
-//        return builder.toString();
-//    }
 }

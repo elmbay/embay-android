@@ -407,14 +407,20 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private void showDialog(int stringId) {
         if (mDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
-            builder.setMessage(stringId);
-            builder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    if (mSignInState == SIGNIN_STATE_VERIFY_CODE) {
-                        showEnterCodePage();
-                    }
-                }
-            });
+            builder.setMessage(stringId)
+                    .setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            if (mSignInState == SIGNIN_STATE_VERIFY_CODE) {
+                                showEnterCodePage();
+                            }
+                        }
+//                    })
+//                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            getActivity().onBackPressed();
+//                        }
+                    });
             mDialog = builder.create();
         } else {
             mDialog.setMessage(getContext().getString(stringId));

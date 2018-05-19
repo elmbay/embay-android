@@ -1,11 +1,14 @@
 package com.example.elmbay.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +42,7 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     private ExpandableCourseAdapter mAdapter;
     private View mSpinner;
     private TextView mInfoBanner;
+    private AlertDialog mDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,6 +75,12 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDialog = null;
+    }
+
+    @Override
     public void onLessonClick(Chapter chapter, Lesson lesson) {
         SessionData sessionData = AppManager.getInstance().getSessionData();
         sessionData.setCurrentChapter(chapter);
@@ -84,7 +94,8 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
         if (event == null || !event.hasError()) {
             onDataLoaded();
         } else {
-            //TODO: show error
+            mSpinner.setVisibility(View.GONE);
+            showDialog(event.getError().getMessageId());
         }
     }
 
@@ -144,5 +155,28 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
         } else {
             mInfoBanner.setVisibility(View.GONE);
         }
+    }
+
+    private void showDialog(int stringId) {
+        if (mDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
+            builder.setMessage(stringId)
+                    .setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // retry
+                            loadData();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            getActivity().onBackPressed();
+                        }
+                    });
+            mDialog = builder.create();
+        } else {
+            mDialog.setMessage(getContext().getString(stringId));
+        }
+        mDialog.show();
     }
 }

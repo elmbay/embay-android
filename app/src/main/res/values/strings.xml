@@ -47,4 +47,6 @@
     <string name="erase_recording">Erase recording</string>
     <string name="done">Done</string>
 
+    <!-- network -->
+    <string name="http_404">Server is temporarily unavailable</string>
 </resources>

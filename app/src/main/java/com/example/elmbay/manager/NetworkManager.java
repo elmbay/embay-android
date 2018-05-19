@@ -25,6 +25,8 @@ import java.lang.reflect.Type;
  */
 
 public class NetworkManager {
+    public static final String REQUEST_METHODS[] = {"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH"};
+
     private static final int MY_SOCKET_TIMEOUT_MS = 60000;
     private static final String LOG_TAG = NetworkManager.class.getName();
 
@@ -36,6 +38,7 @@ public class NetworkManager {
 
     private static NetworkManager sInstance;
     private Context mAppContext;
+    private int mRequestId;
     private RequestQueue mRequestQueue;
     private DefaultRetryPolicy mRetryPolicy;
     private Gson mGson;
@@ -46,6 +49,8 @@ public class NetworkManager {
         }
         return sInstance;
     }
+
+    public int getNextRequestId() { return ++mRequestId; }
 
     public void submit(@NonNull StringRequest request) {
         request.setRetryPolicy(mRetryPolicy);

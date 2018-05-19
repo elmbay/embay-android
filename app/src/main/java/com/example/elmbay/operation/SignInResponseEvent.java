@@ -1,18 +1,16 @@
 package com.example.elmbay.operation;
 
-import com.android.volley.VolleyError;
-
 /**
  * Created by kgu on 4/11/18.
  */
 
 public class SignInResponseEvent {
-    VolleyError mError;
+    OperationError mError;
 
-    public SignInResponseEvent(VolleyError error) {
+    public SignInResponseEvent(OperationError error) {
         mError = error;
     }
 
     public boolean hasError() { return mError != null; }
-    public VolleyError getError() { return mError; }
+    public OperationError getError() { return mError; }
 }

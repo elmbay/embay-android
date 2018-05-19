@@ -26,9 +26,11 @@ import static com.example.elmbay.manager.NetworkManager.ENDPOINT_USERS;
 public class SignInOperation {
     private static final String LOG_TAG = SignInOperation.class.getName();
     private SignInRequest mRequest;
+    private int mRequestId;
 
     public SignInOperation(@NonNull SignInRequest request) {
         mRequest = request;
+        mRequestId = NetworkManager.getInstance().getNextRequestId();
     }
 
     public void submit() {
@@ -43,6 +45,10 @@ public class SignInOperation {
                 return mRequest.getParams();
             }
         };
+
+        if (AppManager.DEBUG) {
+            Log.i(LOG_TAG, "Request " + mRequestId + ": " + NetworkManager.REQUEST_METHODS[method] + " " + url);
+        }
         NetworkManager.getInstance().submit(request);
     }
 
@@ -52,7 +58,7 @@ public class SignInOperation {
             public void onResponse(String response) {
                 SignInResult result = NetworkManager.getInstance().fromJson(response, SignInResult.class);
                 if (AppManager.DEBUG) {
-                    Log.i(LOG_TAG, "SignInResult=" + (result == null ? "null" : result.toString()));
+                    Log.i(LOG_TAG, "Response " + mRequestId + ": " + (result == null ? "null" : result.toString()));
                 }
                 AppManager.getInstance().getSessionData().setSignInResult(result);
                 EventBus.getDefault().post(new SignInResponseEvent(null));
@@ -65,10 +71,9 @@ public class SignInOperation {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (AppManager.DEBUG) {
-                    Log.w(LOG_TAG, "GetCoursesResult error" + error.getMessage());
+                    Log.w(LOG_TAG, "Response " + mRequestId + ": Error statuscode=" + error.networkResponse.statusCode);
                 }
-                EventBus.getDefault().post(new SignInResponseEvent(error)
-                );
+                EventBus.getDefault().post(new SignInResponseEvent(new OperationError(error)));
             }
         };
     }

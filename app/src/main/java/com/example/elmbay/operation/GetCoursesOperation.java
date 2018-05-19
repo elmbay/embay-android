@@ -24,13 +24,15 @@ import static com.example.elmbay.manager.NetworkManager.ENDPOINT_CHAPTERS;
 public class GetCoursesOperation {
     private static final String LOG_TAG = GetCoursesOperation.class.getName();
     private GetCoursesRequest mRequest;
+    private int mRequestId;
 
     public GetCoursesOperation(@NonNull GetCoursesRequest request) {
         mRequest = request;
+        mRequestId = NetworkManager.getInstance().getNextRequestId();
     }
 
     public void submit() {
-        int method = Request.Method.GET;
+        int method = Request.Method.POST;
 
         Uri.Builder builder = Uri.parse(NetworkManager.BASE_URL_MOCK + ENDPOINT_CHAPTERS).buildUpon();
         String url = builder.build().toString();
@@ -41,6 +43,10 @@ public class GetCoursesOperation {
                 return mRequest.getParams();
             }
         };
+
+        if (AppManager.DEBUG) {
+            Log.i(LOG_TAG, "Request " + mRequestId + ": " + NetworkManager.REQUEST_METHODS[method] + " " + url);
+        }
         NetworkManager.getInstance().submit(request);
     }
 
@@ -50,7 +56,7 @@ public class GetCoursesOperation {
             public void onResponse(String response) {
                 GetCoursesResult result = NetworkManager.getInstance().fromJson(response, GetCoursesResult.class);
                 if (AppManager.DEBUG) {
-                    Log.i(LOG_TAG, "GetCoursesResult=" + (result == null ? "null" : result.toString()));
+                    Log.i(LOG_TAG, "Response " + mRequestId + ": " + (result == null ? "null" : result.toString()));
                 }
                 AppManager.getInstance().getSessionData().setListChaptersResult(result);
                 EventBus.getDefault().post(new GetCoursesResponseEvent(null));
@@ -63,10 +69,9 @@ public class GetCoursesOperation {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (AppManager.DEBUG) {
-                    Log.w(LOG_TAG, "GetCoursesResult error" + error.getMessage());
+                    Log.w(LOG_TAG, "Response " + mRequestId + ": Error statuscode=" + error.networkResponse.statusCode);
                 }
-                EventBus.getDefault().post(new GetCoursesResponseEvent(error)
-                );
+                EventBus.getDefault().post(new GetCoursesResponseEvent(new OperationError(error)));
             }
         };
     }

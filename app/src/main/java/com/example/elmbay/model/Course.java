@@ -34,16 +34,4 @@ public class Course {
     public String toString() {
         return NetworkManager.getInstance().toJson(this);
     }
-
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("{id=").append(mId);
-//        if (mName != null) {
-//            builder.append(",name=").append(mName);
-//        }
-//        if (mChapters != null) {
-//            builder.append(",chapters=").append(Helper.listToString(mChapters));
-//        }
-//        return builder.toString();
-//    }
 }

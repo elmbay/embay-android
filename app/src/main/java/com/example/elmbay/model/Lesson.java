@@ -76,21 +76,4 @@ public class Lesson {
     public String toString() {
         return NetworkManager.getInstance().toJson(this);
     }
-
-//    @Override
-//    public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("{id=").append(mId).append(",key=").append(mKeyword);
-//        if (mVideo!= null) {
-//            builder.append(",video=").append(mVideo.toString());
-//        }
-//        if (mAudio!= null) {
-//            builder.append(",audio=").append(mAudio.toString());
-//        }
-//        if (mNote != null) {
-//            builder.append(",note=").append(mNote.toString());
-//        }
-//        builder.append("}");
-//        return builder.toString();
-//    }
 }

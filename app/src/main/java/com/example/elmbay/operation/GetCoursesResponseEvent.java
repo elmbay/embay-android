@@ -7,12 +7,12 @@ import com.android.volley.VolleyError;
  */
 
 public class GetCoursesResponseEvent {
-    VolleyError mError;
+    OperationError mError;
 
-    public GetCoursesResponseEvent(VolleyError error) {
+    public GetCoursesResponseEvent(OperationError error) {
         mError = error;
     }
 
     public boolean hasError() { return mError != null; }
-    public VolleyError getError() { return mError; }
+    public OperationError getError() { return mError; }
 }
