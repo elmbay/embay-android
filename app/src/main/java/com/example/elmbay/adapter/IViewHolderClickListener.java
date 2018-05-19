@@ -1,5 +1,6 @@
 package com.example.elmbay.adapter;
 
+import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 
 /**
@@ -7,5 +8,5 @@ import com.example.elmbay.model.Lesson;
  */
 
 public interface IViewHolderClickListener {
-    void onLessonClick(Lesson lesson);
+    void onLessonClick(Chapter chapter, Lesson lesson);
 }

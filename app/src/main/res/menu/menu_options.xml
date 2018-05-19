@@ -10,6 +10,10 @@
         app:showAsAction="always|withText">
         <menu>
             <item
+                android:id="@+id/menu_item_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/settings"/>
+            <item
                 android:id="@+id/menu_item_log_out"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"
                 android:title="@string/log_out"/>

@@ -1,11 +1,8 @@
 package com.example.elmbay.operation;
 
-import com.example.elmbay.manager.Helper;
-import com.example.elmbay.model.Chapter;
+import com.example.elmbay.model.Course;
 import com.example.elmbay.model.ProgressMark;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 /**
  *
@@ -13,9 +10,8 @@ import java.util.List;
  */
 
 public class ListChaptersResult {
-    // For comparison chapters is a list of chapters in ascend order
-    @SerializedName("chapters")
-    private List<Chapter> mChapters;
+    @SerializedName("course")
+    private Course mCourse;
 
     @SerializedName("mark")
     private ProgressMark mHighMark;
@@ -23,8 +19,8 @@ public class ListChaptersResult {
     @SerializedName("hour")
     private int mNextLoadInHours = 1;
 
-    public void setChapters(List<Chapter> lessons) { mChapters = lessons; }
-    public List<Chapter> getChapters() { return mChapters; }
+    public void setCourse(Course course) { mCourse = course; }
+    public Course getCourse() { return mCourse; }
 
     public void setHighMark(ProgressMark mark) { mHighMark = mark; }
     public ProgressMark getHighMark() { return mHighMark; }
@@ -37,15 +33,15 @@ public class ListChaptersResult {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
         String comma = "";
-        if (mChapters != null) {
-            builder.append(comma).append("chapters=").append(Helper.listToString(mChapters));
+        if (mCourse != null) {
+            builder.append(comma).append("course=").append(mCourse.toString());
             comma = ",";
         }
         if (mHighMark != null) {
-            builder.append(comma).append("highMark=").append(mHighMark.toString());
+            builder.append(comma).append("mark=").append(mHighMark.toString());
             comma = ",";
         }
-        builder.append(comma).append("nextLoadInHours=").append(mNextLoadInHours);
+        builder.append(comma).append("hour=").append(mNextLoadInHours);
         builder.append("}");
         return builder.toString();
     }

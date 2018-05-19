@@ -45,6 +45,7 @@ Polls is a simple API allowing consumers to view polls and vote in them.
         "token" : "USER01",
         "hour" : 2,
         "mark" : {
+            "csid" : 1,
             "cid" : 0,
             "lid" : 0
         }
@@ -62,18 +63,20 @@ Polls is a simple API allowing consumers to view polls and vote in them.
 
     {
         "mark" : {
+            "csid": 1,
             "cid" : 0,
             "lid" : 0
         },
         "hour" : 1,
-        "chapters" : [
+        "course" : {
+            "id" : 1,
+            "name" : "English 101",
+            "chapters" : [
             {
-                "course": "English 101",
                 "id": 1,
                 "topic": "Kids",
                 "lessons": [
                     {
-                        "cid": 1,
                         "id": 1,
                         "key": "Change Channel",
                         "audio": {
@@ -90,7 +93,6 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                         }
                     },
                     {
-                        "cid": 1,
                         "id": 2,
                         "key": "Juicy",
                         "note": {
@@ -107,7 +109,6 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                         }
                     },
                     {
-                        "cid": 1,
                         "id": 3,
                         "key": "literally",
                         "note": {
@@ -126,12 +127,10 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                 ]
             },
             {
-                "course": "English 101",
                 "id": 2,
                 "topic": "Nature",
                 "lessons": [
                     {
-                        "cid": 2,
                         "id": 1,
                         "key": "Blue Sea",
                         "video": {
@@ -142,12 +141,10 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                 ]
             },
             {
-                "course": "English 101",
                 "id": 3,
                 "topic": "Business",
                 "lessons": [
                     {
-                        "cid": 3,
                         "id": 1,
                         "key": "Venice",
                         "video": {
@@ -157,7 +154,8 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                     }
                 ]
             }
-        ]
+            ]
+        }
     }
 
 

@@ -87,8 +87,8 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        final Chapter chapter = (Chapter) getGroup(groupPosition);
         final Lesson lesson = (Lesson) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
@@ -105,7 +105,7 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemClickListener.onLessonClick(lesson);
+                mItemClickListener.onLessonClick(chapter, lesson);
             }
         });
 

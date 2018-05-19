@@ -47,29 +47,17 @@ public abstract class BaseCourseActivity extends AppCompatActivity {
             case R.id.menu_item_log_out:
                 showConfirmationDialog();
                 return true;
+
+            case R.id.menu_item_settings:
+                showSettings();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_Material_Light_Dialog));
-
-        builder.setMessage(R.string.confirm_log_out);
-
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                doLogOut();
-            }
-        });
-
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                return;
-            }
-        });
-
-        builder.create().show();
+    private void showSettings() {
+        Intent intent = new Intent(this, WebViewActivity.class);
+        startActivity(intent);
     }
 
     private void doLogOut() {
@@ -79,5 +67,24 @@ public abstract class BaseCourseActivity extends AppCompatActivity {
 
         // Don't come back to this activity anymore
         finish();
+    }
+
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_Material_Light_Dialog));
+
+        builder.setMessage(R.string.confirm_log_out)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            doLogOut();
+                        }
+                    })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                return;
+            }
+        });
+
+        builder.create().show();
     }
 }

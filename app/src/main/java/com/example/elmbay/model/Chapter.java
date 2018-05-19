@@ -15,9 +15,6 @@ public class Chapter {
     @SerializedName("id")
     private int mId;
 
-    @SerializedName("course")
-    private String mCourse;
-
     @SerializedName("topic")
     private String mTopic;
 
@@ -29,9 +26,6 @@ public class Chapter {
 
     public int getId() { return mId; }
     public void setId(int id) { mId = id; }
-
-    public @Nullable String getCourse() { return mCourse; }
-    public void setCourse(@Nullable String course) { mCourse = course; }
 
     public @Nullable String getTopic() { return mTopic; }
     public void setTopic(@Nullable String topic) { mTopic = topic; }
@@ -46,9 +40,6 @@ public class Chapter {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("{id=").append(mId);
-        if (mCourse != null) {
-            builder.append(",course=").append(mCourse);
-        }
         if (mTopic != null) {
             builder.append(",topic=").append(mTopic);
         }

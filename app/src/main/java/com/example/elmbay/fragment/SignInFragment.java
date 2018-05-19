@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.example.elmbay.R;
@@ -56,9 +57,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     private static final String EMAIL_PATTEN = ".+@.+\\..+";
     private static final String PHONE_START_PATTEN = "[+0-9]";
 
-    private static final int SIGNUP_STATE_NONE = 0;
-    private static final int SIGNUP_STATE_CONFIRM_PASSWORD = 1;
-    private static final int SIGNUP_STATE_VERIFY_UID = 2;
+    private static final int SIGNIN_STATE_NONE = 0;
+    private static final int SIGNIN_STATE_CONFIRM_PASSWORD = 1;
+    private static final int SIGNIN_STATE_VERIFY_CODE = 2;
+    private static final int SIGNIN_STATE_LOAD_DATA = 3;
 
     private static final String LOG_TAG = SignInFragment.class.getName();
     EditText mUidView;
@@ -69,13 +71,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     Button mCreateAccountButton;
     View mSpinner;
     AlertDialog mDialog;
-    EditText mDialogInput;
+    AlertDialog mVerifyCodeDialog;
+    EditText mCodeInput;
 
     String mUid;
     String mUidType;
     String mPassword;
     boolean mEnableButtons = true;
-    int mSignUpState = SIGNUP_STATE_NONE;
+    int mSignInState = SIGNIN_STATE_NONE;
     int mVerificationCode;
 
     @Override
@@ -96,7 +99,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 } else if (start == 0 && count == 1) {
                     String firstChar = Character.toString(s.charAt(0));
                     mUidType = firstChar.matches(PHONE_START_PATTEN) ? SessionData.UID_TYPE_PHONE : SessionData.UID_TYPE_EMAIL;
-                    mUidView.setInputType(mUidType == SessionData.UID_TYPE_PHONE ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                    mUidView.setInputType(SessionData.UID_TYPE_PHONE.equals(mUidType) ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 }
             }
 
@@ -176,14 +179,20 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         super.onPause();
 
         EventBus.getDefault().unregister(this);
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         mDialog = null;
+        mVerifyCodeDialog = null;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in:
+                mSignInState = SIGNIN_STATE_NONE;
                 mConfirmPasswordView.setText("");
                 mConfirmPasswordView.setVisibility(View.GONE);
                 loadData(false);
@@ -229,13 +238,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onCreateAccount() {
-        switch (mSignUpState) {
-            case SIGNUP_STATE_NONE: {
-                if (mDialogInput == null) {
-                    mDialogInput = new EditText(getActivity());
-                }
-
-                mSignUpState = SIGNUP_STATE_CONFIRM_PASSWORD;
+        switch (mSignInState) {
+            case SIGNIN_STATE_NONE: {
+                mSignInState = SIGNIN_STATE_CONFIRM_PASSWORD;
                 mSignInButton.setEnabled(false);
                 mSignInButton.setAlpha((float) 0.2);
                 mCreateAccountButton.setText(R.string.send_code);
@@ -250,9 +255,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 break;
             }
 
-            case SIGNUP_STATE_CONFIRM_PASSWORD:
+            case SIGNIN_STATE_CONFIRM_PASSWORD:
                 if (validateSignIn(true)) {
-                    mSignUpState = SIGNUP_STATE_VERIFY_UID;
                     if (mVerificationCode == 0) {
                         ActivityCompat.requestPermissions(getActivity(),  permissions, SignInActivity.REQUEST_SEND_SMS_PERMISSION);
                     } else {
@@ -261,48 +265,17 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
 
-            case SIGNUP_STATE_VERIFY_UID:
-                if (isValidVerificationCode()) {
-                    loadData(true);
-                } else {
-                    showDialog(R.string.invalid_code);
-                }
+            case SIGNIN_STATE_VERIFY_CODE:
+                showEnterCodePage();
                 break;
         }
-    }
-
-    private void showEnterCodePage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
-        builder.setMessage(R.string.enter_code);
-        builder.setPositiveButton(R.string.verify, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-                if (!TextUtils.isEmpty(mDialogInput.getText())) {
-                    String code = mDialogInput.getText().toString();
-                    if (code != null && Integer.valueOf(code) == mVerificationCode) {
-                        loadData(true);
-                    } else {
-                        showDialog(R.string.invalid_code);
-                    }
-                }
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {}
-        });
-        mDialog = builder.create();
-        mDialog.setView(mDialogInput);
-        mDialog.show();
-    }
-
-    private boolean isValidVerificationCode() {
-        return true;
     }
 
     private void loadData(boolean createAccount) {
         if (!validateSignIn(createAccount)) {
             return;
         }
+        mSignInState = SIGNIN_STATE_LOAD_DATA;
         mSignInContainer.setVisibility(View.GONE);
         mSpinner.setVisibility(View.VISIBLE);
 
@@ -335,7 +308,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
         mUidView.setText(mUid);
         if (!TextUtils.isEmpty(mUid)) {
-            mUidView.setInputType(mUidType == SessionData.UID_TYPE_PHONE ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            mUidView.setInputType(SessionData.UID_TYPE_PHONE.equals(mUidType) ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         }
 
         mPasswordView.setText(mPassword);
@@ -362,12 +335,22 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
+    private void validateCode() {
+        if (!TextUtils.isEmpty(mCodeInput.getText())) {
+            if (Integer.valueOf(mCodeInput.getText().toString()) == mVerificationCode) {
+                loadData(true);
+            } else {
+                showDialog(R.string.invalid_code);
+            }
+        }
+    }
+
     private boolean isValidUid() {
         mUid = null;
         if (!TextUtils.isEmpty(mUidView.getText())) {
             mUid = mUidView.getText().toString();
         }
-        return mUid != null && (mUidType == SessionData.UID_TYPE_PHONE ? mUid.length() >= 10 : mUid.length() >= 8 && mUid.matches(EMAIL_PATTEN));
+        return mUid != null && (SessionData.UID_TYPE_PHONE.equals(mUidType) ? mUid.length() >= 10 : mUid.length() >= 8 && mUid.matches(EMAIL_PATTEN));
     }
 
     private boolean isValidPassword() {
@@ -390,15 +373,52 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void showEnterCodePage() {
+        mSignInState = SIGNIN_STATE_VERIFY_CODE;
+        if (mVerifyCodeDialog == null) {
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            lp.setMarginStart(80);
+            lp.setMarginEnd(80);
+            mCodeInput = new EditText(getActivity());
+            mCodeInput.setSingleLine();
+            mCodeInput.setLayoutParams(lp);
+            FrameLayout dialogInputContainer = new FrameLayout(getActivity());
+            dialogInputContainer.addView(mCodeInput);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
+            builder.setView(dialogInputContainer)
+                    .setMessage(R.string.enter_code)
+                    .setPositiveButton(R.string.verify, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            validateCode();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mSignInState = SIGNIN_STATE_CONFIRM_PASSWORD;
+                        }
+                    });
+
+            mVerifyCodeDialog = builder.create();
+        }
+        mVerifyCodeDialog.show();
+    }
+
     private void showDialog(int stringId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
-        builder.setMessage(stringId);
-        builder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-        mDialog = builder.create();
+        if (mDialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
+            builder.setMessage(stringId);
+            builder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    if (mSignInState == SIGNIN_STATE_VERIFY_CODE) {
+                        showEnterCodePage();
+                    }
+                }
+            });
+            mDialog = builder.create();
+        } else {
+            mDialog.setMessage(getContext().getString(stringId));
+        }
         mDialog.show();
     }
 }

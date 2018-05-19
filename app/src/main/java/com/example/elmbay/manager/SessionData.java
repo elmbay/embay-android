@@ -29,6 +29,7 @@ public class SessionData {
     private static final String KEY_PASSWORD = "pwd";
     private static final String KEY_USER_TOKEN = "ut";
     private static final String KEY_USER_TOKEN_EXPIRATION_TIME = "ut_exp";
+    private static final String KEY_PROGRESS_HIGHMARK_CSID = "high_csid";
     private static final String KEY_PROGRESS_HIGHMARK_CID = "high_cid";
     private static final String KEY_PROGRESS_HIGHMARK_LID = "high_lid";
     private static final String KEY_NEXT_LOAD_TIME = "load_tm";
@@ -52,6 +53,7 @@ public class SessionData {
     private long mNextLoadTime;
     private int mInProgressChapterIndex = -1;
     private int mInProgressLessonIndex = -1;
+    private Chapter mCurrentChapter;
     private Lesson mCurrentLesson;
 
     SessionData(@NonNull Context context) {
@@ -105,6 +107,11 @@ public class SessionData {
     public @NonNull ProgressMark getHighMark() { return mHighMark; }
     private void advanceHighMark(@Nullable ProgressMark mark) {
         if (mark != null) {
+            if (mHighMark.getCourseId() != mark.getCourseId()) {
+                // first time use or user has changed the course, change highMark to force update
+                mHighMark.setCourseId(mark.getCourseId());
+                mHighMark.setChapterId(mark.getChapterId() - 1);
+            }
             advanceHighMark(mark.getChapterId(), mark.getLessonId());
         }
     }
@@ -124,6 +131,7 @@ public class SessionData {
         }
     }
     private void persistHighMark() {
+        PersistenceManager.setInt(mPersistenceStore, KEY_PROGRESS_HIGHMARK_CSID, mHighMark.getCourseId());
         PersistenceManager.setInt(mPersistenceStore, KEY_PROGRESS_HIGHMARK_CID, mHighMark.getChapterId());
         PersistenceManager.setInt(mPersistenceStore, KEY_PROGRESS_HIGHMARK_LID, mHighMark.getLessonId());
         //TODO: update server side - this may not needed if server can record highmark upon receiving a load request
@@ -152,6 +160,8 @@ public class SessionData {
 
     public int getInProgressChapterIndex() { return mInProgressChapterIndex; }
 
+    public @Nullable Chapter getCurrentChapter() { return mCurrentChapter; }
+    public void setCurrentChapter(@Nullable Chapter chapter) { mCurrentChapter = chapter; }
     public @Nullable Lesson getCurrentLesson() { return mCurrentLesson; }
     public void setCurrentLesson(@Nullable Lesson lesson) { mCurrentLesson = lesson; }
 
@@ -163,7 +173,7 @@ public class SessionData {
             return;
         }
 
-        List<Chapter> chapters = mListChaptersResult.getChapters();
+        List<Chapter> chapters = mListChaptersResult.getCourse().getChapters();
         if (Helper.isEmpty(chapters) || chapters.size() <= mInProgressChapterIndex) {
             return;
         }
@@ -212,13 +222,14 @@ public class SessionData {
         mUserToken = mPersistenceStore.getString(KEY_USER_TOKEN, "");
         mUserTokenExpirationTime = mPersistenceStore.getLong(KEY_USER_TOKEN_EXPIRATION_TIME, 0);
         mHighMark = new ProgressMark();
+        mHighMark.setCourseId(mPersistenceStore.getInt(KEY_PROGRESS_HIGHMARK_CSID, 0));
         mHighMark.setChapterId(mPersistenceStore.getInt(KEY_PROGRESS_HIGHMARK_CID, 0));
         mHighMark.setLessonId(mPersistenceStore.getInt(KEY_PROGRESS_HIGHMARK_LID, 0));
         mNextLoadTime = mPersistenceStore.getLong(KEY_NEXT_LOAD_TIME, System.currentTimeMillis() + HOUR_TO_MILLIS);
     }
 
     private boolean validateChapters() {
-        if (mListChaptersResult == null || Helper.isEmpty(mListChaptersResult.getChapters())) {
+        if (mListChaptersResult == null || mListChaptersResult.getCourse() == null || Helper.isEmpty(mListChaptersResult.getCourse().getChapters())) {
             mInProgressChapterIndex = -1;
             mInProgressLessonIndex = -1;
             mCurrentLesson = null;
@@ -235,7 +246,7 @@ public class SessionData {
         mInProgressChapterIndex = -1;
         mInProgressLessonIndex = -1;
 
-        List<Chapter> chapters = mListChaptersResult.getChapters();
+        List<Chapter> chapters = mListChaptersResult.getCourse().getChapters();
         for (int i = 0; i < chapters.size(); ++i) {
             Chapter chapter = chapters.get(i);
             List<Lesson> lessons = chapter.getLessons();

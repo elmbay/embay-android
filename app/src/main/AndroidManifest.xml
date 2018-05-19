@@ -40,10 +40,12 @@
 
         <activity
             android:name="com.example.elmbay.activity.CourseDetailActivity"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity
+            android:name="com.example.elmbay.activity.WebViewActivity">
+        </activity>
     </application>
 
 </manifest>

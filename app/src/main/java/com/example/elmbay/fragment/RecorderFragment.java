@@ -1,7 +1,6 @@
 package com.example.elmbay.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +13,8 @@ import android.widget.ImageButton;
 import com.example.elmbay.R;
 import com.example.elmbay.activity.CourseDetailActivity;
 import com.example.elmbay.manager.AppManager;
+import com.example.elmbay.manager.SessionData;
+import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.widget.RecorderBar;
 
@@ -33,11 +34,12 @@ public class RecorderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_recorder, container, false);
 
-        Activity activity = getActivity();
-        ActivityCompat.requestPermissions(activity, mPermissions, CourseDetailActivity.REQUEST_RECORD_AUDIO_PERMISSION);
+        ActivityCompat.requestPermissions( getActivity(), mPermissions, CourseDetailActivity.REQUEST_RECORD_AUDIO_PERMISSION);
 
-        Lesson lesson = AppManager.getInstance().getSessionData().getCurrentLesson();
-        String fileBaseName = String.format(Locale.getDefault(), "%d_%d", lesson == null ? 0 : lesson.getChapterId(), lesson == null ? 0 : lesson.getId());
+        SessionData sessionData = AppManager.getInstance().getSessionData();
+        Chapter chapter = sessionData.getCurrentChapter();
+        Lesson lesson = sessionData.getCurrentLesson();
+        String fileBaseName = String.format(Locale.getDefault(), "%d_%d", chapter == null ? 0 : chapter.getId(), lesson == null ? 0 : lesson.getId());
         mRecorderBar = new RecorderBar(getContext(), fileBaseName);
         mRecorderBar.setRecordButtons((ImageButton) top.findViewById(R.id.record_start), (ImageButton) top.findViewById(R.id.record_stop));
         mRecorderBar.setReplayButtons((ImageButton) top.findViewById(R.id.replay), (ImageButton) top.findViewById(R.id.replay_stop));

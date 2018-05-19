@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import com.example.elmbay.adapter.ExpandableCourseAdapter;
 import com.example.elmbay.adapter.IViewHolderClickListener;
 import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.manager.SessionData;
+import com.example.elmbay.model.Chapter;
+import com.example.elmbay.model.Course;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.operation.ListChaptersOperation;
 import com.example.elmbay.operation.ListChaptersRequest;
@@ -68,8 +71,10 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     }
 
     @Override
-    public void onLessonClick(Lesson lesson) {
-        AppManager.getInstance().getSessionData().setCurrentLesson(lesson);
+    public void onLessonClick(Chapter chapter, Lesson lesson) {
+        SessionData sessionData = AppManager.getInstance().getSessionData();
+        sessionData.setCurrentChapter(chapter);
+        sessionData.setCurrentLesson(lesson);
         Intent intent = new Intent(getContext(), CourseDetailActivity.class);
         startActivity(intent);
     }
@@ -112,7 +117,15 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
         mSpinner.setVisibility(View.GONE);
 
         ListChaptersResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
-        mAdapter.setChapters(result == null ? null : result.getChapters());
+        if (result != null && result.getCourse() != null) {
+            Course course = result.getCourse();
+            mAdapter.setChapters(course.getChapters());
+            if (!TextUtils.isEmpty(course.getName())) {
+                getActivity().setTitle(course.getName());
+            }
+        } else {
+            mAdapter.setChapters(null);
+        }
         checkInfoBanner();
     }
 

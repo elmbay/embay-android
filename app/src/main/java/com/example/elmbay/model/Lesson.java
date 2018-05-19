@@ -12,9 +12,6 @@ public class Lesson {
     @SerializedName("id")
     private int mId;
 
-    @SerializedName("cid")
-    private int mChapterId;
-
     @SerializedName("key")
     private String mKeyword;
 
@@ -31,9 +28,6 @@ public class Lesson {
 
     public int getId() { return mId; }
     public void setId(int id) { mId = id; }
-
-    public int getChapterId() { return mChapterId; }
-    public void setChapterId(int id) { mChapterId = id; }
 
     public String getKeyword() { return mKeyword; }
     public void setKeyword(String keyword) { mKeyword = keyword; }
@@ -80,12 +74,12 @@ public class Lesson {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("{id=").append(mId).append(",chapterId=").append(mChapterId).append(",keyword=").append(mKeyword);
+        builder.append("{id=").append(mId).append(",key=").append(mKeyword);
         if (mVideo!= null) {
             builder.append(",video=").append(mVideo.toString());
         }
         if (mAudio!= null) {
-            builder.append(",ausio=").append(mAudio.toString());
+            builder.append(",audio=").append(mAudio.toString());
         }
         if (mNote != null) {
             builder.append(",note=").append(mNote.toString());

@@ -8,11 +8,17 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ProgressMark {
+    @SerializedName("csid")
+    private int mCourseId;
+
     @SerializedName("cid")
     private int mChapterId;
 
     @SerializedName("lid")
     private int mLessonId;
+
+    public void setCourseId(int courseId) { mCourseId = courseId; }
+    public int getCourseId() { return mCourseId; }
 
     public void setChapterId(int chapterId) { mChapterId = chapterId; }
     public int getChapterId() { return mChapterId; }
@@ -23,7 +29,7 @@ public class ProgressMark {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("{chapterId=").append(mChapterId).append(",lessonId=").append(mLessonId).append("}");
+        builder.append("{csid=").append(mCourseId).append("{cid=").append(mChapterId).append(",lid=").append(mLessonId).append("}");
         return builder.toString();
     }
 }
