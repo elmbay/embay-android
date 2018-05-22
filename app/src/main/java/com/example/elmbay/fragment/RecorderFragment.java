@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import com.example.elmbay.R;
 import com.example.elmbay.activity.CourseDetailActivity;
 import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.manager.SessionData;
+import com.example.elmbay.manager.CourseManager;
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 import com.example.elmbay.widget.RecorderBar;
@@ -36,9 +36,9 @@ public class RecorderFragment extends Fragment {
 
         ActivityCompat.requestPermissions( getActivity(), mPermissions, CourseDetailActivity.REQUEST_RECORD_AUDIO_PERMISSION);
 
-        SessionData sessionData = AppManager.getInstance().getSessionData();
-        Chapter chapter = sessionData.getCurrentChapter();
-        Lesson lesson = sessionData.getCurrentLesson();
+        CourseManager courseManager = AppManager.getInstance().getSessionData().getCourseManager();
+        Chapter chapter = courseManager.getCurrentChapter();
+        Lesson lesson = courseManager.getCurrentLesson();
         String fileBaseName = String.format(Locale.getDefault(), "%d_%d", chapter == null ? 0 : chapter.getId(), lesson == null ? 0 : lesson.getId());
         mRecorderBar = new RecorderBar(getContext(), fileBaseName);
         mRecorderBar.setRecordButtons((ImageButton) top.findViewById(R.id.record_start), (ImageButton) top.findViewById(R.id.record_stop));

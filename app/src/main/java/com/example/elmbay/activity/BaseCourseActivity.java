@@ -27,7 +27,7 @@ public abstract class BaseCourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mLesson = AppManager.getInstance().getSessionData().getCurrentLesson();
+        mLesson = AppManager.getInstance().getSessionData().getCourseManager().getCurrentLesson();
     }
 
     @Override

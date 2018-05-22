@@ -13,7 +13,7 @@ import android.util.Log;
 import com.example.elmbay.R;
 import com.example.elmbay.fragment.SignInFragment;
 import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.manager.SessionData;
+import com.example.elmbay.manager.UserManager;
 
 /**
  *
@@ -35,12 +35,12 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_frame);
 
         if (savedInstanceState == null) {
-            SessionData sessionData = AppManager.getInstance().getSessionData();
+            UserManager userManager = AppManager.getInstance().getSessionData().getUserManager();
             if (AppManager.DEBUG) {
-                Log.i(LOG_TAG, "token=" + sessionData.getUserToken()
-                        + " expire_at=" + sessionData.getUserTokenExpirationTime() + " now=" + System.currentTimeMillis());
+                Log.i(LOG_TAG, "token=" + userManager.getUserToken()
+                        + " expire_at=" + userManager.getUserTokenExpirationTime() + " now=" + System.currentTimeMillis());
             }
-            if (!TextUtils.isEmpty(sessionData.getUserToken()) && sessionData.getUserTokenExpirationTime() > System.currentTimeMillis()) {
+            if (!TextUtils.isEmpty(userManager.getUserToken()) && userManager.getUserTokenExpirationTime() > System.currentTimeMillis()) {
                 postSignedIn();
             } else {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

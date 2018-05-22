@@ -4,14 +4,15 @@ import com.android.volley.VolleyError;
 import com.example.elmbay.R;
 
 /**
+ *
  * Created by kaininggu on 5/19/18.
  */
 
 public class OperationError {
-    int mHttpStatusCode;
-    int mMessageId;
+    private int mHttpStatusCode;
+    private int mMessageId;
 
-    public OperationError(VolleyError error) {
+    OperationError(VolleyError error) {
         mHttpStatusCode = error.networkResponse.statusCode;
         setMessageId();
     }

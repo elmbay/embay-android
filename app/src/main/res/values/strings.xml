@@ -49,4 +49,7 @@
 
     <!-- network -->
     <string name="http_404">Server is temporarily unavailable</string>
+
+    <!-- webview -->
+    <string name="webview_on_error">"Error on loading web page."</string>
 </resources>

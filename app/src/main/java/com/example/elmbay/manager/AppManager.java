@@ -51,7 +51,7 @@ public class AppManager {
         mAppContext = context.getApplicationContext();
         mSessionData = new SessionData(mAppContext);
         if (MOCK) {
-            mSessionData.setListChaptersResult(MockDataProvider.getSignInResult());
+            mSessionData.getCourseManager().setCoursesResult(MockDataProvider.getSignInResult());
         }
     }
 

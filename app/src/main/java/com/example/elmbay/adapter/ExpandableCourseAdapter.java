@@ -15,8 +15,8 @@ import com.example.elmbay.model.Lesson;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.elmbay.manager.SessionData.COURSE_STATUS_INPROGRESS;
-import static com.example.elmbay.manager.SessionData.COURSE_STATUS_LOCKED;
+import static com.example.elmbay.manager.CourseManager.COURSE_STATUS_INPROGRESS;
+import static com.example.elmbay.manager.CourseManager.COURSE_STATUS_LOCKED;
 
 /**
  * Created by kgu on 4/20/18.

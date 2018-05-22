@@ -28,7 +28,7 @@ public class AudioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_audio, container, false);
 
-        Lesson lesson = AppManager.getInstance().getSessionData().getCurrentLesson();
+        Lesson lesson = AppManager.getInstance().getSessionData().getCourseManager().getCurrentLesson();
         if (lesson != null) {
             mAudio = lesson.getAudio();
         }

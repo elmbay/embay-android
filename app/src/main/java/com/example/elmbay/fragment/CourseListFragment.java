@@ -20,7 +20,9 @@ import com.example.elmbay.activity.CourseDetailActivity;
 import com.example.elmbay.adapter.ExpandableCourseAdapter;
 import com.example.elmbay.adapter.IViewHolderClickListener;
 import com.example.elmbay.manager.AppManager;
+import com.example.elmbay.manager.CourseManager;
 import com.example.elmbay.manager.SessionData;
+import com.example.elmbay.manager.UserManager;
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Course;
 import com.example.elmbay.model.Lesson;
@@ -82,9 +84,9 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
 
     @Override
     public void onLessonClick(Chapter chapter, Lesson lesson) {
-        SessionData sessionData = AppManager.getInstance().getSessionData();
-        sessionData.setCurrentChapter(chapter);
-        sessionData.setCurrentLesson(lesson);
+        CourseManager courseManager = AppManager.getInstance().getSessionData().getCourseManager();
+        courseManager.setCurrentChapter(chapter);
+        courseManager.setCurrentLesson(lesson);
         Intent intent = new Intent(getContext(), CourseDetailActivity.class);
         startActivity(intent);
     }
@@ -107,19 +109,19 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     }
 
     private boolean isReadyToLoad() {
-        SessionData sessionData = AppManager.getInstance().getSessionData();
-        GetCoursesResult result = sessionData.getListChaptersResult();
+        CourseManager courseManager = AppManager.getInstance().getSessionData().getCourseManager();
+        GetCoursesResult result = courseManager.getCoursesResult();
         return result == null
-                || sessionData.getNextLoadTime() < System.currentTimeMillis() && sessionData.getInProgressChapterIndex() < 0;
+                || courseManager.getNextLoadTime() < System.currentTimeMillis() && courseManager.getInProgressChapterIndex() < 0;
     }
 
     private void loadData() {
         mSpinner.setVisibility(View.VISIBLE);
 
-        SessionData sessionData = AppManager.getInstance().getSessionData();
+        UserManager userManager = AppManager.getInstance().getSessionData().getUserManager();
         GetCoursesRequest request = new GetCoursesRequest();
-        request.setUserToken(sessionData.getUserToken());
-        request.setHighMark(sessionData.getHighMark());
+        request.setUserToken(userManager.getUserToken());
+        request.setHighMark(userManager.getHighMark());
         GetCoursesOperation op = new GetCoursesOperation(request);
         op.submit();
     }
@@ -127,7 +129,7 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     private void onDataLoaded() {
         mSpinner.setVisibility(View.GONE);
 
-        GetCoursesResult result = AppManager.getInstance().getSessionData().getListChaptersResult();
+        GetCoursesResult result = AppManager.getInstance().getSessionData().getCourseManager().getCoursesResult();
         if (result != null && result.getCourse() != null) {
             Course course = result.getCourse();
             mAdapter.setChapters(course.getChapters());
@@ -141,10 +143,10 @@ public class CourseListFragment extends Fragment implements IViewHolderClickList
     }
 
     private void checkInfoBanner() {
-        SessionData sessionData = AppManager.getInstance().getSessionData();
-        if (sessionData.getInProgressChapterIndex() < 0) {
-            Log.i("Parrot", "loadTime=" + sessionData.getNextLoadTime() + " now=" + System.currentTimeMillis());
-            long elapsedHour = (sessionData.getNextLoadTime() - System.currentTimeMillis()) / SessionData.HOUR_TO_MILLIS;
+        CourseManager courseManager = AppManager.getInstance().getSessionData().getCourseManager();
+        if (courseManager.getInProgressChapterIndex() < 0) {
+            Log.i("Parrot", "loadTime=" + courseManager.getNextLoadTime() + " now=" + System.currentTimeMillis());
+            long elapsedHour = (courseManager.getNextLoadTime() - System.currentTimeMillis()) / SessionData.HOUR_TO_MILLIS;
             if (elapsedHour <= 1) {
                 elapsedHour = 1;
                 mInfoBanner.setText(getContext().getString(R.string.come_back_singular, elapsedHour));

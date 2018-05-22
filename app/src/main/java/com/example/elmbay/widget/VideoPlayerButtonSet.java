@@ -108,7 +108,7 @@ public class VideoPlayerButtonSet {
                 try {
                     if (!mHasPlayedVideo) {
                         mHasPlayedVideo = true;
-                        AppManager.getInstance().getSessionData().finishedCurrentLesson();
+                        AppManager.getInstance().getSessionData().getCourseManager().finishedCurrentLesson();
                     }
                     mMediaPlayer.start();
                     mState = MEDIA_STATE_PLAYING;

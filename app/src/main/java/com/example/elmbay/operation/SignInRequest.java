@@ -2,18 +2,21 @@ package com.example.elmbay.operation;
 
 import android.support.annotation.NonNull;
 
+import com.android.volley.Request;
 import com.example.elmbay.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.elmbay.manager.NetworkManager.ENDPOINT_USERS;
+
 /**
  *
  * Created by kgu on 4/12/18.
  */
 
-public class SignInRequest {
+public class SignInRequest implements IRequest {
     @SerializedName("u")
     private String mUid;
 
@@ -50,7 +53,11 @@ public class SignInRequest {
         return NetworkManager.getInstance().toJson(this);
     }
 
-    Map<String, String> getParams() {
+    public int getMethod() { return Request.Method.POST; }
+
+    public String getEndpoint() { return NetworkManager.BASE_URL_MOCK + ENDPOINT_USERS; }
+
+    public Map<String, String> getParams() {
         Map<String, String> params = new HashMap<>();
         params.put("u", mUid);
         params.put("t", mUidType);

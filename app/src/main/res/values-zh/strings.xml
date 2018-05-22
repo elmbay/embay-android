@@ -51,4 +51,7 @@
     <!-- network -->
     <string name="http_404">无法找到服务器</string>
 
+    <!-- webview -->
+    <string name="webview_on_error">"页面访问出错."</string>
+
 </resources>

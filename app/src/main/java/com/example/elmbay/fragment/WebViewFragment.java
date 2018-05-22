@@ -1,9 +1,13 @@
 package com.example.elmbay.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.example.elmbay.R;
 import com.example.elmbay.manager.AppManager;
@@ -23,6 +28,7 @@ import com.example.elmbay.manager.AppManager;
 public class WebViewFragment extends Fragment {
     private static final String LOG_TAG = WebViewFragment.class.getName();
     String mUrl = "http://google.com";
+    ProgressBar mSpinner;
     WebView mWebView;
 
     @Override
@@ -30,14 +36,15 @@ public class WebViewFragment extends Fragment {
         View top = inflater.inflate(R.layout.fragment_webview, container, false);
 
         if (!TextUtils.isEmpty(mUrl)) {
+            mSpinner = top.findViewById(R.id.spinner);
+            mSpinner.setVisibility(View.VISIBLE);
+
             mWebView = top.findViewById(R.id.webview);
-            mWebView.getSettings().setJavaScriptEnabled(true);
 
             // App crashes upon back button if we don't set WebViewClient
             mWebView.setWebViewClient(new WebViewClient() {
                 public void onPageFinished(WebView view, String url){
-                    // Target html needs to define javascript function setUserToken(val)
-                    mWebView.loadUrl("javascript:setUserToken('" + AppManager.getInstance().getSessionData().getUserToken() + "')");
+                    mSpinner.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -50,16 +57,31 @@ public class WebViewFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                    if (mWebView.canGoBack()) {
-                        mWebView.goBack();
+                    String message = getContext().getString(R.string.webview_on_error);
+                    if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        message = message + "\n\n" + error.getDescription();
                     }
+                    showDialog(message);
                     super.onReceivedError(mWebView, request, error);
                 }
             });
 
-            mWebView.loadUrl(mUrl);
+            mWebView.loadUrl(mUrl + "?u=" + AppManager.getInstance().getSessionData().getUserManager().getUserToken());
         }
 
         return top;
+    }
+
+    private void showDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
+        builder.setMessage(message)
+                .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (mWebView.canGoBack()) {
+                            mWebView.goBack();
+                        }
+                    }
+                });
+        builder.create().show();
     }
 }

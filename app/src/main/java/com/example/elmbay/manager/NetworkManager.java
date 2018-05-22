@@ -25,8 +25,6 @@ import java.lang.reflect.Type;
  */
 
 public class NetworkManager {
-    public static final String REQUEST_METHODS[] = {"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "TRACE", "PATCH"};
-
     private static final int MY_SOCKET_TIMEOUT_MS = 60000;
     private static final String LOG_TAG = NetworkManager.class.getName();
 
@@ -34,13 +32,13 @@ public class NetworkManager {
 //    public static final String BASE_URL_MOCK = "http://107.3.138.187";
     public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
     public static final String ENDPOINT_USERS = "/v1/elmbay/users";
-    public static final String ENDPOINT_CHAPTERS = "/v1/elmbay/courses";
+    public static final String ENDPOINT_COURSES = "/v1/elmbay/courses";
 
     private static NetworkManager sInstance;
     private Context mAppContext;
-    private int mRequestId;
     private RequestQueue mRequestQueue;
     private DefaultRetryPolicy mRetryPolicy;
+    private int mRequestId;
     private Gson mGson;
 
     public @NonNull static NetworkManager getInstance() {

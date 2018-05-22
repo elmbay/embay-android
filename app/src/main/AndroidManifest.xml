@@ -26,6 +26,10 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
+        <meta-data
+            android:name="android.webkit.WebView.EnableSafeBrowsing"
+            android:value="true" />
+
         <activity
             android:name="com.example.elmbay.activity.SignInActivity">
             <intent-filter>

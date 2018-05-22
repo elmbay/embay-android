@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
 import com.example.elmbay.R;
 import com.example.elmbay.activity.SignInActivity;
 import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.manager.SessionData;
+import com.example.elmbay.manager.UserManager;
 import com.example.elmbay.operation.SignInOperation;
 import com.example.elmbay.operation.SignInRequest;
 import com.example.elmbay.operation.SignInResponseEvent;
@@ -98,8 +98,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     mUidView.setInputType(TYPE_CLASS_PHONE);
                 } else if (start == 0 && count == 1) {
                     String firstChar = Character.toString(s.charAt(0));
-                    mUidType = firstChar.matches(PHONE_START_PATTEN) ? SessionData.UID_TYPE_PHONE : SessionData.UID_TYPE_EMAIL;
-                    mUidView.setInputType(SessionData.UID_TYPE_PHONE.equals(mUidType) ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                    mUidType = firstChar.matches(PHONE_START_PATTEN) ? UserManager.UID_TYPE_PHONE : UserManager.UID_TYPE_EMAIL;
+                    mUidView.setInputType(UserManager.UID_TYPE_PHONE.equals(mUidType) ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 }
             }
 
@@ -280,9 +280,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         mSpinner.setVisibility(View.VISIBLE);
 
         // Save the current sign in data
-        SessionData sessionData = AppManager.getInstance().getSessionData();
-        sessionData.setUid(mUid, mUidType);
-        sessionData.setPassword(mPassword);
+        UserManager userManager = AppManager.getInstance().getSessionData().getUserManager();
+        userManager.setUid(mUid, mUidType);
+        userManager.setPassword(mPassword);
 
         SignInRequest request = new SignInRequest(mUid, mUidType, mPassword, createAccount);
         SignInOperation op = new SignInOperation(request);
@@ -295,20 +295,20 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showHintPage() {
-        SessionData sessionData = AppManager.getInstance().getSessionData();
-        if (TextUtils.isEmpty(sessionData.getUserToken())) {
+        UserManager userManager = AppManager.getInstance().getSessionData().getUserManager();
+        if (TextUtils.isEmpty(userManager.getUserToken())) {
             // Either there is no account or user wants to log out
-            mUidType = SessionData.UID_TYPE_UNKNOWN;
+            mUidType = UserManager.UID_TYPE_UNKNOWN;
             mPassword = "";
         } else {
-            mUid = sessionData.getUid();
-            mUidType = sessionData.getUidType();
-            mPassword = sessionData.getPassword();
+            mUid = userManager.getUid();
+            mUidType = userManager.getUidType();
+            mPassword = userManager.getPassword();
         }
 
         mUidView.setText(mUid);
         if (!TextUtils.isEmpty(mUid)) {
-            mUidView.setInputType(SessionData.UID_TYPE_PHONE.equals(mUidType) ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            mUidView.setInputType(UserManager.UID_TYPE_PHONE.equals(mUidType) ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         }
 
         mPasswordView.setText(mPassword);
@@ -350,7 +350,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         if (!TextUtils.isEmpty(mUidView.getText())) {
             mUid = mUidView.getText().toString();
         }
-        return mUid != null && (SessionData.UID_TYPE_PHONE.equals(mUidType) ? mUid.length() >= 10 : mUid.length() >= 8 && mUid.matches(EMAIL_PATTEN));
+        return mUid != null && (UserManager.UID_TYPE_PHONE.equals(mUidType) ? mUid.length() >= 10 : mUid.length() >= 8 && mUid.matches(EMAIL_PATTEN));
     }
 
     private boolean isValidPassword() {
