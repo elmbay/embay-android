@@ -35,8 +35,8 @@
     <string name="invalid_code">验证码错误</string>
 
     <!-- list of courses -->
-    <string name="come_back_singular">暂无新课，%d 小时后再试.</string>
-    <string name="come_back_plural">暂无新课。请 %d 小时后再试.</string>
+    <string name="come_back">暂无新课，请%s再试.</string>
+    <string name="date_format">Ea hh:mm </string>
 
     <!-- image buttons -->
     <string name="repeat_slowly">慢放</string>
@@ -50,6 +50,8 @@
 
     <!-- network -->
     <string name="http_404">无法找到服务器</string>
+    <string name="json_exception">系统数据格式错误</string>
+    <string name="empty_response">系统空数据错误</string>
 
     <!-- webview -->
     <string name="webview_on_error">"页面访问出错."</string>

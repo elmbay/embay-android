@@ -46,18 +46,18 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Chapter chapter = (Chapter) getGroup(groupPosition);
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        final Chapter chapter = (Chapter) getGroup(groupPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.row_chapter, null);
         }
-        TextView textView = convertView.findViewById(R.id.chapter_id);
-        textView.setTypeface(null, Typeface.BOLD);
-        textView.setText(String.format(Locale.getDefault(),"%d", chapter.getId()));
+//        TextView textView = convertView.findViewById(R.id.chapter_id);
+//        textView.setTypeface(null, Typeface.BOLD);
+//        textView.setText(String.format(Locale.getDefault(),"%d", chapter.getId()));
 
-        textView = convertView.findViewById(R.id.topic);
+        TextView textView = convertView.findViewById(R.id.topic);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setText(chapter.getTopic());
 
@@ -78,6 +78,14 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
         }
 
         return convertView;
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        Chapter chapter = mChapters.get(groupPosition);
+        if (chapter.getLessons() == null) {
+            mItemClickListener.onChapterClick(mChapters.get(groupPosition));
+        }
     }
 
     @Override
@@ -156,6 +164,7 @@ public class ExpandableCourseAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+        // TODO: This one seems not having any effect?
+        return mChapters.get(groupPosition).getLessons().get(childPosition).getStatus() != COURSE_STATUS_LOCKED;
     }
 }

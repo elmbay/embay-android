@@ -14,6 +14,7 @@ import java.io.File;
 
 public class SessionData {
     public static final int HOUR_TO_MILLIS = 3600000;
+    public static final int MINUTE_TO_MILLIS = 60000;
 
     private SharedPreferences mPersistenceStore;
     private UserManager mUserManager;

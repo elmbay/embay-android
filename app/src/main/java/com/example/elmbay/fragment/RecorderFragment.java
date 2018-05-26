@@ -37,8 +37,8 @@ public class RecorderFragment extends Fragment {
         ActivityCompat.requestPermissions( getActivity(), mPermissions, CourseDetailActivity.REQUEST_RECORD_AUDIO_PERMISSION);
 
         CourseManager courseManager = AppManager.getInstance().getSessionData().getCourseManager();
-        Chapter chapter = courseManager.getCurrentChapter();
-        Lesson lesson = courseManager.getCurrentLesson();
+        Chapter chapter = courseManager.getChapterSelected();
+        Lesson lesson = courseManager.getLessonSelected();
         String fileBaseName = String.format(Locale.getDefault(), "%d_%d", chapter == null ? 0 : chapter.getId(), lesson == null ? 0 : lesson.getId());
         mRecorderBar = new RecorderBar(getContext(), fileBaseName);
         mRecorderBar.setRecordButtons((ImageButton) top.findViewById(R.id.record_start), (ImageButton) top.findViewById(R.id.record_stop));

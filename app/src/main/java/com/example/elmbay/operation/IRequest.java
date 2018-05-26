@@ -7,6 +7,8 @@ import java.util.Map;
  */
 
 public interface IRequest {
+    static final String[] REQUEST_METHOD_TO_STRING = {"GET","POST","PUT","DELETE","HEAD","OPTIONS","TRACE","PATCH"};
+
     int getMethod();
     String getEndpoint();
     Map<String, String> getParams();

@@ -61,7 +61,7 @@ public class UserManager {
     public void setSignInResult(@NonNull SignInResult result) {
         setUserToken(result.getUserToken());
         setUserTokenExpirationTime(System.currentTimeMillis() + result.getUserTokenLifeInHours() * SessionData.HOUR_TO_MILLIS);
-        advanceHighMark(result.getHighMark());
+        syncHighMark(result.getHighMark());
     }
 
     public @NonNull String getUserToken() { return mUserToken; }
@@ -79,30 +79,20 @@ public class UserManager {
     }
 
     public @NonNull ProgressMark getHighMark() { return mHighMark; }
-    void advanceHighMark(@Nullable ProgressMark mark) {
+    void syncHighMark(@Nullable ProgressMark mark) {
         if (mark != null) {
             if (mHighMark.getCourseId() != mark.getCourseId()) {
                 // first time use or user has changed the course, change highMark to force update
                 mHighMark.setCourseId(mark.getCourseId());
                 mHighMark.setChapterId(mark.getChapterId() - 1);
             }
-            advanceHighMark(mark.getChapterId(), mark.getLessonId());
+            syncHighMark(mark.getChapterId(), mark.getLessonId());
         }
     }
-    public void advanceHighMark(int chapterId, int lessonId) {
-        boolean needUpdate = false;
-        if (mHighMark.getChapterId() < chapterId) {
-            needUpdate = true;
-        } else if (mHighMark.getChapterId() == chapterId) {
-            if (mHighMark.getLessonId() < lessonId) {
-                needUpdate = true;
-            }
-        }
-        if (needUpdate) {
-            mHighMark.setChapterId(chapterId);
-            mHighMark.setLessonId(lessonId);
-            persistHighMark();
-        }
+    public void syncHighMark(int chapterId, int lessonId) {
+        mHighMark.setChapterId(chapterId);
+        mHighMark.setLessonId(lessonId);
+        persistHighMark();
     }
 
     private void persistHighMark() {

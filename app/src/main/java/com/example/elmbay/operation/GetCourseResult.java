@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by kgu on 4/10/18.
  */
 
-public class GetCoursesResult {
+public class GetCourseResult {
     @SerializedName("course")
     private Course mCourse;
 

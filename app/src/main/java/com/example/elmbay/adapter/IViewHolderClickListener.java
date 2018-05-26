@@ -1,5 +1,7 @@
 package com.example.elmbay.adapter;
 
+import android.support.annotation.NonNull;
+
 import com.example.elmbay.model.Chapter;
 import com.example.elmbay.model.Lesson;
 
@@ -8,5 +10,6 @@ import com.example.elmbay.model.Lesson;
  */
 
 public interface IViewHolderClickListener {
-    void onLessonClick(Chapter chapter, Lesson lesson);
+    void onChapterClick(@NonNull Chapter chapter);
+    void onLessonClick(@NonNull Chapter chapter, @NonNull Lesson lesson);
 }

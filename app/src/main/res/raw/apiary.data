@@ -53,7 +53,7 @@ Polls is a simple API allowing consumers to view polls and vote in them.
 
 ## Lessons [/v1/elmbay/courses]
 
-### List All Chapters [POST]
+### List Chapters in a Course [POST]
 
   + Response 200 (application/json)
 
@@ -142,6 +142,22 @@ Polls is a simple API allowing consumers to view polls and vote in them.
             },
             {
                 "id": 3,
+                "topic": "Business"
+            }
+            ]
+        }
+    }
+
+## chapters [/v1/elmbay/chapters]
+
+### Get Chapter Details [GET]
+
++ Response 200 (application/json)
+    + Headers
+    + Body
+
+            {
+                "id": 3,
                 "topic": "Business",
                 "lessons": [
                     {
@@ -154,8 +170,5 @@ Polls is a simple API allowing consumers to view polls and vote in them.
                     }
                 ]
             }
-            ]
-        }
-    }
 
 

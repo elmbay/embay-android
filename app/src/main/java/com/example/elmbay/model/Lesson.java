@@ -25,6 +25,7 @@ public class Lesson {
     @SerializedName("note")
     private ContentDescriptor mNote;
 
+    @SerializedName("st")
     private int mStatus;
 
     public int getId() { return mId; }

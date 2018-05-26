@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.elmbay.manager.AppManager;
 import com.example.elmbay.manager.NetworkManager;
@@ -54,9 +53,9 @@ public abstract class BaseOperation {
         }
     }
 
-    void logError(VolleyError error) {
+    void logError(OperationError error, String message) {
         if (AppManager.DEBUG) {
-            Log.w(LOG_TAG, "Response " + mRequestId + ": Error statuscode=" + error.networkResponse.statusCode);
+            Log.w(LOG_TAG, "Response " + mRequestId + ": Error " + message + ": " + error == null ? "" : error.toString());
         }
     }
 }

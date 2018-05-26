@@ -16,9 +16,9 @@ import org.greenrobot.eventbus.EventBus;
  * Created by kgu on 5/18/18.
  */
 
-public class SignInOperation extends BaseOperation {
+public class GetCourseOperation extends BaseOperation {
 
-    public SignInOperation(@NonNull SignInRequest request) {
+    public GetCourseOperation(@NonNull GetCourseRequest request) {
         super(request);
     }
 
@@ -27,18 +27,18 @@ public class SignInOperation extends BaseOperation {
             @Override
             public void onResponse(String response) {
                 try {
-                SignInResult result = NetworkManager.getInstance().fromJson(response, SignInResult.class);
+                    GetCourseResult result = NetworkManager.getInstance().fromJson(response, GetCourseResult.class);
                     if (result != null) {
-                logResult(result);
-                AppManager.getInstance().getSessionData().getUserManager().setSignInResult(result);
-                EventBus.getDefault().post(new SignInResponseEvent(null));
+                        logResult(result);
+                        AppManager.getInstance().getSessionData().getCourseManager().setCourseResult(result);
+                        EventBus.getDefault().post(new GetCourseResponseEvent(null));
                     } else {
                         logError(null, "Empty response");
-                        EventBus.getDefault().post(new SignInResponseEvent(new OperationError(R.string.empty_response)));
+                        EventBus.getDefault().post(new GetCourseResponseEvent(new OperationError(R.string.empty_response)));
                     }
                 } catch (JsonParseException ex) {
                     logError(null, "Empty response");
-                    EventBus.getDefault().post(new SignInResponseEvent(new OperationError(R.string.json_exception)));
+                    EventBus.getDefault().post(new GetCourseResponseEvent(new OperationError(R.string.json_exception)));
                 }
             }
         };
@@ -50,7 +50,7 @@ public class SignInOperation extends BaseOperation {
             public void onErrorResponse(VolleyError error) {
                 OperationError oe = new OperationError(error);
                 logError(oe, "Network error");
-                EventBus.getDefault().post(new SignInResponseEvent(oe));
+                EventBus.getDefault().post(new GetCourseResponseEvent(oe));
             }
         };
     }

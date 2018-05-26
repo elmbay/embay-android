@@ -18,10 +18,11 @@ public class Chapter {
     @SerializedName("topic")
     private String mTopic;
 
-    // For comparison, lessons is a list of lessons in ascend order
+    // For comparison, lessons ids are in ascend order
     @SerializedName("lessons")
     private List<Lesson> mLessons;
 
+    @SerializedName("st")
     private int mStatus;
 
     public int getId() { return mId; }

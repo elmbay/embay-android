@@ -33,6 +33,7 @@ public class NetworkManager {
     public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
     public static final String ENDPOINT_USERS = "/v1/elmbay/users";
     public static final String ENDPOINT_COURSES = "/v1/elmbay/courses";
+    public static final String ENDPOINT_LESSONS = "/v1/elmbay/chapters";
 
     private static NetworkManager sInstance;
     private Context mAppContext;

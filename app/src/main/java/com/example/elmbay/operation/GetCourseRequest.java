@@ -17,7 +17,7 @@ import static com.example.elmbay.manager.NetworkManager.ENDPOINT_COURSES;
  * Created by kgu on 5/10/18.
  */
 
-public class GetCoursesRequest implements IRequest {
+public class GetCourseRequest implements IRequest {
     @SerializedName("token")
     private String mUserToken;
 
@@ -29,7 +29,7 @@ public class GetCoursesRequest implements IRequest {
 
     @Override
     public String toString() {
-        return NetworkManager.getInstance().toJson(this);
+        return IRequest.REQUEST_METHOD_TO_STRING[getMethod()] + " " + getEndpoint() + " " + NetworkManager.getInstance().toJson(this);
     }
 
     public int getMethod() { return Request.Method.POST; }
@@ -41,6 +41,5 @@ public class GetCoursesRequest implements IRequest {
         params.put("token", mUserToken);
         params.put("mark", mHighMark.toString());
         return params;
-
     }
 }

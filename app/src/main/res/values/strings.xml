@@ -34,8 +34,8 @@
     <string name="invalid_code">Invalid verification code</string>
 
     <!-- list of courses -->
-    <string name="come_back_singular">New courses may be available in %d hour.</string>
-    <string name="come_back_plural">New courses may be available in %d hours.</string>
+    <string name="come_back">New courses will be available around %s.</string>
+    <string name="date_format">E hh:mm a</string>
 
     <!-- image buttons -->
     <string name="repeat_slowly">Repeat slowly</string>
@@ -49,6 +49,8 @@
 
     <!-- network -->
     <string name="http_404">Server is temporarily unavailable</string>
+    <string name="json_exception">System error: Invalid data format</string>
+    <string name="empty_response">System error: Empty response</string>
 
     <!-- webview -->
     <string name="webview_on_error">"Error on loading web page."</string>

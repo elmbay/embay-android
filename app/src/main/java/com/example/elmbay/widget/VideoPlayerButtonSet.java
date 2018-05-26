@@ -56,6 +56,7 @@ public class VideoPlayerButtonSet {
         if (mVideoView != null) {
             if (mContentDescriptor != null) {
                 mVideoView.setVideoURI(mContentDescriptor.getUri());
+                mVideoView.seekTo(1); // show preview 1 ms into the clip
             }
 
             mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -108,7 +109,7 @@ public class VideoPlayerButtonSet {
                 try {
                     if (!mHasPlayedVideo) {
                         mHasPlayedVideo = true;
-                        AppManager.getInstance().getSessionData().getCourseManager().finishedCurrentLesson();
+                        AppManager.getInstance().getSessionData().getCourseManager().finishedSelectedLesson();
                     }
                     mMediaPlayer.start();
                     mState = MEDIA_STATE_PLAYING;
