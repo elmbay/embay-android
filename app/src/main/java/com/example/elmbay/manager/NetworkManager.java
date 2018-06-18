@@ -5,75 +5,79 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 
 /**
+ * The class manages all network operations
+ *
  * Created by kgu on 4/11/18.
  */
 
 public class NetworkManager {
+    private static final int MY_SOCKET_TIMEOUT_MS = 60000;
     private static final String LOG_TAG = NetworkManager.class.getName();
 
     // urls
-    public static final String BASE_URL_MOCK = "http://private-a3c9c-foundationwallet.apiary-mock.com";
-    public static final String ENDPOINT_USERS = "/v1/elmbay/users/";
+//    public static final String BASE_URL_MOCK = "http://107.3.138.187";
+    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
+    public static final String ENDPOINT_USERS = "/v1/elmbay/users";
+    public static final String ENDPOINT_COURSES = "/v1/elmbay/courses";
+    public static final String ENDPOINT_LESSONS = "/v1/elmbay/chapters";
 
     private static NetworkManager sInstance;
     private Context mAppContext;
     private RequestQueue mRequestQueue;
+    private DefaultRetryPolicy mRetryPolicy;
+    private int mRequestId;
+    private Gson mGson;
 
-    public static NetworkManager getInstance() {
+    public @NonNull static NetworkManager getInstance() {
         if (sInstance == null) {
             setup();
         }
         return sInstance;
     }
 
-    public void submit(StringRequest request) {
+    public int getNextRequestId() { return ++mRequestId; }
+
+    public void submit(@NonNull StringRequest request) {
+        request.setRetryPolicy(mRetryPolicy);
         mRequestQueue.add(request);
     }
-    public void submit(JsonObjectRequest request) { mRequestQueue.add(request); }
 
-    public static JSONObject toJSONObject(Object object) {
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(object);
-        try {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            return jsonObject;
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "Failed to convert " + object.getClass().getSimpleName() + " to JSONObject: " + e.getMessage() + ": " + jsonString);
-            return null;
-        }
+    public @Nullable <T> T fromJson(@NonNull String jsonString, @NonNull Type targetType) {
+        return mGson.fromJson(jsonString, targetType);
     }
 
-    public static <T> T fromJSONObject(JSONObject jsonObject, Type targetType) {
-        Gson gson = new Gson();
-        String str = jsonObject.toString();
-        return gson.fromJson(str, targetType);
-    }
+    public String toJson(@NonNull Object object) { return mGson.toJson(object); }
 
     public boolean hasNetworkConnection() {
         boolean isWifiConn = false;
         boolean isMobileConn = false;
         ConnectivityManager connMgr = (ConnectivityManager) mAppContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (ContextCompat.checkSelfPermission(mAppContext, Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
-            NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            isWifiConn = networkInfo.isConnected();
-            if (!isWifiConn) {
-                networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                isMobileConn = networkInfo.isConnected();
+            try {
+                NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                isWifiConn = networkInfo.isConnected();
+                if (!isWifiConn) {
+                    networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                    isMobileConn = networkInfo.isConnected();
+                }
+            } catch (NullPointerException ex) {
+                if (AppManager.DEBUG) {
+                    Log.w(LOG_TAG, "Null NetworkInfo: " + ex.getMessage());
+                }
             }
         }
         return isWifiConn || isMobileConn;
@@ -94,6 +98,8 @@ public class NetworkManager {
 
         // Creates a default worker pool and calls {@link RequestQueue#start()} on it.
         mRequestQueue = Volley.newRequestQueue(appContext);
+        mRetryPolicy = new DefaultRetryPolicy(MY_SOCKET_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        mGson = new Gson();
     }
 
     private NetworkManager() {}

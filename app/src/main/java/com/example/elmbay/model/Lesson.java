@@ -1,21 +1,20 @@
 package com.example.elmbay.model;
 
+import com.example.elmbay.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ *
  * Created by kgu on 4/6/18.
  */
 
 public class Lesson {
 
     @SerializedName("id")
-    private String mId;
+    private int mId;
 
-    @SerializedName("course")
-    private String mCourse;
-
-    @SerializedName("title")
-    private String mTitle;
+    @SerializedName("key")
+    private String mKeyword;
 
     @SerializedName("video")
     private ContentDescriptor mVideo;
@@ -23,24 +22,59 @@ public class Lesson {
     @SerializedName("audio")
     private ContentDescriptor mAudio;
 
-    @SerializedName("text")
-    private ContentDescriptor mText;
+    @SerializedName("note")
+    private ContentDescriptor mNote;
 
-    public void setId(String id) { mId = id; }
-    public String getId() { return mId; }
+    @SerializedName("st")
+    private int mStatus;
 
-    public void setCourse(String course) { mCourse = course; }
-    public String getCourse() { return mCourse; }
+    public int getId() { return mId; }
+    public void setId(int id) { mId = id; }
 
-    public void setTitle(String title) { mTitle = title; }
-    public String getTitle() { return mTitle; }
+    public String getKeyword() { return mKeyword; }
+    public void setKeyword(String keyword) { mKeyword = keyword; }
 
-    public void setVideo(ContentDescriptor video) { mVideo = video; }
     public ContentDescriptor getVideo() { return mVideo; }
+    public void setVideo(ContentDescriptor video) { mVideo = video; }
+    public void setVideo(String videoString) {
+        if (videoString == null) {
+            mVideo = null;
+        } else {
+            mVideo = new ContentDescriptor();
+            mVideo.setMimeType(ContentDescriptor.CONTENT_TYPE_VIDEO);
+            mVideo.setUriString(videoString);
+        }
+    }
 
-    public void setAudio(ContentDescriptor audio) { mAudio = audio; }
     public ContentDescriptor getAudio() { return mAudio; }
+    public void setAudio(ContentDescriptor audio) { mAudio = audio; }
+    public void setAudio(String audioString) {
+        if (audioString == null) {
+            mAudio = null;
+        } else {
+            mAudio = new ContentDescriptor();
+            mAudio.setMimeType(ContentDescriptor.CONTENT_TYPE_AUDIO);
+            mAudio.setUriString(audioString);
+        }
+    }
 
-    public void setText(ContentDescriptor text) { mText = text; }
-    public ContentDescriptor getText() { return mText; }
+    public ContentDescriptor getNote() { return mNote; }
+    public void setNote(ContentDescriptor note) { mNote = note; }
+    public void setNote(String noteString) {
+        if (noteString == null) {
+            mNote = null;
+        } else {
+            mNote = new ContentDescriptor();
+            mNote.setMimeType(ContentDescriptor.CONTENT_TYPE_IMAGE);
+            mNote.setUriString(noteString);
+        }
+    }
+
+    public int getStatus() { return mStatus; }
+    public void setStatus(int status) { mStatus = status; }
+
+    @Override
+    public String toString() {
+        return NetworkManager.getInstance().toJson(this);
+    }
 }

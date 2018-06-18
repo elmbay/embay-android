@@ -10,17 +10,18 @@
 
     <ImageButton
         android:id="@+id/replay"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_centerInParent="true"
         android:background="@drawable/circle"
         android:scaleType="fitCenter"
-        android:src="@mipmap/snail_blue"/>
+        android:src="@mipmap/slow_play"
+        android:tooltipText="Slow"/>
 
     <ImageButton
         android:id="@+id/record_stop"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_centerInParent="true"
         android:background="@drawable/circle"
         android:scaleType="fitCenter"

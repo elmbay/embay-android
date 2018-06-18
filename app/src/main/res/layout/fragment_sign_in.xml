@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/spinner"/>
+
+    <LinearLayout
+        android:id="@+id/signin_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp">
+
+        <EditText
+            android:id="@+id/uid"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:singleLine="true"
+            android:inputType="phone"
+            android:hint="@string/uid_hint"
+            style="@style/Widget.AppCompat.EditText"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:hint="@string/password"
+            style="@style/Widget.AppCompat.EditText"/>
+
+        <EditText
+            android:id="@+id/confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:hint="@string/confirm_password"
+            style="@style/Widget.AppCompat.EditText"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/sign_in"
+                android:layout_alignParentStart="true"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/oval_button"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:text="@string/sign_in"/>
+
+            <Button
+                android:id="@+id/create_account"
+                android:layout_alignParentEnd="true"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/oval_button"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:text="@string/create_account"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/forget_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:text="@string/forgot_password"
+            android:textColor="@color/colorPrimaryBold"/>
+
+    </LinearLayout>
+</RelativeLayout>

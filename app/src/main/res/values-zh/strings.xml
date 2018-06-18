@@ -1,0 +1,59 @@
+<resources>
+    <!-- manifest -->
+    <string name="app_name">榆树湾 * ElmBay</string>
+
+
+    <!-- common -->
+    <string name="unknown_error">出错.</string>
+    <string name="yes">确定</string>
+    <string name="cancel">取消</string>
+    <string name="ok">确定</string>
+    <string name="try_again">重试</string>
+
+    <!-- options menu -->
+    <string name="settings">设置</string>
+    <string name="log_out">退出登录</string>
+    <string name="help">Help</string>
+    <string name="confirm_log_out">确定退出登录吗?</string>
+
+    <!-- sign in -->
+    <string name="uid_hint">电话</string>
+    <string name="password">密码</string>
+    <string name="sign_in">登录</string>
+    <string name="forgot_password">忘记密码?</string>
+    <string name="invalid_password">请输入有效密码</string>
+
+    <!-- sign up -->
+    <string name="create_account">开账户</string>
+    <string name="send_code">发验证码</string>
+    <string name="verify">确认</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="passwords_mismatch">两次密码应一致</string>
+    <string name="invalid_uid">请输入有效电话</string>
+    <string name="sms_code">榆树湾 * ElmBay: %d</string>
+    <string name="enter_code">输入短信显示的验证码:</string>
+    <string name="invalid_code">验证码错误</string>
+
+    <!-- list of courses -->
+    <string name="come_back">暂无新课，请%s再试.</string>
+    <string name="date_format">Ea hh:mm </string>
+
+    <!-- image buttons -->
+    <string name="repeat_slowly">慢放</string>
+    <string name="start_playing">开始播放</string>
+    <string name="stop_playing">停止播放</string>
+    <string name="start_recording">开始录音</string>
+    <string name="stop_recording">停止录音</string>
+    <string name="share_recording">分享录音</string>
+    <string name="erase_recording">删除录音</string>
+    <string name="done">已学</string>
+
+    <!-- network -->
+    <string name="http_404">无法找到服务器</string>
+    <string name="json_exception">系统数据格式错误</string>
+    <string name="empty_response">系统空数据错误</string>
+
+    <!-- webview -->
+    <string name="webview_on_error">"页面访问出错."</string>
+
+</resources>
