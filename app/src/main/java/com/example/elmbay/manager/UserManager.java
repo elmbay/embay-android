@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.example.elmbay.model.ProgressMark;
 import com.example.elmbay.operation.SignInResult;
 
 import static com.example.elmbay.manager.PersistenceManager.KEY_PASSWORD;
@@ -24,13 +23,11 @@ import static com.example.elmbay.manager.PersistenceManager.KEY_USER_TOKEN_EXPIR
 public class UserManager {
 
     public static final String UID_TYPE_UNKNOWN = "U";
-    public static final String UID_TYPE_EMAIL = "E";
     public static final String UID_TYPE_PHONE = "P";
 
     private SharedPreferences mPersistenceStore;
     private String mUserToken;
     private long mUserTokenExpirationTime;
-    private ProgressMark mHighMark;
 
     UserManager(SharedPreferences persistenceStore) {
         mPersistenceStore = persistenceStore;
@@ -40,10 +37,6 @@ public class UserManager {
     private void fromPersistenceStore() {
         mUserToken = mPersistenceStore.getString(KEY_USER_TOKEN, "");
         mUserTokenExpirationTime = mPersistenceStore.getLong(KEY_USER_TOKEN_EXPIRATION_TIME, 0);
-        mHighMark = new ProgressMark();
-        mHighMark.setCourseId(mPersistenceStore.getInt(KEY_PROGRESS_HIGHMARK_CSID, 0));
-        mHighMark.setChapterId(mPersistenceStore.getInt(KEY_PROGRESS_HIGHMARK_CID, 0));
-        mHighMark.setLessonId(mPersistenceStore.getInt(KEY_PROGRESS_HIGHMARK_LID, 0));
     }
 
     // PII data stays in persistence store only
@@ -61,7 +54,6 @@ public class UserManager {
     public void setSignInResult(@NonNull SignInResult result) {
         setUserToken(result.getUserToken());
         setUserTokenExpirationTime(System.currentTimeMillis() + result.getUserTokenLifeInHours() * SessionData.HOUR_TO_MILLIS);
-        syncHighMark(result.getHighMark());
     }
 
     public @NonNull String getUserToken() { return mUserToken; }
@@ -76,30 +68,6 @@ public class UserManager {
     private void setUserTokenExpirationTime(long time) {
         mUserTokenExpirationTime = time;
         PersistenceManager.setLong(mPersistenceStore, KEY_USER_TOKEN_EXPIRATION_TIME, time);
-    }
-
-    public @NonNull ProgressMark getHighMark() { return mHighMark; }
-    void syncHighMark(@Nullable ProgressMark mark) {
-        if (mark != null) {
-            if (mHighMark.getCourseId() != mark.getCourseId()) {
-                // first time use or user has changed the course, change highMark to force update
-                mHighMark.setCourseId(mark.getCourseId());
-                mHighMark.setChapterId(mark.getChapterId() - 1);
-            }
-            syncHighMark(mark.getChapterId(), mark.getLessonId());
-        }
-    }
-    public void syncHighMark(int chapterId, int lessonId) {
-        mHighMark.setChapterId(chapterId);
-        mHighMark.setLessonId(lessonId);
-        persistHighMark();
-    }
-
-    private void persistHighMark() {
-        PersistenceManager.setInt(mPersistenceStore, KEY_PROGRESS_HIGHMARK_CSID, mHighMark.getCourseId());
-        PersistenceManager.setInt(mPersistenceStore, KEY_PROGRESS_HIGHMARK_CID, mHighMark.getChapterId());
-        PersistenceManager.setInt(mPersistenceStore, KEY_PROGRESS_HIGHMARK_LID, mHighMark.getLessonId());
-        //TODO: update server side - this may not needed if server can record highmark upon receiving a load request
     }
 
     void logout() {

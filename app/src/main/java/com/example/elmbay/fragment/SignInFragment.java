@@ -98,7 +98,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                     mUidView.setInputType(TYPE_CLASS_PHONE);
                 } else if (start == 0 && count == 1) {
                     String firstChar = Character.toString(s.charAt(0));
-                    mUidType = firstChar.matches(PHONE_START_PATTEN) ? UserManager.UID_TYPE_PHONE : UserManager.UID_TYPE_EMAIL;
+                    mUidType = UserManager.UID_TYPE_PHONE;
                     mUidView.setInputType(UserManager.UID_TYPE_PHONE.equals(mUidType) ? TYPE_CLASS_PHONE : TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 }
             }
@@ -124,6 +124,21 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         });
 
         mConfirmPasswordView = top.findViewById(R.id.confirm_password);
+        mConfirmPasswordView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mCreateAccountButton.setText(R.string.send_code);
+                mCreateAccountButton.setEnabled(true);
+                mCreateAccountButton.setAlpha((float) 1.0);
+            }
+        });
+
         mSignInContainer = top.findViewById(R.id.signin_container);
         mSpinner = top.findViewById(R.id.spinner);
         mSignInButton = top.findViewById(R.id.sign_in);
@@ -243,7 +258,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 mSignInState = SIGNIN_STATE_CONFIRM_PASSWORD;
                 mSignInButton.setEnabled(false);
                 mSignInButton.setAlpha((float) 0.2);
-                mCreateAccountButton.setText(R.string.send_code);
+                mCreateAccountButton.setEnabled(false);
+                mCreateAccountButton.setAlpha((float) 0.2);
                 mConfirmPasswordView.setVisibility(View.VISIBLE);
                 Editable password = mPasswordView.getText();
                 Editable password2 = mConfirmPasswordView.getText();

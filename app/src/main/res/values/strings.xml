@@ -1,6 +1,6 @@
 <resources>
     <!-- manifest -->
-    <string name="app_name">ElmBay * 榆树湾</string>
+    <string name="app_name">ElmClass * 榆树课堂</string>
 
     <!-- common -->
     <string name="unknown_error">Something went wrong.</string>
@@ -29,23 +29,9 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="passwords_mismatch">Passwords mismatch, try again</string>
     <string name="invalid_uid">Please enter a valid phone number</string>
-    <string name="sms_code">ElmBay * 榆树湾: %d</string>
+    <string name="sms_code">ElmClass * 榆树课堂: %d</string>
     <string name="enter_code">Enter verification code sent to your phone:</string>
     <string name="invalid_code">Invalid verification code</string>
-
-    <!-- list of courses -->
-    <string name="come_back">New courses will be available around %s.</string>
-    <string name="date_format">E hh:mm a</string>
-
-    <!-- image buttons -->
-    <string name="repeat_slowly">Repeat slowly</string>
-    <string name="start_playing">Start playing</string>
-    <string name="stop_playing">Stop playing</string>
-    <string name="start_recording">Start recording</string>
-    <string name="stop_recording">Stop recording</string>
-    <string name="share_recording">Share recording</string>
-    <string name="erase_recording">Erase recording</string>
-    <string name="done">Done</string>
 
     <!-- network -->
     <string name="http_404">Server is temporarily unavailable</string>

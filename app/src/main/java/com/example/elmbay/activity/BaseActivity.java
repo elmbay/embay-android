@@ -3,7 +3,6 @@ package com.example.elmbay.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 
 import com.example.elmbay.R;
 import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.model.Lesson;
 
 /**
  * The base class to load Lesson and handle action bar setup and action
@@ -20,15 +18,7 @@ import com.example.elmbay.model.Lesson;
  * Created by kgu on 4/18/18.
  */
 
-public abstract class BaseCourseActivity extends AppCompatActivity {
-    Lesson mLesson;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mLesson = AppManager.getInstance().getSessionData().getCourseManager().getLessonSelected();
-    }
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,7 +71,6 @@ public abstract class BaseCourseActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                return;
             }
         });
 

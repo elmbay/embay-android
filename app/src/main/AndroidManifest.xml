@@ -39,15 +39,6 @@
         </activity>
 
         <activity
-            android:name="com.example.elmbay.activity.CourseListActivity">
-        </activity>
-
-        <activity
-            android:name="com.example.elmbay.activity.CourseDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
-        <activity
             android:name="com.example.elmbay.activity.WebViewActivity">
         </activity>
     </application>

@@ -73,7 +73,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void postSignedIn() {
-        Intent intent = new Intent(this, CourseListActivity.class);
+        Intent intent = new Intent(this, WebViewActivity.class);
         startActivity(intent);
 
         // Don't come back to this activity anymore

@@ -18,7 +18,6 @@ class PersistenceManager {
     static final String KEY_PROGRESS_HIGHMARK_CSID = "high_csid";
     static final String KEY_PROGRESS_HIGHMARK_CID = "high_cid";
     static final String KEY_PROGRESS_HIGHMARK_LID = "high_lid";
-    static final String KEY_NEXT_LOAD_TIME = "load_tm";
 
     private static final String PERSISTENCE_STORE = "v1.private";
 

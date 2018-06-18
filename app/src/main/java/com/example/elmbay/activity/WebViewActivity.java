@@ -11,10 +11,11 @@ import com.example.elmbay.fragment.WebViewFragment;
 import com.example.elmbay.manager.AppManager;
 
 /**
+ *
  * Created by kgu on 5/18/18.
  */
 
-public class WebViewActivity extends BaseCourseActivity {
+public class WebViewActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
