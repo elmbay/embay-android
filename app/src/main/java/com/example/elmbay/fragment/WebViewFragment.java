@@ -11,6 +11,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -66,10 +67,17 @@ public class WebViewFragment extends Fragment {
                 }
             });
 
-            mWebView.loadUrl(mUrl + "?u=" + AppManager.getInstance().getSessionData().getUserManager().getUserToken());
+//            mWebView.loadUrl(mUrl + "?u=" + AppManager.getInstance().getSessionData().getUserManager().getUserToken());
+            setCookie();
+            mWebView.loadUrl(mUrl);
         }
 
         return top;
+    }
+
+    private void setCookie() {
+        String cookieString = "u=" + AppManager.getInstance().getSessionData().getUserManager().getUserToken() + "; path=/";
+        CookieManager.getInstance().setCookie(mUrl, cookieString);
     }
 
     private void showDialog(String message) {
