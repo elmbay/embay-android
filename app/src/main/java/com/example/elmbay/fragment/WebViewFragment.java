@@ -19,6 +19,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.example.elmbay.R;
+import com.example.elmbay.activity.WebViewActivity;
 import com.example.elmbay.manager.AppManager;
 
 /**
@@ -28,14 +29,15 @@ import com.example.elmbay.manager.AppManager;
 
 public class WebViewFragment extends Fragment {
     private static final String LOG_TAG = WebViewFragment.class.getName();
-    String mUrl = "http://google.com";
-    ProgressBar mSpinner;
-    WebView mWebView;
+    private String mUrl;
+    private ProgressBar mSpinner;
+    private WebView mWebView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_webview, container, false);
 
+        mUrl = getArguments().getString(WebViewActivity.URL_KEY);
         if (!TextUtils.isEmpty(mUrl)) {
             mSpinner = top.findViewById(R.id.spinner);
             mSpinner.setVisibility(View.VISIBLE);

@@ -41,7 +41,7 @@ public class SignInActivity extends AppCompatActivity {
                         + " expire_at=" + userManager.getUserTokenExpirationTime() + " now=" + System.currentTimeMillis());
             }
             if (!TextUtils.isEmpty(userManager.getUserToken()) && userManager.getUserTokenExpirationTime() > System.currentTimeMillis()) {
-                postSignedIn();
+                navigateToWebView(WebViewActivity.URL_ASSIGNMENT);
             } else {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 Fragment f = new SignInFragment();
@@ -72,8 +72,9 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    public void postSignedIn() {
+    public void navigateToWebView(String url) {
         Intent intent = new Intent(this, WebViewActivity.class);
+        intent.putExtra(WebViewActivity.URL_KEY, url);
         startActivity(intent);
 
         // Don't come back to this activity anymore

@@ -2,7 +2,6 @@
     <!-- manifest -->
     <string name="app_name">榆树课堂 * ElmClass</string>
 
-
     <!-- common -->
     <string name="unknown_error">出错.</string>
     <string name="yes">确定</string>
@@ -11,28 +10,22 @@
     <string name="try_again">重试</string>
 
     <!-- options menu -->
+    <string name="assignment">新课</string>
     <string name="settings">设置</string>
     <string name="log_out">退出登录</string>
-    <string name="help">Help</string>
+    <string name="help">求助</string>
     <string name="confirm_log_out">确定退出登录吗?</string>
 
     <!-- sign in -->
     <string name="uid_hint">电话</string>
-    <string name="password">密码</string>
-    <string name="sign_in">登录</string>
-    <string name="forgot_password">忘记密码?</string>
-    <string name="invalid_password">请输入有效密码</string>
-
-    <!-- sign up -->
-    <string name="create_account">开账户</string>
+    <string name="enter_code">验证码</string>
     <string name="send_code">发验证码</string>
-    <string name="verify">确认</string>
-    <string name="confirm_password">确认密码</string>
-    <string name="passwords_mismatch">两次密码应一致</string>
+    <string name="sign_in">登录</string>
+    <string name="invalid_code">验证码错误</string>
+    <string name="password_sign_in">用密码登录</string>
     <string name="invalid_uid">请输入有效电话</string>
     <string name="sms_code">榆树课堂 * ElmClass: %d</string>
-    <string name="enter_code">输入短信显示的验证码:</string>
-    <string name="invalid_code">验证码错误</string>
+    <string name="sms_failure">无法送短信，清检查电话号码</string>
 
     <!-- network -->
     <string name="http_404">无法找到服务器</string>

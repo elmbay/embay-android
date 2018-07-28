@@ -33,16 +33,26 @@ public abstract class BaseActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-
+            case R.id.menu_item_assignment:
+                navigateToWebView("/elm/daily");
+                return true;
+            case R.id.menu_item_settings:
+//                showSettings();
+                navigateToWebView("/elm/setup");
+                return true;
             case R.id.menu_item_log_out:
                 showConfirmationDialog();
                 return true;
-
-            case R.id.menu_item_settings:
-                showSettings();
+            case R.id.menu_item_help:
+                navigateToWebView("/elm/index");
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateToWebView(String url) {
+        Intent intent = new Intent(this, WebViewActivity.class);
+        startActivity(intent);
     }
 
     private void showSettings() {

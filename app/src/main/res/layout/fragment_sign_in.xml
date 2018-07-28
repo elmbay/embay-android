@@ -26,63 +26,56 @@
             style="@style/Widget.AppCompat.EditText"/>
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/code"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:hint="@string/password"
+            android:hint="@string/enter_code"
             style="@style/Widget.AppCompat.EditText"/>
 
-        <EditText
-            android:id="@+id/confirm_password"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:hint="@string/confirm_password"
-            style="@style/Widget.AppCompat.EditText"
-            android:visibility="gone"/>
+            android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp">
+            <Button
+                android:id="@+id/send_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="50"
+                android:layout_gravity="center_horizontal"
+                android:padding="4dp"
+                android:background="@drawable/oval_button"
+                android:text="@string/send_code"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/sign_in"
-                android:layout_alignParentStart="true"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="50"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/oval_button"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:text="@string/sign_in"/>
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/create_account"
-                android:layout_alignParentEnd="true"
-                android:layout_width="140dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/oval_button"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:text="@string/create_account"/>
-        </RelativeLayout>
         <TextView
-            android:id="@+id/forget_password"
+            android:id="@+id/password_sign_in"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:clickable="true"
-            android:text="@string/forgot_password"
+            android:text="@string/password_sign_in"
             android:textColor="@color/colorPrimaryBold"/>
 
     </LinearLayout>

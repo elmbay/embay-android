@@ -16,6 +16,11 @@ import com.example.elmbay.manager.AppManager;
  */
 
 public class WebViewActivity extends BaseActivity {
+    public static final String URL_KEY = "url";
+    public static final String URL_ASSIGNMENT = "/elm/daily";
+    public static final String URL_SETTING = "/elm/setup";
+    public static final String URL_HELP = "/elm/index";
+    public static final String URL_LOGIN = "/elm/login";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,12 @@ public class WebViewActivity extends BaseActivity {
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             Fragment f = new WebViewFragment();
+            String url = getIntent().getStringExtra(URL_KEY);
+            if (url != null) {
+                Bundle bundle = new Bundle();
+                bundle.putString(URL_KEY, url);
+                f.setArguments(bundle);
+            }
             ft.add(R.id.activity_frame, f);
             ft.commit();
         }

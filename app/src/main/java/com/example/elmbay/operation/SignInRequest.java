@@ -23,16 +23,12 @@ public class SignInRequest implements IRequest {
     @SerializedName("t")
     private String mUidType;
 
-    @SerializedName("p")
-    private String mPassword;
-
     @SerializedName("new")
     private boolean mIsSignUp;
 
-    public SignInRequest(@NonNull String uid, @NonNull String uidType, @NonNull String password, boolean isSignUp) {
+    public SignInRequest(@NonNull String uid, @NonNull String uidType, String password, boolean isSignUp) {
         mUid = uid;
         mUidType = uidType;
-        mPassword = password;
         mIsSignUp = isSignUp;
     }
 
@@ -41,9 +37,6 @@ public class SignInRequest implements IRequest {
 
     public void setUidType(String type) { mUidType = type; }
     public String getUidType() { return mUidType; }
-
-    public void setPassword(String password) { mPassword = password;}
-    public String getPassword() { return mPassword; }
 
     public void setIsSignUp(boolean isSignUp) { mIsSignUp = isSignUp; }
     public boolean isSignUp() { return mIsSignUp; }
@@ -61,7 +54,6 @@ public class SignInRequest implements IRequest {
         Map<String, String> params = new HashMap<>();
         params.put("u", mUid);
         params.put("t", mUidType);
-        params.put("p", mPassword);
         params.put("new", mIsSignUp ? "1" : "0");
         return params;
     }
