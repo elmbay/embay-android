@@ -1,8 +1,10 @@
 package com.example.elmbay.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -89,9 +92,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                mUid = TextUtils.isEmpty(s) ? null : s.toString();
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
         mCodeView = top.findViewById(R.id.code);
@@ -135,30 +136,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-//        menuInflater.inflate(R.menu.menu_options, menu);
-//        super.onCreateOptionsMenu(menu, menuInflater);
-//    }
-
-    /**
-     * react to the user tapping/selecting an options menu item
-     */
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.menu_item_log_out:
-//                AppManager.getInstance().getSessionData().logout();
-//                mUidView.setText("");
-//                mCodeView.setText("");
-//                enableButton(mSendCodeButton, false);
-//                enableButton(mSignInButton, false);
-//                return true;
-//            default:
-//                return ((BaseActivity)getActivity()).onOptionsItemSelected(item);
-//        }
-//    }
 
     @Override
     public void onResume() {
@@ -205,10 +182,9 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     public void onEvent(SignInResponseEvent event) {
         mSpinner.setVisibility(View.GONE);
         if (event == null || !event.hasError()) {
-            ((SignInActivity) getActivity()).navigateToWebView(WebViewActivity.URL_ASSIGNMENT);
+            ((SignInActivity) getActivity()).navigateToWebView(AppManager.getInstance().getSessionData().getUserManager().getUrl());
         } else {
-            //TODO: show error
-            showDialog(R.string.unknown_error);
+            showDialog(event.getError().getMessageId(), event.getError().getMessage());
         }
     }
 
@@ -226,6 +202,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 Log.i(LOG_TAG, "sendTextMessage " + mUid + ": " + message);
             }
             try {
+                mUid = TextUtils.isEmpty(mUidView.getText()) ? null : mUidView.getText().toString();
                 smsManager.sendTextMessage(mUid, null, message, pendingIntent, null);
                 mCodeView.requestFocus();
             } catch (RuntimeException ex) {
@@ -236,14 +213,15 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     private void signIn(boolean createAccount) {
+        AppManager.hideKeyboardFrom(getContext(), mSignInContainer);
         mSignInContainer.setVisibility(View.GONE);
         mSpinner.setVisibility(View.VISIBLE);
 
         // Save the current sign in data
         UserManager userManager = AppManager.getInstance().getSessionData().getUserManager();
-        userManager.setUid(mUid, UserManager.UID_TYPE_PHONE);
+        userManager.setUid(mUid);
 
-        SignInRequest request = new SignInRequest(mUid, UserManager.UID_TYPE_PHONE, null, createAccount);
+        SignInRequest request = new SignInRequest(mUid);
         SignInOperation op = new SignInOperation(request);
         op.submit();
     }
@@ -265,10 +243,24 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showDialog(int stringId) {
+        showDialog(stringId, null);
+    }
+
+    private void showDialog(String message) {
+        showDialog(0, message);
+    }
+
+    private void showDialog(int stringId, String message) {
         if (mDialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
-            builder.setMessage(stringId)
-                    .setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
+
+            if (stringId != 0) {
+                builder.setMessage(stringId);
+            } else {
+                builder.setMessage(message);
+            }
+
+            builder.setPositiveButton(R.string.try_again, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mCodeView.setText("");
                             enableButton(mSendCodeButton, true);

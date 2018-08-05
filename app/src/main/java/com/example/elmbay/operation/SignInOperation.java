@@ -27,11 +27,17 @@ public class SignInOperation extends BaseOperation {
             @Override
             public void onResponse(String response) {
                 try {
-                SignInResult result = NetworkManager.getInstance().fromJson(response, SignInResult.class);
+                    SignInResult result = NetworkManager.getInstance().fromJson(response, SignInResult.class);
                     if (result != null) {
-                logResult(result);
-                AppManager.getInstance().getSessionData().getUserManager().setSignInResult(result);
-                EventBus.getDefault().post(new SignInResponseEvent(null));
+                        logResult(result);
+                        if (result.getReturnCode() == 0) {
+                            AppManager.getInstance().getSessionData().getUserManager().setSignInResult(result);
+                            EventBus.getDefault().post(new SignInResponseEvent(null));
+                        } else {
+                            OperationError error = new OperationError(result.getMessage());
+                            logError(error, "Response");
+                            EventBus.getDefault().post(new SignInResponseEvent(error));
+                        }
                     } else {
                         logError(null, "Empty response");
                         EventBus.getDefault().post(new SignInResponseEvent(new OperationError(R.string.empty_response)));

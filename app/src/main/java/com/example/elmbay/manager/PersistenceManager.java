@@ -11,13 +11,7 @@ import android.content.SharedPreferences;
 class PersistenceManager {
     // persistence keys
     static final String KEY_UID = "uid";
-    static final String KEY_UID_TYPE = "uid_type";
-    static final String KEY_PASSWORD = "pwd";
     static final String KEY_USER_TOKEN = "ut";
-    static final String KEY_USER_TOKEN_EXPIRATION_TIME = "ut_exp";
-    static final String KEY_PROGRESS_HIGHMARK_CSID = "high_csid";
-    static final String KEY_PROGRESS_HIGHMARK_CID = "high_cid";
-    static final String KEY_PROGRESS_HIGHMARK_LID = "high_lid";
 
     private static final String PERSISTENCE_STORE = "v1.private";
 

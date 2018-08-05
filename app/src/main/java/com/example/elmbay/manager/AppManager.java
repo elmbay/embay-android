@@ -1,9 +1,12 @@
 package com.example.elmbay.manager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Singleton holds a sesson cache
@@ -29,6 +32,11 @@ public class AppManager {
     }
 
     public static @NonNull AppManager getInstance() { return sInstance; }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     public @NonNull Context getAppContext() { return mAppContext; }
 

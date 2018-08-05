@@ -37,10 +37,9 @@ public class SignInActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             UserManager userManager = AppManager.getInstance().getSessionData().getUserManager();
             if (AppManager.DEBUG) {
-                Log.i(LOG_TAG, "token=" + userManager.getUserToken()
-                        + " expire_at=" + userManager.getUserTokenExpirationTime() + " now=" + System.currentTimeMillis());
+                Log.i(LOG_TAG, "token=" + userManager.getUserToken() + " url=" + userManager.getUrl());
             }
-            if (!TextUtils.isEmpty(userManager.getUserToken()) && userManager.getUserTokenExpirationTime() > System.currentTimeMillis()) {
+            if (!TextUtils.isEmpty(userManager.getUserToken())) {
                 navigateToWebView(WebViewActivity.URL_ASSIGNMENT);
             } else {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

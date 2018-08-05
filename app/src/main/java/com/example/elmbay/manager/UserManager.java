@@ -6,14 +6,8 @@ import android.support.annotation.Nullable;
 
 import com.example.elmbay.operation.SignInResult;
 
-import static com.example.elmbay.manager.PersistenceManager.KEY_PASSWORD;
-import static com.example.elmbay.manager.PersistenceManager.KEY_PROGRESS_HIGHMARK_CID;
-import static com.example.elmbay.manager.PersistenceManager.KEY_PROGRESS_HIGHMARK_CSID;
-import static com.example.elmbay.manager.PersistenceManager.KEY_PROGRESS_HIGHMARK_LID;
 import static com.example.elmbay.manager.PersistenceManager.KEY_UID;
-import static com.example.elmbay.manager.PersistenceManager.KEY_UID_TYPE;
 import static com.example.elmbay.manager.PersistenceManager.KEY_USER_TOKEN;
-import static com.example.elmbay.manager.PersistenceManager.KEY_USER_TOKEN_EXPIRATION_TIME;
 
 /**
  *
@@ -22,12 +16,10 @@ import static com.example.elmbay.manager.PersistenceManager.KEY_USER_TOKEN_EXPIR
 
 public class UserManager {
 
-    public static final String UID_TYPE_UNKNOWN = "U";
-    public static final String UID_TYPE_PHONE = "P";
-
     private SharedPreferences mPersistenceStore;
+    private String mUid;
     private String mUserToken;
-    private long mUserTokenExpirationTime;
+    private String mUrl;
 
     UserManager(SharedPreferences persistenceStore) {
         mPersistenceStore = persistenceStore;
@@ -35,42 +27,33 @@ public class UserManager {
     }
 
     private void fromPersistenceStore() {
+        mUid = mPersistenceStore.getString(KEY_UID, "");
         mUserToken = mPersistenceStore.getString(KEY_USER_TOKEN, "");
-        mUserTokenExpirationTime = mPersistenceStore.getLong(KEY_USER_TOKEN_EXPIRATION_TIME, 0);
     }
 
     // PII data stays in persistence store only
     public @NonNull
-    String getUid() { return mPersistenceStore.getString(KEY_UID, ""); }
-    public String getUidType() { return mPersistenceStore.getString(KEY_UID_TYPE, UID_TYPE_UNKNOWN); }
-    public void setUid(@NonNull String uid, String uidType) {
+    String getUid() { return mUid; }
+    public void setUid(@NonNull String uid) {
+        mUid = uid;
         PersistenceManager.setString(mPersistenceStore, KEY_UID, uid);
-        PersistenceManager.setString(mPersistenceStore, KEY_UID_TYPE, uidType);
-    }
-
-    public @NonNull String getPassword() { return mPersistenceStore.getString(KEY_PASSWORD, ""); }
-    public void setPassword(@NonNull String password) { PersistenceManager.setString(mPersistenceStore, KEY_PASSWORD, password); }
-
-    public void setSignInResult(@NonNull SignInResult result) {
-        setUserToken(result.getUserToken());
-        setUserTokenExpirationTime(System.currentTimeMillis() + result.getUserTokenLifeInHours() * SessionData.HOUR_TO_MILLIS);
     }
 
     public @NonNull String getUserToken() { return mUserToken; }
     private void setUserToken(@Nullable String userToken) {
-        if (userToken != null && !mUserToken.equals(userToken)) {
-            mUserToken = userToken;
-            PersistenceManager.setString(mPersistenceStore, KEY_USER_TOKEN, userToken);
-        }
+        mUserToken = userToken;
+        PersistenceManager.setString(mPersistenceStore, KEY_USER_TOKEN, userToken);
     }
 
-    public long getUserTokenExpirationTime() { return mUserTokenExpirationTime; }
-    private void setUserTokenExpirationTime(long time) {
-        mUserTokenExpirationTime = time;
-        PersistenceManager.setLong(mPersistenceStore, KEY_USER_TOKEN_EXPIRATION_TIME, time);
+    public String getUrl() { return mUrl; }
+
+    public void setSignInResult(@NonNull SignInResult result) {
+        setUserToken(result.getUserToken());
+        mUrl = NetworkManager.BASE_URL_MOCK + result.getUrl();
     }
 
     void logout() {
+        mUid = "";
         mUserToken = "";
     }
 }

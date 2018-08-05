@@ -29,9 +29,9 @@ public class NetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getName();
 
     // urls
-//    public static final String BASE_URL_MOCK = "http://107.3.138.187";
-    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com";
-//    public static final String ENDPOINT_USERS = "/v1/elmbay/users";
+    public static final String BASE_URL_MOCK = "http://107.3.138.187/v2";
+//    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com/v1/";
+//    public static final String ENDPOINT_USERS = "/elmbay/users";
     public static final String ENDPOINT_USERS = "/elm/signup";
 
     private static NetworkManager sInstance;

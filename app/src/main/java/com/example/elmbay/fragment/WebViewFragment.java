@@ -2,6 +2,7 @@ package com.example.elmbay.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
@@ -19,6 +23,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.example.elmbay.R;
+import com.example.elmbay.activity.SignInActivity;
 import com.example.elmbay.activity.WebViewActivity;
 import com.example.elmbay.manager.AppManager;
 
@@ -32,6 +37,12 @@ public class WebViewFragment extends Fragment {
     private String mUrl;
     private ProgressBar mSpinner;
     private WebView mWebView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,16 +80,70 @@ public class WebViewFragment extends Fragment {
                 }
             });
 
-//            mWebView.loadUrl(mUrl + "?u=" + AppManager.getInstance().getSessionData().getUserManager().getUserToken());
-            setCookie();
-            mWebView.loadUrl(mUrl);
+//            mWebView.clearCache(true);
+//            mWebView.clearHistory();
+            mWebView.getSettings().setJavaScriptEnabled(true);
+            mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+            navigateToWebView(mUrl);
         }
 
         return top;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_options, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            case R.id.menu_item_assignment:
+                navigateToWebView(WebViewActivity.URL_ASSIGNMENT);
+                return true;
+            case R.id.menu_item_settings:
+//                showSettings();
+                navigateToWebView(WebViewActivity.URL_SETTING);
+                return true;
+            case R.id.menu_item_log_out:
+                showConfirmationDialog();
+                return true;
+            case R.id.menu_item_help:
+                navigateToWebView(WebViewActivity.URL_HELP);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateToWebView(String url) {
+        setCookie();
+        mWebView.loadUrl(url);
+    }
+
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), android.R.style.Theme_Material_Light_Dialog));
+
+        builder.setMessage(R.string.confirm_log_out)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        ((WebViewActivity)getActivity()).doLogOut();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+        builder.create().show();
+    }
+
     private void setCookie() {
-        String cookieString = "u=" + AppManager.getInstance().getSessionData().getUserManager().getUserToken() + "; path=/";
+        String cookieString = "E06=" + AppManager.getInstance().getSessionData().getUserManager().getUserToken() + "; path=/";
         CookieManager.getInstance().setCookie(mUrl, cookieString);
     }
 

@@ -14,6 +14,7 @@ import com.example.elmbay.manager.NetworkManager;
 public class OperationError {
     private int mHttpStatusCode;
     private int mMessageId;
+    private String mMessage;
 
     OperationError(@Nullable VolleyError error) {
         if (error != null) {
@@ -35,7 +36,13 @@ public class OperationError {
         mMessageId = messageId == 0 ? R.string.unknown_error : messageId;
     }
 
+    OperationError(String message) {
+        mMessage = message;
+    }
+
     public int getMessageId() { return mMessageId; }
+
+    public String getMessage() { return mMessage; }
 
     @Override
     public String toString() { return NetworkManager.getInstance().toJson(this); }
