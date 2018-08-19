@@ -1,4 +1,4 @@
-package com.example.elmbay.manager;
+package com.example.elmclass.manager;
 
 import android.content.Context;
 import android.content.SharedPreferences;

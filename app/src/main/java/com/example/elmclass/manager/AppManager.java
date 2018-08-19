@@ -1,4 +1,4 @@
-package com.example.elmbay.manager;
+package com.example.elmclass.manager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.view.inputmethod.InputMethodManager;
  */
 
 public class AppManager {
-    public static final String PACKAGE_NAME = "com.example.elmbay";
+    public static final String PACKAGE_NAME = "com.example.elmclass";
     public static final boolean DEBUG = true;
     private static final boolean MOCK = false;
 

@@ -1,8 +1,7 @@
-package com.example.elmbay.fragment;
+package com.example.elmclass.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,10 +21,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.example.elmbay.R;
-import com.example.elmbay.activity.SignInActivity;
-import com.example.elmbay.activity.WebViewActivity;
-import com.example.elmbay.manager.AppManager;
+import com.example.elmclass.R;
+import com.example.elmclass.activity.WebViewActivity;
+import com.example.elmclass.manager.AppManager;
+import com.example.elmclass.manager.NetworkManager;
 
 /**
  *
@@ -48,7 +47,7 @@ public class WebViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View top = inflater.inflate(R.layout.fragment_webview, container, false);
 
-        mUrl = getArguments().getString(WebViewActivity.URL_KEY);
+        mUrl = getArguments().getString(NetworkManager.URL_KEY);
         if (!TextUtils.isEmpty(mUrl)) {
             mSpinner = top.findViewById(R.id.spinner);
             mSpinner.setVisibility(View.VISIBLE);
@@ -103,17 +102,17 @@ public class WebViewFragment extends Fragment {
                 getActivity().onBackPressed();
                 return true;
             case R.id.menu_item_assignment:
-                navigateToWebView(WebViewActivity.URL_ASSIGNMENT);
+                navigateToWebView(NetworkManager.ENDPOINT_ASSIGNMENT);
                 return true;
             case R.id.menu_item_settings:
 //                showSettings();
-                navigateToWebView(WebViewActivity.URL_SETTING);
+                navigateToWebView(NetworkManager.ENDPOINT_SETTING);
                 return true;
             case R.id.menu_item_log_out:
                 showConfirmationDialog();
                 return true;
             case R.id.menu_item_help:
-                navigateToWebView(WebViewActivity.URL_HELP);
+                navigateToWebView(NetworkManager.ENDPOINT_HELP);
                 return true;
         }
         return super.onOptionsItemSelected(item);

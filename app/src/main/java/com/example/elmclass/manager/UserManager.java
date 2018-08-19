@@ -1,13 +1,13 @@
-package com.example.elmbay.manager;
+package com.example.elmclass.manager;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.example.elmbay.operation.SignInResult;
+import com.example.elmclass.operation.SignInResult;
 
-import static com.example.elmbay.manager.PersistenceManager.KEY_UID;
-import static com.example.elmbay.manager.PersistenceManager.KEY_USER_TOKEN;
+import static com.example.elmclass.manager.PersistenceManager.KEY_UID;
+import static com.example.elmclass.manager.PersistenceManager.KEY_USER_TOKEN;
 
 /**
  *
@@ -49,7 +49,7 @@ public class UserManager {
 
     public void setSignInResult(@NonNull SignInResult result) {
         setUserToken(result.getUserToken());
-        mUrl = NetworkManager.BASE_URL_MOCK + result.getUrl();
+        mUrl = NetworkManager.BASE_URL + result.getUrl();
     }
 
     void logout() {

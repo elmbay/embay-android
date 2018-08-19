@@ -1,4 +1,4 @@
-package com.example.elmbay;
+package com.example.elmclass;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

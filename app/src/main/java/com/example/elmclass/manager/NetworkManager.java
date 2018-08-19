@@ -1,4 +1,4 @@
-package com.example.elmbay.manager;
+package com.example.elmclass.manager;
 
 import android.Manifest;
 import android.content.Context;
@@ -29,10 +29,14 @@ public class NetworkManager {
     private static final String LOG_TAG = NetworkManager.class.getName();
 
     // urls
-    public static final String BASE_URL_MOCK = "http://107.3.138.187/v2";
-//    public static final String BASE_URL_MOCK = "http://private-329923-parrot1.apiary-mock.com/v1/";
-//    public static final String ENDPOINT_USERS = "/elmbay/users";
-    public static final String ENDPOINT_USERS = "/elm/signup";
+    public static final String URL_KEY = "url";
+    public static final String BASE_URL = "http://www.elmclass.com/v2/";
+    public static final String ENDPOINT_USERS = NetworkManager.BASE_URL + "elm/signup";
+    public static final String ENDPOINT_ASSIGNMENT = NetworkManager.BASE_URL + "elm/daily";
+    public static final String ENDPOINT_SETTING = NetworkManager.BASE_URL + "elm/setup";
+    public static final String ENDPOINT_HELP = NetworkManager.BASE_URL + "elm/help";
+    public static final String ENDPOINT_LOGIN = NetworkManager.BASE_URL + "elm/login";
+
 
     private static NetworkManager sInstance;
     private Context mAppContext;
@@ -75,7 +79,7 @@ public class NetworkManager {
                 }
             } catch (NullPointerException ex) {
                 if (AppManager.DEBUG) {
-                    Log.w(LOG_TAG, "Null NetworkInfo: " + ex.getMessage());
+                    Log.w(LOG_TAG, "Connection NPE: " + ex.getMessage());
                 }
             }
         }
@@ -86,8 +90,10 @@ public class NetworkManager {
         if (sInstance == null) {
             try {
                 sInstance = new NetworkManager(AppManager.getInstance().getAppContext());
-            } catch (NullPointerException e) {
-                Log.w(LOG_TAG, "The app has not set up yet.");
+            } catch (NullPointerException ex) {
+                if (AppManager.DEBUG) {
+                    Log.w(LOG_TAG, "Setup NPE: " + ex.getMessage());
+                }
             }
         }
     }

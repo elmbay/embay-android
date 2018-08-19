@@ -1,6 +1,6 @@
 <resources>
     <!-- manifest -->
-    <string name="app_name">ElmClass * 榆树课堂</string>
+    <string name="app_name">ElmClass</string>
 
     <!-- common -->
     <string name="unknown_error">Something went wrong.</string>
@@ -24,7 +24,7 @@
     <string name="password_sign_in">Sign in with password</string>
     <string name="invalid_code">Invalid verification code</string>
     <string name="invalid_uid">Please enter a valid phone number</string>
-    <string name="sms_code">ElmClass * 榆树课堂: %d</string>
+    <string name="sms_code">ElmClass: %d</string>
     <string name="sms_failure">Unable to send text message. Please verify the phone number.</string>
 
     <!-- network -->

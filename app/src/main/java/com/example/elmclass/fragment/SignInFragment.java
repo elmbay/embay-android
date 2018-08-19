@@ -1,10 +1,8 @@
-package com.example.elmbay.fragment;
+package com.example.elmclass.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,31 +18,26 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.elmbay.R;
-import com.example.elmbay.activity.BaseActivity;
-import com.example.elmbay.activity.SignInActivity;
-import com.example.elmbay.activity.WebViewActivity;
-import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.manager.UserManager;
-import com.example.elmbay.operation.SignInOperation;
-import com.example.elmbay.operation.SignInRequest;
-import com.example.elmbay.operation.SignInResponseEvent;
+import com.example.elmclass.R;
+import com.example.elmclass.activity.SignInActivity;
+import com.example.elmclass.manager.AppManager;
+import com.example.elmclass.manager.NetworkManager;
+import com.example.elmclass.manager.UserManager;
+import com.example.elmclass.operation.SignInOperation;
+import com.example.elmclass.operation.SignInRequest;
+import com.example.elmclass.operation.SignInResponseEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import static android.text.InputType.TYPE_CLASS_PHONE;
-import static com.example.elmbay.activity.SignInActivity.REQUEST_SEND_SMS;
+import static com.example.elmclass.activity.SignInActivity.REQUEST_SEND_SMS;
 
 /**
  * The class manages the sign in page
@@ -173,7 +166,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
 
             case R.id.password_sign_in:
                 //elm/login
-                ((SignInActivity)getActivity()).navigateToWebView(WebViewActivity.URL_LOGIN);
+                ((SignInActivity)getActivity()).navigateToWebView(NetworkManager.ENDPOINT_LOGIN);
                 break;
         }
     }
@@ -206,8 +199,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                 smsManager.sendTextMessage(mUid, null, message, pendingIntent, null);
                 mCodeView.requestFocus();
             } catch (RuntimeException ex) {
-                Log.e(LOG_TAG, ex.getMessage() + "(" + mUid + ")");
                 showDialog(R.string.sms_failure);
+                if (AppManager.DEBUG) {
+                    Log.e(LOG_TAG, "RuntimException: " + ex.getMessage() + " (mUid=" + mUid + ")");
+                }
             }
         }
     }

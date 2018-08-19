@@ -1,15 +1,15 @@
-package com.example.elmbay.operation;
+package com.example.elmclass.operation;
 
 import android.support.annotation.NonNull;
 
 import com.android.volley.Request;
-import com.example.elmbay.manager.NetworkManager;
+import com.example.elmclass.manager.NetworkManager;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.elmbay.manager.NetworkManager.ENDPOINT_USERS;
+import static com.example.elmclass.manager.NetworkManager.ENDPOINT_USERS;
 
 /**
  *
@@ -34,7 +34,7 @@ public class SignInRequest implements IRequest {
 
     public int getMethod() { return Request.Method.POST; }
 
-    public String getEndpoint() { return NetworkManager.BASE_URL_MOCK + ENDPOINT_USERS; }
+    public String getEndpoint() { return NetworkManager.ENDPOINT_USERS; }
 
     public Map<String, String> getParams() {
         Map<String, String> params = new HashMap<>();

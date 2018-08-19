@@ -1,4 +1,4 @@
-package com.example.elmbay.activity;
+package com.example.elmclass.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,10 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.elmbay.R;
-import com.example.elmbay.fragment.SignInFragment;
-import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.manager.UserManager;
+import com.example.elmclass.R;
+import com.example.elmclass.fragment.SignInFragment;
+import com.example.elmclass.manager.AppManager;
+import com.example.elmclass.manager.NetworkManager;
+import com.example.elmclass.manager.UserManager;
 
 /**
  *
@@ -40,7 +41,7 @@ public class SignInActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, "token=" + userManager.getUserToken() + " url=" + userManager.getUrl());
             }
             if (!TextUtils.isEmpty(userManager.getUserToken())) {
-                navigateToWebView(WebViewActivity.URL_ASSIGNMENT);
+                navigateToWebView(NetworkManager.ENDPOINT_ASSIGNMENT);
             } else {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 Fragment f = new SignInFragment();
@@ -73,7 +74,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void navigateToWebView(String url) {
         Intent intent = new Intent(this, WebViewActivity.class);
-        intent.putExtra(WebViewActivity.URL_KEY, url);
+        intent.putExtra(NetworkManager.URL_KEY, url);
         startActivity(intent);
 
         // Don't come back to this activity anymore

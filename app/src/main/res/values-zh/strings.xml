@@ -1,6 +1,6 @@
 <resources>
     <!-- manifest -->
-    <string name="app_name">榆树课堂 * ElmClass</string>
+    <string name="app_name">榆树课堂</string>
 
     <!-- common -->
     <string name="unknown_error">出错.</string>
@@ -24,7 +24,7 @@
     <string name="invalid_code">验证码错误</string>
     <string name="password_sign_in">用密码登录</string>
     <string name="invalid_uid">请输入有效电话</string>
-    <string name="sms_code">榆树课堂 * ElmClass: %d</string>
+    <string name="sms_code">榆树课堂: %d</string>
     <string name="sms_failure">无法送短信，清检查电话号码</string>
 
     <!-- network -->

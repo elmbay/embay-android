@@ -1,16 +1,6 @@
-package com.example.elmbay.activity;
+package com.example.elmclass.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextThemeWrapper;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
-import com.example.elmbay.R;
-import com.example.elmbay.manager.AppManager;
 
 /**
  * The base class to load Lesson and handle action bar setup and action

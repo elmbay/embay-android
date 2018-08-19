@@ -1,4 +1,4 @@
-package com.example.elmbay.activity;
+package com.example.elmclass.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,10 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
-import com.example.elmbay.R;
-import com.example.elmbay.fragment.WebViewFragment;
-import com.example.elmbay.manager.AppManager;
-import com.example.elmbay.manager.NetworkManager;
+import com.example.elmclass.R;
+import com.example.elmclass.fragment.WebViewFragment;
+import com.example.elmclass.manager.AppManager;
+import com.example.elmclass.manager.NetworkManager;
+
+import static com.example.elmclass.manager.NetworkManager.URL_KEY;
 
 /**
  *
@@ -18,11 +20,6 @@ import com.example.elmbay.manager.NetworkManager;
  */
 
 public class WebViewActivity extends BaseActivity {
-    public static final String URL_KEY = "url";
-    public static final String URL_ASSIGNMENT = NetworkManager.BASE_URL_MOCK + "/elm/daily";
-    public static final String URL_SETTING = NetworkManager.BASE_URL_MOCK + "/elm/setup";
-    public static final String URL_HELP = NetworkManager.BASE_URL_MOCK + "/elm/help";
-    public static final String URL_LOGIN = NetworkManager.BASE_URL_MOCK + "/elm/login";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
